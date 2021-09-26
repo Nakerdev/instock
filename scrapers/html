@@ -1,0 +1,4 @@
+
+> scrapers@1.0.0 check-product-availability /home/naker90/Desktop/Projects/in-stock/scrapers
+> tsc && node dist/index.js "amazon:B01B1NVB66"
+

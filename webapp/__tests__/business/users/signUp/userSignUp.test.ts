@@ -5,6 +5,7 @@ import PasswordHashingService from "../../../../business/security/cryptography/p
 import UuidService from "../../../../business/security/cryptography/uuidService";
 import TimeService from "../../../../business/infraestructure/timeService";
 import UserRepository from "../../../../business/users/userRepository";
+import build from "next/dist/build";
 
 describe("User SignUp", () => {
 
@@ -28,13 +29,7 @@ describe("User SignUp", () => {
     })
 
     it("signs up user", () => {
-        const request = new UserSignUpRequest(
-            "user@email.com",
-            "Alvaro",
-            "Gonzalez",
-            "SecurePassword*",
-            true
-        );
+        const request = buildRequest();
         const uuid = "deb74e35-ea5f-535f-890f-5779b5d8e27f"
         uuidService.create
             .mockReturnValue(uuid);
@@ -60,4 +55,13 @@ describe("User SignUp", () => {
         )
     });
 
+    function buildRequest(): UserSignUpRequest {
+        return new UserSignUpRequest(
+            "user@email.com",
+            "Alvaro",
+            "Gonzalez",
+            "SecurePassword*",
+            true
+        );
+    }
 });

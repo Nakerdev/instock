@@ -29,10 +29,15 @@ class UserSignUp {
     }
 
     signUp(request: UserSignUpRequest){
+        const user = this.buildUser(request);
+        this.userRepository.save(user);
+    }
+
+    private buildUser(request: UserSignUpRequest): User {
         const id = this.uuidService.create();
         const hashedPassword = this.passwordHashingService.hash(request.password);
         const signUpDate = this.timeService.utcNow();
-        const user = new User(
+        return new User(
             id,
             request.email,
             hashedPassword,
@@ -40,7 +45,6 @@ class UserSignUp {
             request.surname,
             signUpDate
         );
-        this.userRepository.save(user);
     }
 }
 

@@ -10,9 +10,12 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@types/uuid": "^8.3.1",
+    "jest-mock-extended": "^2.0.4",
     "next": "11.1.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

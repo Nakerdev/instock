@@ -1,6 +1,7 @@
 import {mock, MockProxy} from "jest-mock-extended";
 
-import { UserSignUp, UserSignUpRequest } from "../../../../business/users/signUp/userSignUp";
+import UserSignUp from "../../../../business/users/signUp/userSignUp";
+import UserSignUpRequest from "../../../../business/users/signUp/UserSignUpRequest";
 import PasswordHashingService from "../../../../business/security/cryptography/passwordHashingService";
 import UuidService from "../../../../business/security/cryptography/uuidService";
 import TimeService from "../../../../business/infraestructure/timeService";

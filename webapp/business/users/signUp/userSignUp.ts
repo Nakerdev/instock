@@ -3,13 +3,9 @@ import UuidService from "../../security/cryptography/uuidService";
 import TimeService from "../../infraestructure/timeService";
 import UserRepository from "../userRepository";
 import User from "../user";
+import UserSignUpRequest from "./UserSignUpRequest";
 
-export {
-    UserSignUp,
-    UserSignUpRequest
-}
-
-class UserSignUp {
+export default class UserSignUp {
 
     readonly userRepository: UserRepository;
     readonly passwordHashingService: PasswordHashingService;
@@ -46,28 +42,5 @@ class UserSignUp {
             request.surname,
             signUpDate
         );
-    }
-}
-
-class UserSignUpRequest {
-    readonly email: string;
-    readonly name: string;
-    readonly surname: string;
-    readonly password: string;
-    readonly areLegalTermsAndConditionsAccepted: boolean;
-
-    constructor(
-        email: string, 
-        name: string, 
-        surname: string, 
-        password: string,
-        areLegalTermsAndConditionsAccepted: boolean
-    ) {
-
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-        this.areLegalTermsAndConditionsAccepted = areLegalTermsAndConditionsAccepted;
     }
 }

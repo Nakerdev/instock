@@ -29,6 +29,7 @@ class UserSignUp {
     }
 
     signUp(request: UserSignUpRequest){
+        if(this.userRepository.exist(request.email)) return;
         const user = this.buildUser(request);
         this.userRepository.save(user);
     }

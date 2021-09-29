@@ -5,7 +5,6 @@ import PasswordHashingService from "../../../../business/security/cryptography/p
 import UuidService from "../../../../business/security/cryptography/uuidService";
 import TimeService from "../../../../business/infraestructure/timeService";
 import UserRepository from "../../../../business/users/userRepository";
-import build from "next/dist/build";
 
 describe("User SignUp", () => {
 
@@ -53,6 +52,17 @@ describe("User SignUp", () => {
                 signUpDate: utcNow
             })
         )
+    });
+
+    it("does not signup user when user with the same email already exist", () => {
+        const request = buildRequest();
+        userRepository.exist
+            .calledWith(request.email)
+            .mockReturnValue(true);
+
+        command.signUp(request);
+
+        expect(userRepository.save).not.toHaveBeenCalled()
     });
 
     function buildRequest(): UserSignUpRequest {

@@ -1,5 +1,6 @@
 import Validation from "./validation";
 import { ValidationError } from "./validationError";
+import { isEmpty } from "../utils/stringUtils";
 
 export default class Email {
 
@@ -9,7 +10,7 @@ export default class Email {
         
         const ALLOWED_MAX_LENGHT = 255;
 
-        if(this.isEmptyOrNull(value)){
+        if(isEmpty(value)){
             return Validation.fail([ValidationError.Required]);
         }
         if(!this.isValidEmail(value)){
@@ -25,10 +26,6 @@ export default class Email {
 
     private constructor(value: string){
         this.value = value;
-    }
-
-    private static isEmptyOrNull(value: string) {
-        return value == null || value == undefined || value === "" || value === " ";
     }
 
     private static isValidEmail(value: string) {

@@ -4,20 +4,7 @@ import Surname from "../../valueObjects/surname";
 import Password from "../../valueObjects/password";
 import Validation from "../../valueObjects/validation";
 import { ValidationError } from "../../valueObjects/validationError";
-
-class FormValidationError<Error> {
-    readonly fieldId: string;
-    readonly error: Error;
-
-    static create<ErrorT>(fieldId: string, errors: ErrorT[]){
-        return errors.map(error => new FormValidationError(fieldId, error));
-    }
-
-    constructor(fieldId: string, error: Error){
-        this.fieldId = fieldId;
-        this.error = error;
-    }
-}
+import FormValidationError from "../../valueObjects/formValidationError";
 
 export {
     UserSignUpRequest,
@@ -43,15 +30,20 @@ export default class UserSignUpRequest {
             || nameValidation.isFail()
             || surnameValidation.isFail()
             || passwordValidation.isFail()
+            || !requestDto.areLegalTermsAndConditionsAccepted
         ){
             const emailFails: FormValidationError<ValidationError>[] = FormValidationError.create("email", emailValidation.getFails());
             const nameFails: FormValidationError<ValidationError>[] = FormValidationError.create("name", nameValidation.getFails());
             const surnameFails: FormValidationError<ValidationError>[] = FormValidationError.create("surname", surnameValidation.getFails());
             const passwordFails: FormValidationError<ValidationError>[] = FormValidationError.create("password", passwordValidation.getFails());
+            const legalTermsAndConditions: FormValidationError<ValidationError>[] = !requestDto.areLegalTermsAndConditionsAccepted
+                ? FormValidationError.create("legalTermsAndConditions", [ValidationError.Required])
+                : [];
             const formValidations = emailFails
                 .concat(nameFails)
                 .concat(surnameFails)
-                .concat(passwordFails);
+                .concat(passwordFails)
+                .concat(legalTermsAndConditions);
             return Validation.fail(formValidations);
         }
 

@@ -3,6 +3,7 @@ import Email from "../../../../business/valueObjects/email";
 import Name from "../../../../business/valueObjects/name";
 import Surname from "../../../../business/valueObjects/surname";
 import Password from "../../../../business/valueObjects/password";
+import { ValidationError } from "../../../../business/valueObjects/validationError";
 
 describe("User SignUp Request", () => {
 
@@ -40,6 +41,12 @@ describe("User SignUp Request", () => {
             name: "does not create request when password has validaiton errors",
             requestDto: buildRequestDto({password: ""}),
             expectedFieldId: "password"
+        },
+        {
+            name: "does not create request when legal terms and conditions are not accepted",
+            requestDto: buildRequestDto({areLegalTermsAndConditionsAccepted: false}),
+            expectedFieldId: "legalTermsAndConditions",
+            expectedError: ValidationError.Required
         }
     ];
 
@@ -51,6 +58,9 @@ describe("User SignUp Request", () => {
             const errors = requestValidaiton.getFails();
             expect(errors.length).toBe(1);
             expect(errors[0].fieldId).toBe(testCase.expectedFieldId);
+            if(testCase.expectedError){
+                expect(errors[0].error).toBe(testCase.expectedError);
+            }
         });
     });
 
@@ -82,5 +92,6 @@ describe("User SignUp Request", () => {
 interface ValidationErrorTestCase {
     name: string,
     requestDto: UserSignUpRequestDto,
-    expectedFieldId: string
+    expectedFieldId: string,
+    expectedError?: ValidationError
 }

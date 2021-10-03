@@ -9,30 +9,38 @@ describe("Email", () => {
         expect(validation.isSuccess()).toBeTruthy();
     });
 
-    it("does not create email when the value is empty", () => {
-        const validation = Email.create("");
+    const validationTestCases: ValidationTestCase[] = [
+        { 
+            name: "does not create email when the value is empty", 
+            value: "", 
+            expectedError: ValidationError.Required
+        },
+        { 
+            name: "does not create email when the format is not valid", 
+            value: "user@emailcom", 
+            expectedError: ValidationError.InvalidFormat
+        },
+        { 
+            name: "does not create email when the length is too long", 
+            value: 'a'.repeat(255) + "@email.com", 
+            expectedError: ValidationError.WrongLength
+        }
+    ]
 
-        expect(validation.isFail()).toBeTruthy();
-        const fails = validation.getFails();
-        expect(fails.length).toBe(1);
-        expect(fails[0]).toBe(ValidationError.Required);
-    });
+    validationTestCases.forEach(testCase => {
+        it(testCase.name, () => {
+            const validation = Email.create(testCase.value);
 
-    it("does not create email when the format is not valid", () => {
-        const validation = Email.create("user@emailcom");
-
-        expect(validation.isFail()).toBeTruthy();
-        const fails = validation.getFails();
-        expect(fails.length).toBe(1);
-        expect(fails[0]).toBe(ValidationError.InvalidFormat);
-    });
-
-    it("does not create email when the length is too long", () => {
-        const validation = Email.create('a'.repeat(255) + "@email.com");
-
-        expect(validation.isFail()).toBeTruthy();
-        const fails = validation.getFails();
-        expect(fails.length).toBe(1);
-        expect(fails[0]).toBe(ValidationError.WrongLength);
-    });
+            expect(validation.isFail()).toBeTruthy();
+            const fails = validation.getFails();
+            expect(fails.length).toBe(1);
+            expect(fails[0]).toBe(testCase.expectedError);
+        });
+    })
 });
+
+interface ValidationTestCase {
+    name: string,
+    value: string, 
+    expectedError: ValidationError,
+}

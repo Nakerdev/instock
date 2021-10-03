@@ -1,3 +1,5 @@
+import Password from "../../valueObjects/password";
+
 export default interface PasswordHasingService {
-    hash(plainPassword: string): string;
+    hash(plainPassword: Password): Password;
 } 

@@ -1,11 +1,12 @@
 import {mock, MockProxy} from "jest-mock-extended";
 
 import UserSignUp from "../../../../business/users/signUp/userSignUp";
-import UserSignUpRequest from "../../../../business/users/signUp/UserSignUpRequest";
+import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
 import PasswordHashingService from "../../../../business/security/cryptography/passwordHashingService";
 import UuidService from "../../../../business/security/cryptography/uuidService";
 import TimeService from "../../../../business/infraestructure/timeService";
 import UserRepository from "../../../../business/users/userRepository";
+import Password from "../../../../business/valueObjects/password";
 
 describe("User SignUp", () => {
 
@@ -33,7 +34,7 @@ describe("User SignUp", () => {
         const uuid = "deb74e35-ea5f-535f-890f-5779b5d8e27f"
         uuidService.create
             .mockReturnValue(uuid);
-        const hashedPassword = "hashed-password"
+        const hashedPassword = Password.createFromBusiness("$2a$12$pBJwF27FLEY1RQSh428lX.1hwwh9uHdgGyM7il6C/cVa2/wbAdzKC")
         passwordHasingService.hash
             .calledWith(request.password)
             .mockReturnValue(hashedPassword);
@@ -67,12 +68,13 @@ describe("User SignUp", () => {
     });
 
     function buildRequest(): UserSignUpRequest {
-        return new UserSignUpRequest(
+        const requestDto = new UserSignUpRequestDto(
             "user@email.com",
             "Alvaro",
             "Gonzalez",
-            "SecurePassword*",
+            "MyStr0ngPass*",
             true
         );
+        return UserSignUpRequest.create(requestDto).getSuccess();
     }
 });

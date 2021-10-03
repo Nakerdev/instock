@@ -21,15 +21,19 @@ export default class Password {
             return Validation.fail([ValidationError.WrongLength]);
         }
 
-        const name = new Password(value);
-        return Validation.success(name);
+        const password = new Password(value);
+        return Validation.success(password);
+    }
+
+    static createFromBusiness(value: string): Password {
+        return new Password(value);
     }
 
     private constructor(value: string){
         this.value = value;
     }
 
-    static isAStrongPassword(value: string): boolean {
+    private static isAStrongPassword(value: string): boolean {
         return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(value)
     }
 }

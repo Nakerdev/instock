@@ -30,4 +30,9 @@ export default class Validation<Fail, Success> {
     getFails(): Fail[]{
         return this.fail;
     }
+
+    getSuccess(): Success {
+        if(this.success === undefined) throw new Error("Invalid operation, the current object is in an invalid state.")
+        return this.success;
+    }
 }

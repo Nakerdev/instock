@@ -4,8 +4,14 @@ import TimeService from "../../infraestructure/timeService";
 import UserRepository from "../userRepository";
 import User from "../user";
 import UserSignUpRequest from "./UserSignUpRequest";
+import Either from "../../valueObjects/either";
 
-export default class UserSignUp {
+export {
+    UserSignUp,
+    UserSignUpError
+}
+
+class UserSignUp {
 
     readonly userRepository: UserRepository;
     readonly passwordHashingService: PasswordHashingService;
@@ -24,15 +30,18 @@ export default class UserSignUp {
         this.timeService = timeService;
     }
 
-    signUp(request: UserSignUpRequest){
-        if(this.userRepository.exist(request.email)) return;
-        const user = this.buildUser(request);
+    async signUp(request: UserSignUpRequest): Promise<Either<UserSignUpError, User>>{
+        if(this.userRepository.exist(request.email)) {
+            return Either.left(UserSignUpError.UserAlreadyExist);
+        }
+        const user = await this.buildUser(request);
         this.userRepository.save(user);
+        return Either.right(user);
     }
 
-    private buildUser(request: UserSignUpRequest): User {
+    private async buildUser(request: UserSignUpRequest): Promise<User> {
         const id = this.uuidService.create();
-        const hashedPassword = this.passwordHashingService.hash(request.password);
+        const hashedPassword = await this.passwordHashingService.hash(request.password);
         const signUpDate = this.timeService.utcNow();
         return new User(
             id,
@@ -43,4 +52,8 @@ export default class UserSignUp {
             signUpDate
         );
     }
+}
+
+enum UserSignUpError {
+    UserAlreadyExist
 }

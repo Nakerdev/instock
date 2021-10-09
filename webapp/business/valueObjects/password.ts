@@ -33,6 +33,10 @@ export default class Password {
         this.value = value;
     }
 
+    getValue(): string{
+        return this.value;
+    }
+
     private static isAStrongPassword(value: string): boolean {
         return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(value)
     }

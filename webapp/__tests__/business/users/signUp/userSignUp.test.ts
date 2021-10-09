@@ -1,6 +1,6 @@
 import {mock, MockProxy} from "jest-mock-extended";
 
-import UserSignUp from "../../../../business/users/signUp/userSignUp";
+import { UserSignUp, UserSignUpError } from "../../../../business/users/signUp/userSignUp";
 import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
 import PasswordHashingService from "../../../../business/security/cryptography/passwordHashingService";
 import UuidService from "../../../../business/security/cryptography/uuidService";
@@ -29,7 +29,7 @@ describe("User SignUp", () => {
         );
     })
 
-    it("signs up user", () => {
+    it("signs up user", async () => {
         const request = buildRequest();
         const uuid = "deb74e35-ea5f-535f-890f-5779b5d8e27f"
         uuidService.create
@@ -37,13 +37,14 @@ describe("User SignUp", () => {
         const hashedPassword = Password.createFromBusiness("$2a$12$pBJwF27FLEY1RQSh428lX.1hwwh9uHdgGyM7il6C/cVa2/wbAdzKC")
         passwordHasingService.hash
             .calledWith(request.password)
-            .mockReturnValue(hashedPassword);
+            .mockResolvedValue(hashedPassword);
         const utcNow = new Date(2021, 10, 10);
         timeService.utcNow
             .mockReturnValue(utcNow);
 
-        command.signUp(request);
+        var result = await command.signUp(request);
 
+        expect(result.isRight()).toBeTruthy();
         expect(userRepository.save).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: uuid,
@@ -56,14 +57,16 @@ describe("User SignUp", () => {
         )
     });
 
-    it("does not signup user when user with the same email already exist", () => {
+    it("does not signup user when user with the same email already exist", async () => {
         const request = buildRequest();
         userRepository.exist
             .calledWith(request.email)
             .mockReturnValue(true);
 
-        command.signUp(request);
+        const result = await command.signUp(request);
 
+        expect(result.isLeft()).toBeTruthy();
+        expect(result.getLeft()).toBe(UserSignUpError.UserAlreadyExist);
         expect(userRepository.save).not.toHaveBeenCalled()
     });
 

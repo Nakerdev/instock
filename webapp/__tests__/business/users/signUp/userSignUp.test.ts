@@ -1,4 +1,6 @@
 import {mock, MockProxy} from "jest-mock-extended";
+import { isLeft, isRight, match } from "fp-ts/Either";
+import { pipe } from "fp-ts/pipeable";
 
 import { UserSignUp, UserSignUpError } from "../../../../business/users/signUp/userSignUp";
 import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
@@ -44,7 +46,14 @@ describe("User SignUp", () => {
 
         var result = await command.signUp(request);
 
-        expect(result.isRight()).toBeTruthy();
+        expect(isRight(result)).toBeTruthy();
+        pipe(
+            result,
+            match(
+                _ => expect(true).toBeFalsy(),
+                createdUser => expect(createdUser.id).toBe(uuid)
+            )
+        );
         expect(userRepository.save).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: uuid,
@@ -65,8 +74,14 @@ describe("User SignUp", () => {
 
         const result = await command.signUp(request);
 
-        expect(result.isLeft()).toBeTruthy();
-        expect(result.getLeft()).toBe(UserSignUpError.UserAlreadyExist);
+        expect(isLeft(result)).toBeTruthy();
+        pipe(
+            result,
+            match(
+                error => expect(error).toBe(UserSignUpError.UserAlreadyExist),
+                _ => expect(true).toBeFalsy()
+            )
+        );
         expect(userRepository.save).not.toHaveBeenCalled()
     });
 

@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
+import { match } from "fp-ts/Either";
+import { pipe } from "fp-ts/pipeable";
 
 import { ApiResponseBuilder } from "./apiUtils";
 import { UserSignUp } from "../../../../business/users/signUp/userSignUp";
-import UserSignUpRequest, { UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
+import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
 import { EnviromentConfiguration, enviromentConfiguration } from "../../../../enviromentConfiguration";
+import User from "../../../../business/users/user";
 
 export {
   UserSignUpController,
@@ -32,13 +35,19 @@ class UserSignUpController {
       const validationErrors = commandRequest.getFails();
       this.apiResponseBuilder.sendValidationErrorResponse(validationErrors);
     }
-    const result = await this.command.signUp(commandRequest.getSuccess());
-    if(result.isLeft()){
-      const commandError = result.getLeft();
-      this.apiResponseBuilder.sendCommandErrorResponse(commandError.toString());
-    }
-    const user = result.getRight();
-    const sessionToken = jwt.sign({ userId: user.id }, enviromentConfiguration.JWT_SECRET_KEY, { expiresIn: '7d' });
+    pipe(
+      await this.command.signUp(commandRequest.getSuccess()),
+      match(
+        error => this.apiResponseBuilder.sendCommandErrorResponse(error.toString()),
+        createdUser => this.createSessionTokenAndBuildSuccessResponse(createdUser)
+      )
+    )
+  }
+
+  private createSessionTokenAndBuildSuccessResponse(createdUser: User): void {
+    const tokenPayload = { userId: createdUser.id };
+    const tokenConfig = { expiresIn: '7d' };
+    const sessionToken = jwt.sign(tokenPayload, enviromentConfiguration.JWT_SECRET_KEY, tokenConfig);
     const response = new ResponseDto(sessionToken);
     this.apiResponseBuilder.sendSuccessResponse(response);
   }

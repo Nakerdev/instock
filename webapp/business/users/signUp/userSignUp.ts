@@ -1,10 +1,11 @@
+import { Either, left, right } from "fp-ts/Either";
+
 import PasswordHashingService from "../../security/cryptography/passwordHashingService";
 import UuidService from "../../security/cryptography/uuidService";
 import TimeService from "../../infraestructure/timeService";
 import UserRepository from "../userRepository";
 import User from "../user";
-import UserSignUpRequest from "./UserSignUpRequest";
-import Either from "../../valueObjects/either";
+import { UserSignUpRequest } from "./UserSignUpRequest";
 
 export {
     UserSignUp,
@@ -32,11 +33,11 @@ class UserSignUp {
 
     async signUp(request: UserSignUpRequest): Promise<Either<UserSignUpError, User>>{
         if(this.userRepository.exist(request.email)) {
-            return Either.left(UserSignUpError.UserAlreadyExist);
+            return left(UserSignUpError.UserAlreadyExist);
         }
         const user = await this.buildUser(request);
         this.userRepository.save(user);
-        return Either.right(user);
+        return right(user);
     }
 
     private async buildUser(request: UserSignUpRequest): Promise<User> {

@@ -11,7 +11,7 @@ export {
     UserSignUpRequestDto
 }
 
-export default class UserSignUpRequest {
+class UserSignUpRequest {
 
     readonly email: Email;
     readonly name: Name;

@@ -29,20 +29,25 @@ class UserSignUpController {
       this.enviromentConfiguration = enviromentConfiguration;
   }
 
-  async signUp(request: UserSignUpControllerRequest){
-    const commandRequest = this.buildCommandRequest(request);
-    if(commandRequest.isFail()){
-      const validationErrors = commandRequest.getFails();
-      this.apiResponseBuilder.sendValidationErrorResponse(validationErrors);
-    }
+  signUp(request: UserSignUpControllerRequest): void {
     pipe(
-      await this.command.signUp(commandRequest.getSuccess()),
+      this.buildCommandRequest(request),
+      match(
+        validationErrors => this.apiResponseBuilder.sendValidationErrorResponse(validationErrors),
+        request => this.executeCommand(request)
+      )
+    )
+  }
+
+  private async executeCommand(request: UserSignUpRequest): Promise<void> {
+    pipe(
+      await this.command.signUp(request),
       match(
         error => this.apiResponseBuilder.sendCommandErrorResponse(error.toString()),
         createdUser => this.createSessionTokenAndBuildSuccessResponse(createdUser)
       )
-    )
-  }
+    );
+  }  
 
   private createSessionTokenAndBuildSuccessResponse(createdUser: User): void {
     const tokenPayload = { userId: createdUser.id };

@@ -1,8 +1,9 @@
+import { Either, left, right } from "fp-ts/Either";
+
 import Email from "../../valueObjects/email";
 import Name from "../../valueObjects/name";
 import Surname from "../../valueObjects/surname";
 import Password from "../../valueObjects/password";
-import Validation from "../../valueObjects/validation";
 import { ValidationError } from "../../valueObjects/validationError";
 import FormValidationError from "../../valueObjects/formValidationError";
 
@@ -18,7 +19,10 @@ class UserSignUpRequest {
     readonly surname: Surname;
     readonly password: Password;
 
-    static create(requestDto: UserSignUpRequestDto): Validation<FormValidationError<ValidationError>, UserSignUpRequest> {
+    static create(requestDto: UserSignUpRequestDto): Either<
+        Array<FormValidationError<ValidationError>>, 
+        UserSignUpRequest
+    > {
 
         const emailValidation = Email.create(requestDto.email);
         const nameValidation = Name.create(requestDto.name);
@@ -44,7 +48,7 @@ class UserSignUpRequest {
                 .concat(surnameFails)
                 .concat(passwordFails)
                 .concat(legalTermsAndConditions);
-            return Validation.fail(formValidations);
+            return left(formValidations);
         }
 
         const request = new UserSignUpRequest(
@@ -53,7 +57,7 @@ class UserSignUpRequest {
             surnameValidation.getSuccess(),
             passwordValidation.getSuccess()
         );
-        return Validation.success(request);
+        return right(request);
     }
 
     private constructor(

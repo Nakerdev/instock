@@ -1,3 +1,6 @@
+import { isLeft, isRight, match } from "fp-ts/Either";
+import { pipe } from "fp-ts/pipeable";
+
 import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
 import Email from "../../../../business/valueObjects/email";
 import Name from "../../../../business/valueObjects/name";
@@ -10,15 +13,23 @@ describe("User SignUp Request", () => {
     it("creates request", () => {
         const requestDto = buildRequestDto({});
 
-        const requestValidaiton = UserSignUpRequest.create(requestDto);
+        const result = UserSignUpRequest.create(requestDto);
 
-        expect(requestValidaiton.isSuccess()).toBeTruthy();
-        expect(requestValidaiton.getSuccess()).toEqual({
-            email: Email.create(requestDto.email).getSuccess(),
-            name: Name.create(requestDto.name).getSuccess(),
-            surname: Surname.create(requestDto.surname).getSuccess(),
-            password: Password.create(requestDto.password).getSuccess()
-        });
+        expect(isRight(result)).toBeTruthy();
+        pipe(
+            result,
+            match(
+                _ => expect(true).toBeFalsy(),
+                request => {
+                    expect(request).toEqual({
+                        email: Email.create(requestDto.email).getSuccess(),
+                        name: Name.create(requestDto.name).getSuccess(),
+                        surname: Surname.create(requestDto.surname).getSuccess(),
+                        password: Password.create(requestDto.password).getSuccess()
+                    });
+                }
+            )
+        );
     });
 
     const validationErrorTestCases: ValidationErrorTestCase[] = [
@@ -52,15 +63,22 @@ describe("User SignUp Request", () => {
 
     validationErrorTestCases.forEach(testCase => {
         it(testCase.name, () => {
-            const requestValidaiton = UserSignUpRequest.create(testCase.requestDto);
+            const result = UserSignUpRequest.create(testCase.requestDto);
 
-            expect(requestValidaiton.isSuccess()).toBeFalsy();
-            const errors = requestValidaiton.getFails();
-            expect(errors.length).toBe(1);
-            expect(errors[0].fieldId).toBe(testCase.expectedFieldId);
-            if(testCase.expectedError){
-                expect(errors[0].error).toBe(testCase.expectedError);
-            }
+            expect(isLeft(result)).toBeTruthy();
+            pipe(
+                result,
+                match(
+                    errors => {
+                        expect(errors.length).toBe(1);
+                        expect(errors[0].fieldId).toBe(testCase.expectedFieldId);
+                        if(testCase.expectedError){
+                            expect(errors[0].error).toBe(testCase.expectedError);
+                        }
+                    },
+                    _ => expect(true).toBeFalsy()
+                )
+            );
         });
     });
 

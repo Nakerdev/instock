@@ -32,7 +32,7 @@ describe("User SignUp", () => {
     })
 
     it("signs up user", async () => {
-        const request = buildRequest();
+        const request = <UserSignUpRequest>buildRequest();
         const uuid = "deb74e35-ea5f-535f-890f-5779b5d8e27f"
         uuidService.create
             .mockReturnValue(uuid);
@@ -67,7 +67,7 @@ describe("User SignUp", () => {
     });
 
     it("does not signup user when user with the same email already exist", async () => {
-        const request = buildRequest();
+        const request = <UserSignUpRequest>buildRequest();
         userRepository.exist
             .calledWith(request.email)
             .mockReturnValue(true);
@@ -85,7 +85,7 @@ describe("User SignUp", () => {
         expect(userRepository.save).not.toHaveBeenCalled()
     });
 
-    function buildRequest(): UserSignUpRequest {
+    function buildRequest(): UserSignUpRequest | null {
         const requestDto = new UserSignUpRequestDto(
             "user@email.com",
             "Alvaro",
@@ -93,6 +93,12 @@ describe("User SignUp", () => {
             "MyStr0ngPass*",
             true
         );
-        return UserSignUpRequest.create(requestDto).getSuccess();
+        return pipe(
+            UserSignUpRequest.create(requestDto),
+            match(
+                _ => null,
+                request => request
+            )
+        );
     }
 });

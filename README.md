@@ -3,6 +3,11 @@
 ## Requirements
 
     - Docker >=19.03
+    - Enviroments variables
+
+## Enviroment Variables
+
+TODO (the .env file is not in the version control system)
 
 ## Database
 

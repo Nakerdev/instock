@@ -1,4 +1,5 @@
-import Validation from "./validation";
+import { Either, left, right } from "fp-ts/Either";
+
 import { ValidationError } from "./validationError";
 import { isEmpty } from "../utils/stringUtils";
 
@@ -6,22 +7,22 @@ export default class Email {
 
     private value: string;
 
-    static create(value: string): Validation<ValidationError, Email> {
+    static create(value: string): Either<ValidationError, Email> {
         
         const ALLOWED_MAX_LENGHT = 255;
 
         if(isEmpty(value)){
-            return Validation.fail([ValidationError.Required]);
+            return left(ValidationError.Required);
         }
         if(!this.isValidEmail(value)){
-            return Validation.fail([ValidationError.InvalidFormat]);
+            return left(ValidationError.InvalidFormat);
         }
         if(value.length >= ALLOWED_MAX_LENGHT){
-            return Validation.fail([ValidationError.WrongLength]);
+            return left(ValidationError.WrongLength);
         }
 
         const email = new Email(value);
-        return Validation.success(email);
+        return right(email);
     }
 
     private constructor(value: string){

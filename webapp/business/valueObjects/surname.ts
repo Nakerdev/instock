@@ -1,4 +1,5 @@
-import Validation from "./validation";
+import { Either, left, right } from "fp-ts/Either";
+
 import { ValidationError } from "./validationError";
 import { isEmpty } from "../utils/stringUtils";
 
@@ -6,19 +7,19 @@ export default class Surname {
 
     private value: string;
 
-    static create(value: string): Validation<ValidationError, Surname> {
+    static create(value: string): Either<ValidationError, Surname> {
         
         const ALLOWED_MAX_LENGHT = 255;
 
         if(isEmpty(value)){
-            return Validation.fail([ValidationError.Required]);
+            return left(ValidationError.Required);
         }
         if(value.length >= ALLOWED_MAX_LENGHT){
-            return Validation.fail([ValidationError.WrongLength]);
+            return left(ValidationError.WrongLength);
         }
 
         const surname = new Surname(value);
-        return Validation.success(surname);
+        return right(surname);
     }
 
     private constructor(value: string){

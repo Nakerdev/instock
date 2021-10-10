@@ -21,11 +21,15 @@ describe("User SignUp Request", () => {
             match(
                 _ => expect(true).toBeFalsy(),
                 request => {
+                    const expectedEmail = Email.create(requestDto.email);
+                    const expectedName = Name.create(requestDto.name);
+                    const expectedSurnname = Surname.create(requestDto.surname);
+                    const expectedPassword = Password.create(requestDto.password);
                     expect(request).toEqual({
-                        email: Email.create(requestDto.email).getSuccess(),
-                        name: Name.create(requestDto.name).getSuccess(),
-                        surname: Surname.create(requestDto.surname).getSuccess(),
-                        password: Password.create(requestDto.password).getSuccess()
+                        email: isRight(expectedEmail) ? expectedEmail.right : null,
+                        name: isRight(expectedName) ? expectedName.right : null,
+                        surname: isRight(expectedSurnname) ? expectedSurnname.right : null,
+                        password: isRight(expectedPassword) ? expectedPassword.right : null
                     });
                 }
             )

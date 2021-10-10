@@ -1,12 +1,15 @@
+import { isLeft, isRight, match } from "fp-ts/Either";
+import { pipe } from "fp-ts/pipeable";
+
 import Surname from "../../../business/valueObjects/surname";
 import { ValidationError } from "../../../business/valueObjects/validationError";
 
 describe("Surname", () => {
 
     it("creates surname", () => {
-        const validation = Surname.create("Gonzalez");
+        const result = Surname.create("Gonzalez");
 
-        expect(validation.isSuccess()).toBeTruthy();
+        expect(isRight(result)).toBeTruthy();
     });
 
     const validationTestCases: ValidationTestCase[] = [
@@ -24,12 +27,16 @@ describe("Surname", () => {
 
     validationTestCases.forEach(testCase => {
         it(testCase.name, () => {
-            const validation = Surname.create(testCase.value);
+            const result = Surname.create(testCase.value);
 
-            expect(validation.isFail()).toBeTruthy();
-            const fails = validation.getFails();
-            expect(fails.length).toBe(1);
-            expect(fails[0]).toBe(testCase.expectedError);
+            expect(isLeft(result)).toBeTruthy();
+            pipe(
+                result,
+                match(
+                    error => expect(error).toBe(testCase.expectedError),
+                    _ => expect(true).toBeFalsy()
+                )
+            );
         });
     })
 });

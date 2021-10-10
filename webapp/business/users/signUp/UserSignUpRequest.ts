@@ -1,4 +1,5 @@
-import { Either, left, right } from "fp-ts/Either";
+import { Either, left, right, isLeft, match } from "fp-ts/Either";
+import { pipe } from "fp-ts/pipeable";
 
 import Email from "../../valueObjects/email";
 import Name from "../../valueObjects/name";
@@ -24,39 +25,34 @@ class UserSignUpRequest {
         UserSignUpRequest
     > {
 
-        const emailValidation = Email.create(requestDto.email);
-        const nameValidation = Name.create(requestDto.name);
-        const surnameValidation = Surname.create(requestDto.surname);
-        const passwordValidation = Password.create(requestDto.password);
+        const emailValidationResult = Email.create(requestDto.email);
+        const nameValidationResult = Name.create(requestDto.name);
+        const surnameValidationResult = Surname.create(requestDto.surname);
+        const passwordValidationResult = Password.create(requestDto.password);
 
         if(
-            emailValidation.isFail()
-            || nameValidation.isFail()
-            || surnameValidation.isFail()
-            || passwordValidation.isFail()
+            isLeft(emailValidationResult)
+            || isLeft(nameValidationResult)
+            || isLeft(surnameValidationResult)
+            || isLeft(passwordValidationResult)
             || !requestDto.areLegalTermsAndConditionsAccepted
         ){
-            const emailFails: FormValidationError<ValidationError>[] = FormValidationError.create("email", emailValidation.getFails());
-            const nameFails: FormValidationError<ValidationError>[] = FormValidationError.create("name", nameValidation.getFails());
-            const surnameFails: FormValidationError<ValidationError>[] = FormValidationError.create("surname", surnameValidation.getFails());
-            const passwordFails: FormValidationError<ValidationError>[] = FormValidationError.create("password", passwordValidation.getFails());
-            const legalTermsAndConditions: FormValidationError<ValidationError>[] = !requestDto.areLegalTermsAndConditionsAccepted
-                ? FormValidationError.create("legalTermsAndConditions", [ValidationError.Required])
-                : [];
-            const formValidations = emailFails
-                .concat(nameFails)
-                .concat(surnameFails)
-                .concat(passwordFails)
-                .concat(legalTermsAndConditions);
+            const formValidations: FormValidationError<ValidationError>[] = [];
+            pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError("email", error)), _ => 0));
+            pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError("name", error)), _ => 0));
+            pipe(surnameValidationResult, match(error => formValidations.push(new FormValidationError("surname", error)), _ => 0));
+            pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError("password", error)), _ => 0));
+            if(!requestDto.areLegalTermsAndConditionsAccepted){
+                formValidations.push(new FormValidationError("legalTermsAndConditions", ValidationError.Required))
+            }
             return left(formValidations);
         }
 
         const request = new UserSignUpRequest(
-            emailValidation.getSuccess(),
-            nameValidation.getSuccess(),
-            surnameValidation.getSuccess(),
-            passwordValidation.getSuccess()
-        );
+            emailValidationResult.right,
+            nameValidationResult.right,
+            surnameValidationResult.right,
+            passwordValidationResult.right);
         return right(request);
     }
 

@@ -1,4 +1,5 @@
-import Validation from "./validation";
+import { Either, left, right } from "fp-ts/Either";
+
 import { ValidationError } from "./validationError";
 import { isEmpty } from "../utils/stringUtils";
 
@@ -6,23 +7,23 @@ export default class Password {
 
     private value: string;
 
-    static create(value: string): Validation<ValidationError, Password> {
+    static create(value: string): Either<ValidationError, Password> {
         
         const ALLOWED_MIN_LENGHT = 8;
         const ALLOWED_MAX_LENGHT = 255;
 
         if(isEmpty(value)){
-            return Validation.fail([ValidationError.Required]);
+            return left(ValidationError.Required);
         }
         if(value.length < ALLOWED_MIN_LENGHT || !this.isAStrongPassword(value)){
-            return Validation.fail([ValidationError.InvalidFormat]);
+            return left(ValidationError.InvalidFormat);
         }
         if(value.length >= ALLOWED_MAX_LENGHT){
-            return Validation.fail([ValidationError.WrongLength]);
+            return left(ValidationError.WrongLength);
         }
 
         const password = new Password(value);
-        return Validation.success(password);
+        return right(password);
     }
 
     static createFromBusiness(value: string): Password {

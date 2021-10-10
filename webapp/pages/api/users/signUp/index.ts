@@ -1,22 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { buildUserSignUpController } from "./factory";
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+import { buildUserSignUpController } from "./factory";
+import { UserSignUpControllerRequest } from "./controller";
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
   switch (method) {
-    case "GET":
-      const criteria = extractCriteriaParamFrom(req);
-      const controller = buildMoviesController(res);
-      const moviesRequest = new MoviesControllerRequest(criteria);
-      controller.search(moviesRequest);
+    case "POST":
+      const requestDto: UserSignUpControllerRequest = JSON.parse(req.body);
+      const controller = buildUserSignUpController(res);
+      controller.signUp(requestDto);
       break;
     default:
-      res.setHeader("Allow", ["GET"]);
+      res.setHeader("Allow", ["POST"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 };
-
-function extractCriteriaParamFrom(req: NextApiRequest) {
-  const { criteria } = req.query;
-  return Array.isArray(criteria) ? "" : criteria;
-}

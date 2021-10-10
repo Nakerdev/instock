@@ -8,7 +8,7 @@ import PasswordHashingService from "../../../../business/security/cryptography/p
 import UuidService from "../../../../business/security/cryptography/uuidService";
 import TimeService from "../../../../business/infraestructure/timeService";
 import UserRepository from "../../../../business/users/userRepository";
-import Password from "../../../../business/valueObjects/password";
+import { Password } from "../../../../business/valueObjects/password";
 
 describe("User SignUp", () => {
 
@@ -70,7 +70,7 @@ describe("User SignUp", () => {
         const request = <UserSignUpRequest>buildRequest();
         userRepository.exist
             .calledWith(request.email)
-            .mockReturnValue(true);
+            .mockResolvedValue(true);
 
         const result = await command.signUp(request);
 

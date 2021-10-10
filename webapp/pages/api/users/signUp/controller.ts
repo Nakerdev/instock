@@ -6,7 +6,7 @@ import { ApiResponseBuilder } from "./apiUtils";
 import { UserSignUp } from "../../../../business/users/signUp/userSignUp";
 import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
 import { EnviromentConfiguration, enviromentConfiguration } from "../../../../enviromentConfiguration";
-import User from "../../../../business/users/user";
+import { User } from "../../../../business/users/user";
 
 export {
   UserSignUpController,

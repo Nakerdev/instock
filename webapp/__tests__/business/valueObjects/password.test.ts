@@ -1,7 +1,7 @@
 import { isLeft, isRight, match } from "fp-ts/Either";
 import { pipe } from "fp-ts/pipeable";
 
-import Password from "../../../business/valueObjects/password";
+import { Password } from "../../../business/valueObjects/password";
 import { ValidationError } from "../../../business/types/validationError";
 
 describe("Password", () => {

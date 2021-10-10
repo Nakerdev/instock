@@ -4,7 +4,7 @@ import PasswordHashingService from "../../security/cryptography/passwordHashingS
 import UuidService from "../../security/cryptography/uuidService";
 import TimeService from "../../infraestructure/timeService";
 import UserRepository from "../userRepository";
-import User from "../user";
+import { User } from "../user";
 import { UserSignUpRequest } from "./UserSignUpRequest";
 
 export {
@@ -32,11 +32,12 @@ class UserSignUp {
     }
 
     async signUp(request: UserSignUpRequest): Promise<Either<UserSignUpError, User>>{
-        if(this.userRepository.exist(request.email)) {
+        const userAlreadyExist = await this.userRepository.exist(request.email);
+        if(userAlreadyExist) {
             return left(UserSignUpError.UserAlreadyExist);
         }
         const user = await this.buildUser(request);
-        this.userRepository.save(user);
+        await this.userRepository.save(user);
         return right(user);
     }
 

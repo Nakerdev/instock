@@ -1,10 +1,10 @@
 import { Either, left, right, isLeft, match } from "fp-ts/Either";
 import { pipe } from "fp-ts/pipeable";
 
-import Email from "../../valueObjects/email";
-import Name from "../../valueObjects/name";
-import Surname from "../../valueObjects/surname";
-import Password from "../../valueObjects/password";
+import { Email } from "../../valueObjects/email";
+import { Name } from "../../valueObjects/name";
+import { Surname } from "../../valueObjects/surname";
+import { Password } from "../../valueObjects/password";
 import { ValidationError } from "../../types/validationError";
 import FormValidationError from "../../types/formValidationError";
 

@@ -3,9 +3,15 @@ import { Either, left, right } from "fp-ts/Either";
 import { ValidationError } from "../types/validationError";
 import { isEmpty } from "../utils/stringUtils";
 
-export default class Name {
+export {
+    Name,
+    NamePersistenceState
+}
+
+class Name {
 
     private value: string;
+    readonly state: NamePersistenceState = new NamePersistenceState(this.value);
 
     static create(value: string): Either<ValidationError, Name> {
         
@@ -23,6 +29,14 @@ export default class Name {
     }
 
     private constructor(value: string){
+        this.value = value;
+    }
+}
+
+class NamePersistenceState {
+    readonly value: string;
+
+    constructor(value: string){
         this.value = value;
     }
 }

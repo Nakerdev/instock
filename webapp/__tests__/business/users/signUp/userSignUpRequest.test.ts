@@ -2,10 +2,10 @@ import { isLeft, isRight, match } from "fp-ts/Either";
 import { pipe } from "fp-ts/pipeable";
 
 import { UserSignUpRequest, UserSignUpRequestDto } from "../../../../business/users/signUp/UserSignUpRequest";
-import Email from "../../../../business/valueObjects/email";
-import Name from "../../../../business/valueObjects/name";
-import Surname from "../../../../business/valueObjects/surname";
-import Password from "../../../../business/valueObjects/password";
+import { Email } from "../../../../business/valueObjects/email";
+import { Name } from "../../../../business/valueObjects/name";
+import { Surname } from "../../../../business/valueObjects/surname";
+import { Password } from "../../../../business/valueObjects/password";
 import { ValidationError } from "../../../../business/types/validationError";
 
 describe("User SignUp Request", () => {

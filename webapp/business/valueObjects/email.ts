@@ -3,9 +3,16 @@ import { Either, left, right } from "fp-ts/Either";
 import { ValidationError } from "../types/validationError";
 import { isEmpty } from "../utils/stringUtils";
 
-export default class Email {
+export {
+    Email,
+    EmailPersistenceState
+}
+
+class Email {
 
     private value: string;
+
+    readonly state: EmailPersistenceState = new EmailPersistenceState(this.value);
 
     static create(value: string): Either<ValidationError, Email> {
         
@@ -32,5 +39,13 @@ export default class Email {
     private static isValidEmail(value: string) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(value).toLowerCase());
+    }
+}
+
+class EmailPersistenceState {
+    readonly value: string;
+
+    constructor(value: string){
+        this.value = value;
     }
 }

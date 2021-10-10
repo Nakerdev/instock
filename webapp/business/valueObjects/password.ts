@@ -3,9 +3,16 @@ import { Either, left, right } from "fp-ts/Either";
 import { ValidationError } from "../types/validationError";
 import { isEmpty } from "../utils/stringUtils";
 
-export default class Password {
+export {
+    Password,
+    PasswordPersistenceState
+}
+
+class Password {
 
     private value: string;
+
+    readonly state: PasswordPersistenceState = new PasswordPersistenceState(this.value);
 
     static create(value: string): Either<ValidationError, Password> {
         
@@ -40,5 +47,13 @@ export default class Password {
 
     private static isAStrongPassword(value: string): boolean {
         return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(value)
+    }
+}
+
+class PasswordPersistenceState {
+    readonly value: string;
+
+    constructor(value: string){
+        this.value = value;
     }
 }

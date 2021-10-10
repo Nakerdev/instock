@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
-import FormValidationError from "../../../../business/valueObjects/formValidationError";
-import { ValidationError } from "../../../../business/valueObjects/validationError";
+import FormValidationError from "../../../../business/types/formValidationError";
+import { ValidationError } from "../../../../business/types/validationError";
 
 export type ResponseBody = object | string | Array<object>;
 

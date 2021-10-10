@@ -5,8 +5,8 @@ import Email from "../../valueObjects/email";
 import Name from "../../valueObjects/name";
 import Surname from "../../valueObjects/surname";
 import Password from "../../valueObjects/password";
-import { ValidationError } from "../../valueObjects/validationError";
-import FormValidationError from "../../valueObjects/formValidationError";
+import { ValidationError } from "../../types/validationError";
+import FormValidationError from "../../types/formValidationError";
 
 export {
     UserSignUpRequest,

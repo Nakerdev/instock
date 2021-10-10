@@ -2,7 +2,7 @@ import { isLeft, isRight, match } from "fp-ts/Either";
 import { pipe } from "fp-ts/pipeable";
 
 import Surname from "../../../business/valueObjects/surname";
-import { ValidationError } from "../../../business/valueObjects/validationError";
+import { ValidationError } from "../../../business/types/validationError";
 
 describe("Surname", () => {
 

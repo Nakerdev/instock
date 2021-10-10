@@ -6,7 +6,7 @@ import Email from "../../../../business/valueObjects/email";
 import Name from "../../../../business/valueObjects/name";
 import Surname from "../../../../business/valueObjects/surname";
 import Password from "../../../../business/valueObjects/password";
-import { ValidationError } from "../../../../business/valueObjects/validationError";
+import { ValidationError } from "../../../../business/types/validationError";
 
 describe("User SignUp Request", () => {
 

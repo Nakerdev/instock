@@ -1,6 +1,6 @@
 import { Either, left, right } from "fp-ts/Either";
 
-import { ValidationError } from "./validationError";
+import { ValidationError } from "../types/validationError";
 import { isEmpty } from "../utils/stringUtils";
 
 export default class Surname {

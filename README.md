@@ -2,8 +2,7 @@
 
 ## Requirements
 
-- Docker >=19.03
-- Sequilize command line installed globally (npm install -g sequelize-cli)
+    - Docker >=19.03
 
 ## Database
 

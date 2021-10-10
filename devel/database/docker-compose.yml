@@ -1,0 +1,21 @@
+version: '2.3'
+services: 
+    database:
+        image: postgres:14
+        container_name: database
+        restart: always
+        environment: 
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "Password01!"
+        volumes: 
+            - ~/in-stock/db-data:/var/lib/postgresql/data
+        networks: 
+            instocknet:
+                ipv4_address: 192.168.2.2
+
+networks:
+    instocknet:
+        driver: bridge
+        ipam: 
+            config: 
+                - subnet: 192.168.2.0/24

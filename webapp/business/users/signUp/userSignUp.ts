@@ -43,7 +43,7 @@ class UserSignUp {
 
     private async buildUser(request: UserSignUpRequest): Promise<User> {
         const id = this.uuidService.create();
-        const hashedPassword = await this.passwordHashingService.hash(request.password);
+        const hashedPassword = await request.password.hash(this.passwordHashingService);
         const signUpDate = this.timeService.utcNow();
         return new User(
             id,

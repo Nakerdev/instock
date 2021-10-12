@@ -1,5 +1,6 @@
 import { Either, left, right } from "fp-ts/Either";
 
+import PasswordHasingService from "../security/cryptography/passwordHashingService";
 import { ValidationError } from "../types/validationError";
 import { isEmpty } from "../utils/stringUtils";
 
@@ -33,17 +34,14 @@ class Password {
         return right(password);
     }
 
-    static createFromBusiness(value: string): Password {
-        return new Password(value);
-    }
-
     private constructor(value: string){
         this.value = value;
         this.state = new PasswordPersistenceState(value);
     }
 
-    getValue(): string{
-        return this.value;
+    async hash(hashingService: PasswordHasingService): Promise<Password> {
+        const hashedPassword = await hashingService.hash(this.value);
+        return new Password(hashedPassword);
     }
 
     private static isAStrongPassword(value: string): boolean {

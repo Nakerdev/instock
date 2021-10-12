@@ -34,6 +34,10 @@ class Password {
         return right(password);
     }
 
+    static createFromState(state: PasswordPersistenceState): Password {
+        return new Password(state.value);
+    }
+
     private constructor(value: string){
         this.value = value;
         this.state = new PasswordPersistenceState(value);
@@ -42,6 +46,13 @@ class Password {
     async hash(hashingService: PasswordHasingService): Promise<Password> {
         const hashedPassword = await hashingService.hash(this.value);
         return new Password(hashedPassword);
+    }
+
+    async compare(
+        hashingService: PasswordHasingService,
+        passwordIntent: Password
+    ): Promise<boolean> {
+        return await hashingService.compare(this.value, passwordIntent.value);
     }
 
     private static isAStrongPassword(value: string): boolean {

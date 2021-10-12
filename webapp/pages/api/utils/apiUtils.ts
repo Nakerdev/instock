@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
-import FormValidationError from "../../../../business/types/formValidationError";
-import { ValidationError } from "../../../../business/types/validationError";
+import FormValidationError from "../../../business/types/formValidationError";
+import { ValidationError } from "../../../business/types/validationError";
 
 export type ResponseBody = object | string | Array<object>;
 
@@ -8,6 +8,7 @@ export interface ApiResponseBuilder {
   sendSuccessResponse(responseBody: ResponseBody): void;
   sendValidationErrorResponse(formValidationErrors: FormValidationError<ValidationError>[]): void;
   sendCommandErrorResponse(commandError: string): void;
+  sendUnauthorizedResponse(): void;
 }
 
 export function nextApiResponseBuilder(
@@ -17,7 +18,8 @@ export function nextApiResponseBuilder(
   return {
     sendSuccessResponse,
     sendValidationErrorResponse: sendValidtionErrorResponse,
-    sendCommandErrorResponse
+    sendCommandErrorResponse,
+    sendUnauthorizedResponse
   };
 
   function sendSuccessResponse(responseBody: ResponseBody): void {
@@ -30,5 +32,9 @@ export function nextApiResponseBuilder(
 
   function sendCommandErrorResponse(commandError: string): void {
     res.status(404).json({commandError: commandError});
+  }
+
+  function sendUnauthorizedResponse(): void {
+    res.status(401).send();
   }
 }

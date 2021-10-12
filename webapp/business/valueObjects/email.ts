@@ -32,6 +32,10 @@ class Email {
         return right(email);
     }
 
+    static createFromState(state: EmailPersistenceState): Email {
+        return new Email(state.value);
+    }
+
     private constructor(value: string){
         this.value = value;
         this.state = new EmailPersistenceState(value);

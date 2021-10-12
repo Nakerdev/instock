@@ -29,6 +29,10 @@ class Name {
         return right(name);
     }
 
+    static createFromState(state: NamePersistenceState): Name {
+        return new Name(state.value);
+    }
+
     private constructor(value: string){
         this.value = value;
         this.state = new NamePersistenceState(value);

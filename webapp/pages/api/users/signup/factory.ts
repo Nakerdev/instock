@@ -1,6 +1,6 @@
 import { NextApiResponse } from "next";
 
-import { nextApiResponseBuilder } from "./apiUtils";
+import { nextApiResponseBuilder } from "../../utils/apiUtils";
 import { UserSignUpController } from "./controller";
 import { enviromentConfiguration } from "../../../../enviromentConfiguration";
 import { UserSignUp } from "../../../../business/users/signUp/userSignUp";

@@ -12,7 +12,7 @@ class Surname {
 
     private value: string;
 
-    readonly state: SurnamePersistenceState = new SurnamePersistenceState(this.value)
+    readonly state: SurnamePersistenceState;
 
     static create(value: string): Either<ValidationError, Surname> {
         
@@ -31,6 +31,7 @@ class Surname {
 
     private constructor(value: string){
         this.value = value;
+        this.state = new SurnamePersistenceState(value);
     }
 }
 

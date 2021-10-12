@@ -1,5 +1,5 @@
 export enum ValidationError {
-    Required = 0,
-    InvalidFormat = 1,
-    WrongLength = 2
+    Required = "Required",
+    InvalidFormat = "InvalidFormat",
+    WrongLength = "WrongLength" 
 }

@@ -57,5 +57,5 @@ class UserSignUp {
 }
 
 enum UserSignUpError {
-    UserAlreadyExist = "USER_ALREADY_EXIST"
+    UserAlreadyExist = "UserAlreadyExist"
 }

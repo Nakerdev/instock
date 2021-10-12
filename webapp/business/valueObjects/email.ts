@@ -12,7 +12,7 @@ class Email {
 
     private value: string;
 
-    readonly state: EmailPersistenceState = new EmailPersistenceState(this.value);
+    readonly state: EmailPersistenceState;
 
     static create(value: string): Either<ValidationError, Email> {
         
@@ -34,6 +34,7 @@ class Email {
 
     private constructor(value: string){
         this.value = value;
+        this.state = new EmailPersistenceState(value);
     }
 
     private static isValidEmail(value: string) {

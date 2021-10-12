@@ -12,7 +12,7 @@ class Password {
 
     private value: string;
 
-    readonly state: PasswordPersistenceState = new PasswordPersistenceState(this.value);
+    readonly state: PasswordPersistenceState;
 
     static create(value: string): Either<ValidationError, Password> {
         
@@ -39,6 +39,7 @@ class Password {
 
     private constructor(value: string){
         this.value = value;
+        this.state = new PasswordPersistenceState(value);
     }
 
     getValue(): string{

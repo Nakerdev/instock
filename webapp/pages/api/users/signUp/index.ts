@@ -7,7 +7,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
   switch (method) {
     case "POST":
-      const requestDto: UserSignUpControllerRequest = JSON.parse(req.body);
+      const requestDto: UserSignUpControllerRequest = req.body;
       const controller = buildUserSignUpController(res);
       controller.signUp(requestDto);
       break;

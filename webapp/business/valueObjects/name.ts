@@ -11,7 +11,8 @@ export {
 class Name {
 
     private value: string;
-    readonly state: NamePersistenceState = new NamePersistenceState(this.value);
+
+    readonly state: NamePersistenceState;
 
     static create(value: string): Either<ValidationError, Name> {
         
@@ -30,6 +31,7 @@ class Name {
 
     private constructor(value: string){
         this.value = value;
+        this.state = new NamePersistenceState(value);
     }
 }
 

@@ -6,10 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "jest --watch",
-    "migration:create": "npx prisma migrate dev --create-only --name --",
-    "migration:apply": "npx prisma migrate dev"
+    "migration:create": "prisma migrate dev --create-only --name --",
+    "migration:apply": "prisma migrate dev",
+    "lint": "npx eslint . --fix --ext .ts"
   },
   "dependencies": {
     "@prisma/client": "3.2.1",

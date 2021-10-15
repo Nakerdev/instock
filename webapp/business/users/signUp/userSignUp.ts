@@ -7,13 +7,10 @@ import UserRepository from '../userRepository'
 import { User } from '../user'
 import { UserSignUpRequest } from './UserSignUpRequest'
 
-export {
-  UserSignUp,
-  UserSignUpError
-}
+export { UserSignUp, UserSignUpError }
 
 enum UserSignUpError {
-    UserAlreadyExist = 'UserAlreadyExist'
+  UserAlreadyExist = 'UserAlreadyExist',
 }
 
 class UserSignUp {
@@ -34,7 +31,9 @@ class UserSignUp {
     this.timeService = timeService
   }
 
-  async signUp (request: UserSignUpRequest): Promise<Either<UserSignUpError, User>> {
+  async signUp (
+    request: UserSignUpRequest
+  ): Promise<Either<UserSignUpError, User>> {
     const userAlreadyExist = await this.userRepository.exist(request.email)
     if (userAlreadyExist) {
       return left(UserSignUpError.UserAlreadyExist)
@@ -46,7 +45,9 @@ class UserSignUp {
 
   private async buildUser (request: UserSignUpRequest): Promise<User> {
     const id = this.uuidService.create()
-    const hashedPassword = await request.password.hash(this.passwordHashingService)
+    const hashedPassword = await request.password.hash(
+      this.passwordHashingService
+    )
     const signUpDate = this.timeService.utcNow()
     return new User(
       id,

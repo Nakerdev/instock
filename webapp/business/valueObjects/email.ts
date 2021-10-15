@@ -1,56 +1,54 @@
-import { Either, left, right } from "fp-ts/Either";
+import { Either, left, right } from 'fp-ts/Either'
 
-import { ValidationError } from "../types/validationError";
-import { isEmpty } from "../utils/stringUtils";
+import { ValidationError } from '../types/validationError'
+import { isEmpty } from '../utils/stringUtils'
 
 export {
-    Email,
-    EmailPersistenceState
+  Email,
+  EmailPersistenceState
 }
 
 class Email {
+  private value: string
 
-    private value: string;
+  readonly state: EmailPersistenceState
 
-    readonly state: EmailPersistenceState;
+  static create (value: string): Either<ValidationError, Email> {
+    const ALLOWED_MAX_LENGHT = 255
 
-    static create(value: string): Either<ValidationError, Email> {
-        
-        const ALLOWED_MAX_LENGHT = 255;
-
-        if(isEmpty(value)){
-            return left(ValidationError.Required);
-        }
-        if(!this.isValidEmail(value)){
-            return left(ValidationError.InvalidFormat);
-        }
-        if(value.length >= ALLOWED_MAX_LENGHT){
-            return left(ValidationError.WrongLength);
-        }
-
-        const email = new Email(value);
-        return right(email);
+    if (isEmpty(value)) {
+      return left(ValidationError.Required)
+    }
+    if (!this.isValidEmail(value)) {
+      return left(ValidationError.InvalidFormat)
+    }
+    if (value.length >= ALLOWED_MAX_LENGHT) {
+      return left(ValidationError.WrongLength)
     }
 
-    static createFromState(state: EmailPersistenceState): Email {
-        return new Email(state.value);
-    }
+    const email = new Email(value)
+    return right(email)
+  }
 
-    private constructor(value: string){
-        this.value = value;
-        this.state = new EmailPersistenceState(value);
-    }
+  static createFromState (state: EmailPersistenceState): Email {
+    return new Email(state.value)
+  }
 
-    private static isValidEmail(value: string) {
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(value).toLowerCase());
-    }
+  private constructor (value: string) {
+    this.value = value
+    this.state = new EmailPersistenceState(value)
+  }
+
+  private static isValidEmail (value: string) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(value).toLowerCase())
+  }
 }
 
 class EmailPersistenceState {
-    readonly value: string;
+  readonly value: string
 
-    constructor(value: string){
-        this.value = value;
-    }
+  constructor (value: string) {
+    this.value = value
+  }
 }

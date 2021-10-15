@@ -1,6 +1,6 @@
-import { NextApiResponse } from "next";
-import FormValidationError from "../../../business/types/formValidationError";
-import { ValidationError } from "../../../business/types/validationError";
+import { NextApiResponse } from 'next'
+import FormValidationError from '../../../business/types/formValidationError'
+import { ValidationError } from '../../../business/types/validationError'
 
 export type ResponseBody = object | string | Array<object>;
 
@@ -11,30 +11,29 @@ export interface ApiResponseBuilder {
   sendUnauthorizedResponse(): void;
 }
 
-export function nextApiResponseBuilder(
+export function nextApiResponseBuilder (
   res: NextApiResponse
 ): ApiResponseBuilder {
-
   return {
     sendSuccessResponse,
     sendValidationErrorResponse: sendValidtionErrorResponse,
     sendCommandErrorResponse,
     sendUnauthorizedResponse
-  };
-
-  function sendSuccessResponse(responseBody: ResponseBody): void {
-    res.status(200).json(responseBody);
   }
 
-  function sendValidtionErrorResponse(formValidationErrors: FormValidationError<ValidationError>[]): void {
-    res.status(404).json(formValidationErrors);
+  function sendSuccessResponse (responseBody: ResponseBody): void {
+    res.status(200).json(responseBody)
   }
 
-  function sendCommandErrorResponse(commandError: string): void {
-    res.status(404).json({commandError: commandError});
+  function sendValidtionErrorResponse (formValidationErrors: FormValidationError<ValidationError>[]): void {
+    res.status(404).json(formValidationErrors)
   }
 
-  function sendUnauthorizedResponse(): void {
-    res.status(401).send();
+  function sendCommandErrorResponse (commandError: string): void {
+    res.status(404).json({ commandError: commandError })
+  }
+
+  function sendUnauthorizedResponse (): void {
+    res.status(401).send()
   }
 }

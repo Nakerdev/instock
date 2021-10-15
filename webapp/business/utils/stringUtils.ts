@@ -1,1 +1,1 @@
-export const isEmpty = (value: string): boolean => value === "" || value === " ";
+export const isEmpty = (value: string): boolean => value === '' || value === ' '

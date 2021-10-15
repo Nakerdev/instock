@@ -1,48 +1,46 @@
-import { Either, left, right } from "fp-ts/Either";
+import { Either, left, right } from 'fp-ts/Either'
 
-import { ValidationError } from "../types/validationError";
-import { isEmpty } from "../utils/stringUtils";
+import { ValidationError } from '../types/validationError'
+import { isEmpty } from '../utils/stringUtils'
 
 export {
-    Name,
-    NamePersistenceState
+  Name,
+  NamePersistenceState
 }
 
 class Name {
+  private value: string
 
-    private value: string;
+  readonly state: NamePersistenceState
 
-    readonly state: NamePersistenceState;
+  static create (value: string): Either<ValidationError, Name> {
+    const ALLOWED_MAX_LENGHT = 255
 
-    static create(value: string): Either<ValidationError, Name> {
-        
-        const ALLOWED_MAX_LENGHT = 255;
-
-        if(isEmpty(value)){
-            return left(ValidationError.Required);
-        }
-        if(value.length >= ALLOWED_MAX_LENGHT){
-            return left(ValidationError.WrongLength);
-        }
-
-        const name = new Name(value);
-        return right(name);
+    if (isEmpty(value)) {
+      return left(ValidationError.Required)
+    }
+    if (value.length >= ALLOWED_MAX_LENGHT) {
+      return left(ValidationError.WrongLength)
     }
 
-    static createFromState(state: NamePersistenceState): Name {
-        return new Name(state.value);
-    }
+    const name = new Name(value)
+    return right(name)
+  }
 
-    private constructor(value: string){
-        this.value = value;
-        this.state = new NamePersistenceState(value);
-    }
+  static createFromState (state: NamePersistenceState): Name {
+    return new Name(state.value)
+  }
+
+  private constructor (value: string) {
+    this.value = value
+    this.state = new NamePersistenceState(value)
+  }
 }
 
 class NamePersistenceState {
-    readonly value: string;
+  readonly value: string
 
-    constructor(value: string){
-        this.value = value;
-    }
+  constructor (value: string) {
+    this.value = value
+  }
 }

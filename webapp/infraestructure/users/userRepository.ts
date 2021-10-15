@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Option, none, some } from 'fp-ts/Option'
 
+import DbUserModel from '../../prisma/models/users/user'
 import UserRepository from '../../business/users/userRepository'
 import { User, UserPersistenceState } from '../../business/users/user'
 import { Email, EmailPersistenceState } from '../../business/valueObjects/email'
@@ -74,14 +75,4 @@ export default class UserPrismaRepository implements UserRepository {
     )
     return User.createFromState(userState)
   }
-}
-
-// TODO: Move this model to common place
-interface DbUserModel {
-    id: string;
-    email: string;
-    password: string;
-    name: string;
-    surname: string;
-    signUpDate: Date;
 }

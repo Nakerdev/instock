@@ -1,12 +1,11 @@
-import jwt from 'jsonwebtoken'
 import { match } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/pipeable'
 
-import { ApiResponseBuilder } from './apiUtils'
+import { ApiResponseBuilder } from './../../utils/apiUtils'
 import { UserSignUp } from '../../../../business/users/signUp/userSignUp'
 import { UserSignUpRequest, UserSignUpRequestDto } from '../../../../business/users/signUp/UserSignUpRequest'
-import { EnviromentConfiguration, enviromentConfiguration } from '../../../../enviromentConfiguration'
 import { User } from '../../../../business/users/user'
+import SessionService from '../../../../application/session/sessionService'
 
 export {
   UserSignUpController,
@@ -16,16 +15,16 @@ export {
 class UserSignUpController {
   readonly command: UserSignUp
   readonly apiResponseBuilder: ApiResponseBuilder
-  readonly enviromentConfiguration: EnviromentConfiguration
+  readonly sessionService: SessionService
 
   constructor (
     command: UserSignUp,
     apiResponseBuilder: ApiResponseBuilder,
-    enviromentConfiguration: EnviromentConfiguration
+    sessionService: SessionService
   ) {
     this.command = command
     this.apiResponseBuilder = apiResponseBuilder
-    this.enviromentConfiguration = enviromentConfiguration
+    this.sessionService = sessionService
   }
 
   signUp (request: UserSignUpControllerRequest): void {
@@ -49,9 +48,7 @@ class UserSignUpController {
   }
 
   private createSessionTokenAndBuildSuccessResponse (createdUser: User): void {
-    const tokenPayload = { userId: createdUser.id }
-    const tokenConfig = { expiresIn: '7d' }
-    const sessionToken = jwt.sign(tokenPayload, enviromentConfiguration.JWT_SECRET_KEY, tokenConfig)
+    const sessionToken = this.sessionService.create(createdUser)
     const response = new ResponseDto(sessionToken)
     this.apiResponseBuilder.sendSuccessResponse(response)
   }

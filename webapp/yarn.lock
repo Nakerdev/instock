@@ -883,7 +883,7 @@
     semver "^7.3.5"
     tsutils "^3.21.0"
 
-"@typescript-eslint/experimental-utils@5.0.0":
+"@typescript-eslint/experimental-utils@5.0.0", "@typescript-eslint/experimental-utils@^5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-5.0.0.tgz#c7d7e67443dfb9fd93a5d060fb72c9e9b5638bbc"
   integrity sha512-Dnp4dFIsZcPawD6CT1p5NibNUQyGSEz80sULJZkyhyna8AEqArmfwMwJPbmKzWVo4PabqNVzHYlzmcdLQWk+pg==
@@ -2241,6 +2241,13 @@ eslint-plugin-import@^2.25.2:
     object.values "^1.1.5"
     resolve "^1.20.0"
     tsconfig-paths "^3.11.0"
+
+eslint-plugin-jest@^25.2.1:
+  version "25.2.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-25.2.1.tgz#998b8a770b816534674a2df72b6165a0a42c1f61"
+  integrity sha512-fC6T95lqgWHsdVFd+f0kTHH32NxbIzIm1fJ/3kGaCFcQP1fJc5khV7DzUHjNQSTOHd5Toa7ccEBptab4uFqbNQ==
+  dependencies:
+    "@typescript-eslint/experimental-utils" "^5.0.0"
 
 eslint-plugin-jsx-a11y@^6.4.1:
   version "6.4.1"

@@ -23,8 +23,14 @@ module.exports = {
   },
   plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'jest'
   ],
   rules: {
+    'no-use-before-define': 'off',
+    "no-unused-vars": "off"
+  },
+  env: {
+    'jest/globals': true
   }
 }

@@ -17,7 +17,7 @@ export default class UserPrismaRepository implements UserRepository {
 
   async save (user: User): Promise<void> {
     try {
-      await this.prisma.$connect
+      await this.prisma.$connect()
       const userState = user.state
       await this.prisma.user.create({
         data: {
@@ -30,13 +30,13 @@ export default class UserPrismaRepository implements UserRepository {
         }
       })
     } finally {
-      this.prisma.$disconnect
+      this.prisma.$disconnect()
     }
   }
 
   async searchBy (email: Email): Promise<Option<User>> {
     try {
-      await this.prisma.$connect
+      await this.prisma.$connect()
       const dbModel: DbUserModel | null = await this.prisma.user.findFirst({
         where: {
           email: email.state.value
@@ -45,13 +45,13 @@ export default class UserPrismaRepository implements UserRepository {
       if (dbModel === null) return none
       return some(this.buildUser(dbModel))
     } finally {
-      this.prisma.$disconnect
+      this.prisma.$disconnect()
     }
   }
 
   async exist (email: Email): Promise<boolean> {
     try {
-      await this.prisma.$connect
+      await this.prisma.$connect()
       const user = await this.prisma.user.findFirst({
         where: {
           email: email.state.value
@@ -59,7 +59,7 @@ export default class UserPrismaRepository implements UserRepository {
       })
       return user !== null
     } finally {
-      this.prisma.$disconnect
+      this.prisma.$disconnect()
     }
   }
 

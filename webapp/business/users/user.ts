@@ -2,7 +2,6 @@ import { Email, EmailPersistenceState } from '../valueObjects/email'
 import { Password, PasswordPersistenceState } from '../valueObjects/password'
 import { Name, NamePersistenceState } from '../valueObjects/name'
 import { Surname, SurnamePersistenceState } from '../valueObjects/surname'
-import { id } from 'fp-ts/lib/Refinement'
 
 export {
   User,

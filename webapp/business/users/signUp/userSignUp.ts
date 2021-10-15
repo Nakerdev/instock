@@ -12,6 +12,10 @@ export {
   UserSignUpError
 }
 
+enum UserSignUpError {
+    UserAlreadyExist = 'UserAlreadyExist'
+}
+
 class UserSignUp {
   readonly userRepository: UserRepository
   readonly passwordHashingService: PasswordHashingService
@@ -53,8 +57,4 @@ class UserSignUp {
       signUpDate
     )
   }
-}
-
-enum UserSignUpError {
-    UserAlreadyExist = 'UserAlreadyExist'
 }

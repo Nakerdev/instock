@@ -7,11 +7,7 @@ import PasswordHashingService from '../../../../business/security/cryptography/p
 import UserRepository from '../../../../business/users/userRepository'
 import { UserLogin, UserLoginError } from '../../../../business/users/login/userLogin'
 import { UserLoginRequest, UserLoginRequestDto } from '../../../../business/users/login/UserLoginRequest'
-import { User } from '../../../../business/users/user'
-import { Password, PasswordPersistenceState } from '../../../../business/valueObjects/password'
-import { NamePersistenceState, Name } from '../../../../business/valueObjects/name'
-import { Surname, SurnamePersistenceState } from '../../../../business/valueObjects/surname'
-import { Email, EmailPersistenceState } from '../../../../business/valueObjects/email'
+import buildUser from '../../builders/users/userBuilder'
 
 describe('User Login', () => {
   let userRepository: MockProxy<UserRepository>
@@ -86,23 +82,6 @@ describe('User Login', () => {
       )
     )
   })
-
-    interface UserBuilderParams {
-        password?: string;
-    }
-
-    function buildUser ({
-      password = 'hashed-password'
-    }): User {
-      return new User(
-        'id',
-        Email.createFromState(new EmailPersistenceState('user@email.com')),
-        Password.createFromState(new PasswordPersistenceState(password)),
-        Name.createFromState(new NamePersistenceState('Alvaro')),
-        Surname.createFromState(new SurnamePersistenceState('Gonzalez')),
-        new Date(2021, 10, 10)
-      )
-    }
 
     interface RequestBuilderParams {
         password?: string;

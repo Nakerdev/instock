@@ -4,7 +4,11 @@ module.exports = {
     '!**/*.d.ts',
     '!**/node_modules/**'
   ],
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/.next/',
+    '<rootDir>/__tests__/business/builders/'
+  ],
   testEnvironment: 'jsdom',
   transform: {
     /* Use babel-jest to transpile tests with the next/babel preset
@@ -13,6 +17,6 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/',
-    '^.+\\.module\\.(css|sass|scss)$'
+    '^.+\\.module\\.(css|sass|scss)$',
   ]
 }

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "jest --watch",
     "migration:create": "prisma migrate dev --create-only --name --",
     "migration:apply": "prisma migrate dev",
     "lint": "npx eslint . --fix --ext .ts"
@@ -27,6 +28,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-typescript": "^7.15.8",
     "@types/jest": "^27.0.2",
     "@types/react": "17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

@@ -10,7 +10,7 @@ import { UserSignUpRequest } from './UserSignUpRequest'
 export { UserSignUp, UserSignUpError }
 
 enum UserSignUpError {
-  UserAlreadyExist = 'UserAlreadyExist',
+  UserAlreadyExist = 'UserAlreadyExist'
 }
 
 class UserSignUp {

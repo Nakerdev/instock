@@ -1,3 +1,4 @@
+import { UserId, UserIdPersistenceState } from '../valueObjects/userId'
 import { Email, EmailPersistenceState } from '../valueObjects/email'
 import { Password, PasswordPersistenceState } from '../valueObjects/password'
 import { Name, NamePersistenceState } from '../valueObjects/name'
@@ -9,7 +10,7 @@ export {
 }
 
 class User {
-  readonly id: string
+  readonly id: UserId
   readonly email: Email
   readonly password: Password
   readonly name: Name
@@ -20,7 +21,7 @@ class User {
 
   static createFromState (state: UserPersistenceState) {
     return new User(
-      state.id,
+      UserId.createFromState(state.id),
       Email.createFromState(state.email),
       Password.createFromState(state.password),
       Name.createFromState(state.name),
@@ -30,7 +31,7 @@ class User {
   }
 
   constructor (
-    id: string,
+    id: UserId,
     email: Email,
     password: Password,
     name: Name,
@@ -44,7 +45,7 @@ class User {
     this.password = password
     this.signUpDate = signUpDate
     this.state = new UserPersistenceState(
-      this.id,
+      this.id.state,
       this.email.state,
       this.password.state,
       this.name.state,
@@ -55,7 +56,7 @@ class User {
 }
 
 class UserPersistenceState {
-  readonly id: string
+  readonly id: UserIdPersistenceState
   readonly email: EmailPersistenceState
   readonly password: PasswordPersistenceState
   readonly name: NamePersistenceState
@@ -63,7 +64,7 @@ class UserPersistenceState {
   readonly signUpDate: Date
 
   constructor (
-    id: string,
+    id: UserIdPersistenceState,
     email: EmailPersistenceState,
     password: PasswordPersistenceState,
     name: NamePersistenceState,

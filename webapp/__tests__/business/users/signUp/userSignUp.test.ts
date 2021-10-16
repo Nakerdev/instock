@@ -8,6 +8,7 @@ import PasswordHashingService from '../../../../business/security/cryptography/p
 import UuidService from '../../../../business/security/cryptography/uuidService'
 import TimeService from '../../../../business/infraestructure/timeService'
 import UserRepository from '../../../../business/users/userRepository'
+import { UserId } from '../../../../business/valueObjects/userId'
 
 describe('User SignUp', () => {
   let userRepository: MockProxy<UserRepository>
@@ -50,13 +51,14 @@ describe('User SignUp', () => {
       result,
       match(
         _ => expect(true).toBeFalsy(),
-        createdUser => expect(createdUser.id).toBe(uuid)
+        createdUser => expect(createdUser.id.state.value).toBe(uuid)
       )
     )
+    const expectedUserId = UserId.newId(uuidService)
     const expectedPassword = await request.password.hash(passwordHasingService)
     expect(userRepository.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        id: uuid,
+        id: expectedUserId,
         email: request.email,
         name: request.name,
         surname: request.surname,

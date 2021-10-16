@@ -15,7 +15,7 @@ export class JwtSessionService implements SessionService {
   }
 
   create (user: User): string {
-    const tokenPayload = { userId: user.id }
+    const tokenPayload = { userId: user.id.state.value }
     const tokenConfig = { expiresIn: '30d' }
     return jwt.sign(tokenPayload, this.enviromentConfiguration.JWT_SECRET_KEY, tokenConfig)
   }

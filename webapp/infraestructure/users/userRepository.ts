@@ -3,6 +3,7 @@ import { Option, none, some } from 'fp-ts/Option'
 
 import DbUserModel from '../../prisma/models/users/user'
 import UserRepository from '../../business/users/userRepository'
+import { UserIdPersistenceState } from '../../business/valueObjects/userId'
 import { User, UserPersistenceState } from '../../business/users/user'
 import { Email, EmailPersistenceState } from '../../business/valueObjects/email'
 import { PasswordPersistenceState } from '../../business/valueObjects/password'
@@ -22,7 +23,7 @@ export default class UserPrismaRepository implements UserRepository {
       const userState = user.state
       await this.prisma.user.create({
         data: {
-          id: userState.id,
+          id: userState.id.value,
           email: userState.email.value,
           password: userState.password.value,
           name: userState.name.value,
@@ -66,7 +67,7 @@ export default class UserPrismaRepository implements UserRepository {
 
   private buildUser (dbModel: DbUserModel) {
     const userState = new UserPersistenceState(
-      dbModel.id,
+      new UserIdPersistenceState(dbModel.id),
       new EmailPersistenceState(dbModel.email),
       new PasswordPersistenceState(dbModel.password),
       new NamePersistenceState(dbModel.name),

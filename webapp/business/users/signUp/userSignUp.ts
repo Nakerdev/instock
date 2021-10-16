@@ -6,6 +6,7 @@ import TimeService from '../../infraestructure/timeService'
 import UserRepository from '../userRepository'
 import { User } from '../user'
 import { UserSignUpRequest } from './UserSignUpRequest'
+import { UserId } from '../../valueObjects/userId'
 
 export { UserSignUp, UserSignUpError }
 
@@ -44,13 +45,13 @@ class UserSignUp {
   }
 
   private async buildUser (request: UserSignUpRequest): Promise<User> {
-    const id = this.uuidService.create()
+    const userId = UserId.newId(this.uuidService)
     const hashedPassword = await request.password.hash(
       this.passwordHashingService
     )
     const signUpDate = this.timeService.utcNow()
     return new User(
-      id,
+      userId,
       request.email,
       hashedPassword,
       request.name,

@@ -13,8 +13,8 @@ export {
 
 class UserPasswordRecovery {
   readonly userRepository: UserRepository
-  readonly timeService: TimeService;
-  readonly userPasswordRecoveryEmailSender: UserPasswordRecoveryEmailSender;
+  readonly timeService: TimeService
+  readonly userPasswordRecoveryEmailSender: UserPasswordRecoveryEmailSender
 
   constructor (
     userRepository: UserRepository,
@@ -29,23 +29,23 @@ class UserPasswordRecovery {
   async recovery (request: UserPasswordRecoveryRequest): Promise<Option<UserPasswordRecoveryError>> {
     const user = await this.userRepository.searchBy(request.email)
     if (isNone(user)) return some(UserPasswordRecoveryError.UserNotFound)
-    this.sendPasswordRecoveryEmail(user.value);
-    return none;
+    this.sendPasswordRecoveryEmail(user.value)
+    return none
   }
 
-  private sendPasswordRecoveryEmail(user: User): void {
-    var emailSendingRequest = new UserPasswordRecoveryEmailSendingRequest(
+  private sendPasswordRecoveryEmail (user: User): void {
+    const emailSendingRequest = new UserPasswordRecoveryEmailSendingRequest(
       user.id,
       this.builPasswordChangePetitionExpirationDate()
     )
-    this.userPasswordRecoveryEmailSender.send(emailSendingRequest);
+    this.userPasswordRecoveryEmailSender.send(emailSendingRequest)
   }
 
-  private builPasswordChangePetitionExpirationDate(): Date {
-    const ONE_DAY_MORE = 1;
-    var passwordChangePetitionExpirationDate = this.timeService.utcNow();
-    passwordChangePetitionExpirationDate.setDate(passwordChangePetitionExpirationDate.getDate() + ONE_DAY_MORE);
-    return passwordChangePetitionExpirationDate;
+  private builPasswordChangePetitionExpirationDate (): Date {
+    const ONE_DAY_MORE = 1
+    const passwordChangePetitionExpirationDate = this.timeService.utcNow()
+    passwordChangePetitionExpirationDate.setDate(passwordChangePetitionExpirationDate.getDate() + ONE_DAY_MORE)
+    return passwordChangePetitionExpirationDate
   }
 }
 

@@ -56,7 +56,7 @@ describe('User Password Recovery Request', () => {
     }
 
     function buildRequestDto ({
-      email = 'user@email.com',
+      email = 'user@email.com'
     }: requestDtoBuilderParams): UserPasswordRecoveryRequestDto {
       return new UserPasswordRecoveryRequestDto(
         email

@@ -23,13 +23,13 @@ describe('User Password Recovery', () => {
     command = new UserPasswordRecovery(
       userRepository,
       timeService,
-      userPasswordRecoveryEmailSender 
+      userPasswordRecoveryEmailSender
     )
   })
 
   it('sends password recovery email to user', async () => {
     const request = <UserPasswordRecoveryRequest>buildRequest()
-    const user = buildUser({});
+    const user = buildUser({})
     userRepository.searchBy
       .calledWith(request.email)
       .mockResolvedValue(some(user))

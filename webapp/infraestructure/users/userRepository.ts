@@ -3,7 +3,7 @@ import { Option, none, some } from 'fp-ts/Option'
 
 import DbUserModel from '../../prisma/models/users/user'
 import UserRepository from '../../business/users/userRepository'
-import { UserIdPersistenceState } from '../../business/valueObjects/userId'
+import { UserIdPersistenceState, UserId } from '../../business/valueObjects/userId'
 import { User, UserPersistenceState } from '../../business/users/user'
 import { Email, EmailPersistenceState } from '../../business/valueObjects/email'
 import { PasswordPersistenceState } from '../../business/valueObjects/password'
@@ -36,7 +36,7 @@ export default class UserPrismaRepository implements UserRepository {
     }
   }
 
-  async searchBy (email: Email): Promise<Option<User>> {
+  async searchByEmail (email: Email): Promise<Option<User>> {
     try {
       await this.prisma.$connect()
       const dbModel: DbUserModel | null = await this.prisma.user.findFirst({
@@ -46,6 +46,38 @@ export default class UserPrismaRepository implements UserRepository {
       })
       if (dbModel === null) return none
       return some(this.buildUser(dbModel))
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async searchById (id: UserId): Promise<Option<User>> {
+    try {
+      await this.prisma.$connect()
+      const dbModel: DbUserModel | null = await this.prisma.user.findFirst({
+        where: {
+          id: id.state.value
+        }
+      })
+      if (dbModel === null) return none
+      return some(this.buildUser(dbModel))
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async update (user: User): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      const userState = user.state
+      await this.prisma.user.update({
+        where: {
+          id: userState.id.value
+        },
+        data: {
+          password: userState.password.value
+        }
+      })
     } finally {
       this.prisma.$disconnect()
     }

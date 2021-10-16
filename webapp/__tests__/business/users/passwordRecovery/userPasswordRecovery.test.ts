@@ -9,6 +9,7 @@ import UserRepository from '../../../../business/users/userRepository'
 import { UserPasswordRecovery, UserPasswordRecoveryError } from '../../../../business/users/passwordRecovery/userPasswordRecovery'
 import UserPasswordRecoveryEmailSender from '../../../../business/notifications/emails/userPasswordRecoveryEmailSender'
 import buildUser from '../../builders/users/userBuilder'
+import { ExpirationDate } from '../../../../business/valueObjects/expirationDate'
 
 describe('User Password Recovery', () => {
   let userRepository: MockProxy<UserRepository>
@@ -40,10 +41,11 @@ describe('User Password Recovery', () => {
     const result = await command.recovery(request)
 
     expect(isNone(result)).toBeTruthy()
+    const expectedExpirationDate = new ExpirationDate(new Date(2021, 10, 11, 23, 0, 0, 0))
     expect(userPasswordRecoveryEmailSender.send).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: user.id,
-        passwordChangePetitionExpirationDate: new Date(2021, 10, 11, 23, 0, 0, 0)
+        passwordChangePetitionExpirationDate: expectedExpirationDate
       })
     )
   })

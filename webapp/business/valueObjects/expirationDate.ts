@@ -25,7 +25,7 @@ class ExpirationDate {
     return right(expirationDate)
   }
 
-  private constructor (value: Date) {
+  constructor (value: Date) {
     this.value = value
   }
 

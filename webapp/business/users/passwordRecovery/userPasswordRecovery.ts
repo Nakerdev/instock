@@ -5,6 +5,7 @@ import { UserPasswordRecoveryRequest } from './UserPasswordRecoveryRequest'
 import UserPasswordRecoveryEmailSender, { UserPasswordRecoveryEmailSendingRequest } from '../../notifications/emails/userPasswordRecoveryEmailSender'
 import TimeService from '../../infraestructure/timeService'
 import { User } from '../user'
+import { ExpirationDate } from '../../valueObjects/expirationDate'
 
 export {
   UserPasswordRecovery,
@@ -41,11 +42,11 @@ class UserPasswordRecovery {
     this.userPasswordRecoveryEmailSender.send(emailSendingRequest)
   }
 
-  private builPasswordChangePetitionExpirationDate (): Date {
+  private builPasswordChangePetitionExpirationDate (): ExpirationDate {
     const ONE_DAY_MORE = 1
     const passwordChangePetitionExpirationDate = this.timeService.utcNow()
     passwordChangePetitionExpirationDate.setDate(passwordChangePetitionExpirationDate.getDate() + ONE_DAY_MORE)
-    return passwordChangePetitionExpirationDate
+    return new ExpirationDate(passwordChangePetitionExpirationDate)
   }
 }
 

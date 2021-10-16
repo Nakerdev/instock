@@ -24,7 +24,7 @@ class UserLogin {
   }
 
   async login (request: UserLoginRequest): Promise<Either<UserLoginError, User>> {
-    const user = await this.userRepository.searchBy(request.email)
+    const user = await this.userRepository.searchByEmail(request.email)
     if (isNone(user)) return left(UserLoginError.UserNotFound)
     const isTheSamePassword = await user.value.password.compare(this.passwordHashingService, request.password)
     if (!isTheSamePassword) return left(UserLoginError.InvalidCredentials)

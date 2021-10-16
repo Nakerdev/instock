@@ -30,7 +30,7 @@ describe('User Password Recovery', () => {
   it('sends password recovery email to user', async () => {
     const request = <UserPasswordRecoveryRequest>buildRequest()
     const user = buildUser({})
-    userRepository.searchBy
+    userRepository.searchByEmail
       .calledWith(request.email)
       .mockResolvedValue(some(user))
     const utcNow = new Date(2021, 10, 10, 23, 0, 0, 0)
@@ -50,7 +50,7 @@ describe('User Password Recovery', () => {
 
   it('does not signup user when user not found', async () => {
     const request = <UserPasswordRecoveryRequest>buildRequest()
-    userRepository.searchBy
+    userRepository.searchByEmail
       .mockResolvedValue(none)
 
     const result = await command.recovery(request)

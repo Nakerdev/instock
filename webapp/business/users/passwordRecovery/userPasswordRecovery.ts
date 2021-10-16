@@ -27,7 +27,7 @@ class UserPasswordRecovery {
   }
 
   async recovery (request: UserPasswordRecoveryRequest): Promise<Option<UserPasswordRecoveryError>> {
-    const user = await this.userRepository.searchBy(request.email)
+    const user = await this.userRepository.searchByEmail(request.email)
     if (isNone(user)) return some(UserPasswordRecoveryError.UserNotFound)
     this.sendPasswordRecoveryEmail(user.value)
     return none

@@ -28,7 +28,7 @@ describe('User Login', () => {
     const request = <UserLoginRequest>buildRequest({ password: passwordIntent })
     const userHashedPassword = 'hashed-password'
     const user = buildUser({ password: userHashedPassword })
-    userRepository.searchBy
+    userRepository.searchByEmail
       .calledWith(request.email)
       .mockResolvedValue(some(user))
     passwordHasingService.compare
@@ -49,7 +49,7 @@ describe('User Login', () => {
 
   it('does not login user when credentials are invalid', async () => {
     const request = <UserLoginRequest>buildRequest({})
-    userRepository.searchBy
+    userRepository.searchByEmail
       .mockResolvedValue(some(buildUser({})))
     passwordHasingService.compare
       .mockResolvedValue(false)
@@ -68,7 +68,7 @@ describe('User Login', () => {
 
   it('does not login user when user not found', async () => {
     const request = <UserLoginRequest>buildRequest({})
-    userRepository.searchBy
+    userRepository.searchByEmail
       .mockResolvedValue(none)
 
     const result = await command.login(request)

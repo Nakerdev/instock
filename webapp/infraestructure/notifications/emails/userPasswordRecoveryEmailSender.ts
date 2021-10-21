@@ -1,16 +1,69 @@
 import IUserPasswordRecoveryEmailSender, { UserPasswordRecoveryEmailSendingRequest } from "../../../business/notifications/emails/userPasswordRecoveryEmailSender";
 import MailService, { MailSendingRequest } from "../../../business/infraestructure/mailService";
+import Serializer from "../../../business/infraestructure/serializer";
+import EncryptionService from "../../../business/security/cryptography/encryptionService";
+import UrlEncoder from "../../../business/security/cryptography/urlEncoder";
+import { UserId } from "../../../business/valueObjects/userId";
+import { ExpirationDate } from "../../../business/valueObjects/expirationDate";
 
 export default class UserPasswordRecoveryEmailSender implements IUserPasswordRecoveryEmailSender  {
-
+    
     readonly mailService: MailService;
+    readonly serializer: Serializer;
+    readonly encryptionService: EncryptionService;
+    readonly urlEncoder: UrlEncoder;
+    readonly inStockNoReplyEmail: string;
+    readonly inStockWebAppBaseUrl: string;
 
-    constructor(mailService: MailService){
+    private readonly userPasswordRecoveryPageUrl = this.inStockWebAppBaseUrl + "/user/password/recovery?t={token}"
+    private readonly emailSubject = "Reset your InStock password"
+
+    constructor(
+        mailService: MailService,
+        serializer: Serializer,
+        encryptionService: EncryptionService,
+        urlEncoder: UrlEncoder,
+        inStockNoReplyEmail: string,
+        inStockWebAppBaseUrl: string,
+    ){
         this.mailService = mailService;
+        this.serializer = serializer;
+        this.encryptionService = encryptionService;
+        this.urlEncoder = urlEncoder;
+        this.inStockNoReplyEmail = inStockNoReplyEmail;
+        this.inStockWebAppBaseUrl = inStockWebAppBaseUrl;
     }
 
-    send(request: UserPasswordRecoveryEmailSendingRequest): Promise<void> {
-        throw new Error("Method not implemented.");
+    send(request: UserPasswordRecoveryEmailSendingRequest): void {
+
+        const token = this.createToken(request.userId, request.passwordChangePetitionExpirationDate);
+        const resetPasswordUrl = this.userPasswordRecoveryPageUrl.replace("{token}", token)
+
+        var html = this.buildEmailTemplate(
+            request.userName.state.value, 
+            request.userEmail.state.value, 
+            resetPasswordUrl)
+        var mailSendingRequest = new MailSendingRequest(
+            request.userEmail.state.value,
+            this.inStockNoReplyEmail,
+            this.emailSubject,
+            html
+        )
+
+        this.mailService.send(mailSendingRequest);
+    }
+
+    createToken(
+        userId: UserId, 
+        passwordChangePetitionExpirationDate: ExpirationDate
+    ): string {
+        const token = new Token(
+            userId.state.value, 
+            passwordChangePetitionExpirationDate.state.value)
+        const serializedToken = this.serializer.serialize(token)
+        const encryptedToken = this.encryptionService.encrypt(serializedToken)
+        const serializedEncryptedToken = this.serializer.serialize(encryptedToken)
+        return this.urlEncoder.encode(serializedEncryptedToken)
     }
 
     private buildEmailTemplate(
@@ -111,5 +164,15 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
             </body>
             </html>
         `
+    }
+}
+
+class Token {
+    readonly userId: string;
+    readonly passwordChangePetitionExpirationDate: Date;
+
+    constructor(userId: string, passwordChangePetitionExpirationDate: Date){
+        this.userId = userId;
+        this.passwordChangePetitionExpirationDate = passwordChangePetitionExpirationDate;
     }
 }

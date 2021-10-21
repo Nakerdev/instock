@@ -11,6 +11,8 @@ export {
 class ExpirationDate {
   private value: Date
 
+  readonly state: ExpirationDatePersistenceState
+
   static create (value: string): Either<ValidationError, ExpirationDate> {
     if (isEmpty(value)) {
       return left(ValidationError.Required)
@@ -27,6 +29,7 @@ class ExpirationDate {
 
   constructor (value: Date) {
     this.value = value
+    this.state = new ExpirationDatePersistenceState(value)
   }
 
   isExpired (timeService: TimeService): boolean {
@@ -39,5 +42,13 @@ class ExpirationDate {
     } catch {
       return false
     }
+  }
+}
+
+class ExpirationDatePersistenceState {
+  readonly value: Date
+
+  constructor (value: Date) {
+    this.value = value
   }
 }

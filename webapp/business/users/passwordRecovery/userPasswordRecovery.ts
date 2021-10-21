@@ -37,6 +37,8 @@ class UserPasswordRecovery {
   private sendPasswordRecoveryEmail (user: User): void {
     const emailSendingRequest = new UserPasswordRecoveryEmailSendingRequest(
       user.id,
+      user.email,
+      user.name,
       this.builPasswordChangePetitionExpirationDate()
     )
     this.userPasswordRecoveryEmailSender.send(emailSendingRequest)

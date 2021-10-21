@@ -45,6 +45,8 @@ describe('User Password Recovery', () => {
     expect(userPasswordRecoveryEmailSender.send).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: user.id,
+        userEmail: user.email,
+        userName: user.name,
         passwordChangePetitionExpirationDate: expectedExpirationDate
       })
     )

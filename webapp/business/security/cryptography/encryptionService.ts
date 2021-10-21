@@ -4,11 +4,11 @@ export default interface EncryptionService {
 }
 
 export class EncryptedResult {
-    readonly iv: string;
-    readonly data: string;
+  readonly iv: string
+  readonly data: string
 
-    constructor(iv: string, data: string){
-        this.iv = iv;
-        this.data = data;
-    }
+  constructor (iv: string, data: string) {
+    this.iv = iv
+    this.data = data
+  }
 }

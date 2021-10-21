@@ -1,77 +1,75 @@
-import IUserPasswordRecoveryEmailSender, { UserPasswordRecoveryEmailSendingRequest } from "../../../business/notifications/emails/userPasswordRecoveryEmailSender";
-import MailService, { MailSendingRequest } from "../../../business/infraestructure/mailService";
-import Serializer from "../../../business/infraestructure/serializer";
-import EncryptionService from "../../../business/security/cryptography/encryptionService";
-import UrlEncoder from "../../../business/security/cryptography/urlEncoder";
-import { UserId } from "../../../business/valueObjects/userId";
-import { ExpirationDate } from "../../../business/valueObjects/expirationDate";
+import IUserPasswordRecoveryEmailSender, { UserPasswordRecoveryEmailSendingRequest } from '../../../business/notifications/emails/userPasswordRecoveryEmailSender'
+import MailService, { MailSendingRequest } from '../../../business/infraestructure/mailService'
+import Serializer from '../../../business/infraestructure/serializer'
+import EncryptionService from '../../../business/security/cryptography/encryptionService'
+import UrlEncoder from '../../../business/security/cryptography/urlEncoder'
+import { UserId } from '../../../business/valueObjects/userId'
+import { ExpirationDate } from '../../../business/valueObjects/expirationDate'
 
-export default class UserPasswordRecoveryEmailSender implements IUserPasswordRecoveryEmailSender  {
-    
-    readonly mailService: MailService;
-    readonly serializer: Serializer;
-    readonly encryptionService: EncryptionService;
-    readonly urlEncoder: UrlEncoder;
-    readonly inStockNoReplyEmail: string;
-    readonly inStockWebAppBaseUrl: string;
+export default class UserPasswordRecoveryEmailSender implements IUserPasswordRecoveryEmailSender {
+  readonly mailService: MailService
+  readonly serializer: Serializer
+  readonly encryptionService: EncryptionService
+  readonly urlEncoder: UrlEncoder
+  readonly inStockNoReplyEmail: string
+  readonly inStockWebAppBaseUrl: string
 
-    private readonly userPasswordRecoveryPageUrl = this.inStockWebAppBaseUrl + "/user/password/recovery?t={token}"
-    private readonly emailSubject = "Reset your InStock password"
+  private readonly userPasswordRecoveryPageUrl = this.inStockWebAppBaseUrl + '/user/password/recovery?t={token}'
+  private readonly emailSubject = 'Reset your InStock password'
 
-    constructor(
-        mailService: MailService,
-        serializer: Serializer,
-        encryptionService: EncryptionService,
-        urlEncoder: UrlEncoder,
-        inStockNoReplyEmail: string,
-        inStockWebAppBaseUrl: string,
-    ){
-        this.mailService = mailService;
-        this.serializer = serializer;
-        this.encryptionService = encryptionService;
-        this.urlEncoder = urlEncoder;
-        this.inStockNoReplyEmail = inStockNoReplyEmail;
-        this.inStockWebAppBaseUrl = inStockWebAppBaseUrl;
-    }
+  constructor (
+    mailService: MailService,
+    serializer: Serializer,
+    encryptionService: EncryptionService,
+    urlEncoder: UrlEncoder,
+    inStockNoReplyEmail: string,
+    inStockWebAppBaseUrl: string
+  ) {
+    this.mailService = mailService
+    this.serializer = serializer
+    this.encryptionService = encryptionService
+    this.urlEncoder = urlEncoder
+    this.inStockNoReplyEmail = inStockNoReplyEmail
+    this.inStockWebAppBaseUrl = inStockWebAppBaseUrl
+  }
 
-    send(request: UserPasswordRecoveryEmailSendingRequest): void {
+  send (request: UserPasswordRecoveryEmailSendingRequest): void {
+    const token = this.createToken(request.userId, request.passwordChangePetitionExpirationDate)
+    const resetPasswordUrl = this.userPasswordRecoveryPageUrl.replace('{token}', token)
 
-        const token = this.createToken(request.userId, request.passwordChangePetitionExpirationDate);
-        const resetPasswordUrl = this.userPasswordRecoveryPageUrl.replace("{token}", token)
+    const html = this.buildEmailTemplate(
+      request.userName.state.value,
+      request.userEmail.state.value,
+      resetPasswordUrl)
+    const mailSendingRequest = new MailSendingRequest(
+      request.userEmail.state.value,
+      this.inStockNoReplyEmail,
+      this.emailSubject,
+      html
+    )
 
-        var html = this.buildEmailTemplate(
-            request.userName.state.value, 
-            request.userEmail.state.value, 
-            resetPasswordUrl)
-        var mailSendingRequest = new MailSendingRequest(
-            request.userEmail.state.value,
-            this.inStockNoReplyEmail,
-            this.emailSubject,
-            html
-        )
+    this.mailService.send(mailSendingRequest)
+  }
 
-        this.mailService.send(mailSendingRequest);
-    }
+  createToken (
+    userId: UserId,
+    passwordChangePetitionExpirationDate: ExpirationDate
+  ): string {
+    const token = new Token(
+      userId.state.value,
+      passwordChangePetitionExpirationDate.state.value)
+    const serializedToken = this.serializer.serialize(token)
+    const encryptedToken = this.encryptionService.encrypt(serializedToken)
+    const serializedEncryptedToken = this.serializer.serialize(encryptedToken)
+    return this.urlEncoder.encode(serializedEncryptedToken)
+  }
 
-    createToken(
-        userId: UserId, 
-        passwordChangePetitionExpirationDate: ExpirationDate
-    ): string {
-        const token = new Token(
-            userId.state.value, 
-            passwordChangePetitionExpirationDate.state.value)
-        const serializedToken = this.serializer.serialize(token)
-        const encryptedToken = this.encryptionService.encrypt(serializedToken)
-        const serializedEncryptedToken = this.serializer.serialize(encryptedToken)
-        return this.urlEncoder.encode(serializedEncryptedToken)
-    }
-
-    private buildEmailTemplate(
-       userName: string, 
-       userEmail: string, 
-       resetPasswordUrl: string
-    ) {
-        return `
+  private buildEmailTemplate (
+    userName: string,
+    userEmail: string,
+    resetPasswordUrl: string
+  ) {
+    return `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html>
             <head>
@@ -164,15 +162,15 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
             </body>
             </html>
         `
-    }
+  }
 }
 
 class Token {
-    readonly userId: string;
-    readonly passwordChangePetitionExpirationDate: Date;
+  readonly userId: string
+  readonly passwordChangePetitionExpirationDate: Date
 
-    constructor(userId: string, passwordChangePetitionExpirationDate: Date){
-        this.userId = userId;
-        this.passwordChangePetitionExpirationDate = passwordChangePetitionExpirationDate;
-    }
+  constructor (userId: string, passwordChangePetitionExpirationDate: Date) {
+    this.userId = userId
+    this.passwordChangePetitionExpirationDate = passwordChangePetitionExpirationDate
+  }
 }

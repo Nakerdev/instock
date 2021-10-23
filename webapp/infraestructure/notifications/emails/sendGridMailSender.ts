@@ -30,9 +30,10 @@ export default class SendGridMailService implements MailService {
         //do nothing
       })
       .catch((error) => {
-        const log = new Log(`Can not send email to ${request.to}. [subject: ${request.subject}, error: ${error.response.body}]`)
+        const code = error.response.code
+        const errors = JSON.stringify(error.response.body)
+        const log = new Log(`Can not send email to ${request.to}. [httpStatusCode: ${code}, subject: ${request.subject}, error: ${errors}]`)
         this.logger.logError(log)
-        console.log(error)
       })
   }
 }

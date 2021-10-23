@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "jest --watch",
-    "migration:create": "prisma migrate dev --create-only --name --",
+    "migration:create": "prisma migrate dev --create-only --name",
     "migration:apply": "prisma migrate dev",
     "lint": "npx eslint . --fix --ext .ts"
   },

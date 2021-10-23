@@ -19,11 +19,10 @@ model User {
   signUpDate DateTime
 }
 
-model Log {
+model Logs {
   id Int @id @default(autoincrement())
   source String
   level String
   message String
-  exception String
   createdAt DateTime
 }

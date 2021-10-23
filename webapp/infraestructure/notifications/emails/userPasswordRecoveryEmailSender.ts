@@ -15,7 +15,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   readonly webAppBaseUrl: string
   readonly supportEmail: string
 
-  private readonly userPasswordRecoveryPageUrl = this.webAppBaseUrl + '/user/password/recovery?t={token}'
+  private readonly userPasswordRecoveryPageEndpoint = '/user/password/recovery?t={token}'
   private readonly emailSubject = 'Reset your InStock password'
 
   constructor (
@@ -38,7 +38,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
 
   send (request: UserPasswordRecoveryEmailSendingRequest): void {
     const token = this.createToken(request.userId, request.passwordChangePetitionExpirationDate)
-    const resetPasswordUrl = this.userPasswordRecoveryPageUrl.replace('{token}', token)
+    const resetPasswordUrl = this.webAppBaseUrl + this.userPasswordRecoveryPageEndpoint.replace('{token}', token)
 
     const html = this.buildEmailTemplate(
       request.userName.state.value,
@@ -82,15 +82,23 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                 <title>Reset your InStock password</title>
                 <style>
                     body {
-                        background-color: #EFEFEF;
-                        margin: 20px 20px;
                     }
-                    h1 {
+
+                    .title {
                         color: #171616;
                         padding-bottom: 10px;
                         border-bottom: 1px solid #171616
                     }
-                    a {
+
+                    .paragraph {
+                        color: #171616;
+                        font-size: 18px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                        line-height: 1.4em;
+                    }
+
+                    .button { 
                         background-color: #FF3B3F;
                         border: none;
                         color: white;
@@ -105,19 +113,6 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                         margin-bottom: 10px;
                     }
 
-                    p {
-                        color: #171616;
-                        font-size: 18px;
-                        margin-top: 10px;
-                        margin-bottom: 10px;
-                        line-height: 1.4em;
-                    }
-
-                    .main {
-                        display: flex;
-                        flex-direction: column;
-                    }
-
                     .footer {
                         display: flex;
                         flex-direction: column;
@@ -130,29 +125,29 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                     }
                 </style>
             </head>
-            <body>
+            <body style="background-color: #EFEFEF; margin: 20px 20px;">
                 <div>
-                    <h1>
-                    InStock
+                    <h1 class="title">
+                      InStock
                     </h1>
                 </div>
-                <div class="main">
-                <p>
+                <div>
+                <p class="paragraph">
                     Hello ${userName},
                 </p>
-                <p>
+                <p class="paragraph">
                     We've received a request to reset the password for the InStock account
                     associated with ${userEmail}. No changes have been made to your account
                     yet.
                 </p>
-                <p>
+                <p class="paragraph">
                     You can reset your password by clicking the link below:
                 </p>
-                <a href="${resetPasswordUrl}" target="_blank">Reset your password</a>
-                <p>
+                <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
+                <p class="paragraph">
                     If you did not request a new password, please ignore this notification.
                 </p>
-                <p>
+                <p class="paragraph">
                     -- The InStock Team
                 </p>
                 </div>

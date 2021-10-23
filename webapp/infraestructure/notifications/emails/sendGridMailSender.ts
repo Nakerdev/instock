@@ -20,7 +20,7 @@ export default class SendGridMailService implements MailService {
       to: request.to,
       from: request.from,
       subject: request.subject,
-      text: '',
+      text: request.html,
       html: request.html
     }
 

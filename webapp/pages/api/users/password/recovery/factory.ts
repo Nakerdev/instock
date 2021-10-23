@@ -15,6 +15,7 @@ import Base64UrlEncoder from '../../../../../infraestructure/security/cryptograp
 export function buildUserPasswordRecoveryController (res: NextApiResponse): UserPasswordRecoveryController {
   return new UserPasswordRecoveryController(
     buildCommand(),
+    ServiceFactory.buildPrismaDbLogger(),
     nextApiResponseBuilder(res))
 
   function buildCommand (): UserPasswordRecovery {

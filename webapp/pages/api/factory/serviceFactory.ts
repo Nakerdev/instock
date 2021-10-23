@@ -3,6 +3,7 @@ import { enviromentConfiguration } from '../../../enviromentConfiguration'
 import MailService from '../../../business/infraestructure/mailService'
 import SendGridMailService from '../../../infraestructure/notifications/emails/sendGridMailSender'
 import PrismaDbLogger from '../../../infraestructure/monitoring/prismaDbLogger'
+import Logger from '../../../business/monitoring/logger'
 
 export default class ServiceFactory {
   static buildSessionService (): SessionService {
@@ -11,7 +12,11 @@ export default class ServiceFactory {
 
   static buildSendGridEmailService (): MailService {
     return new SendGridMailService(
-      new PrismaDbLogger(enviromentConfiguration.SOURCE),
+      this.buildPrismaDbLogger(),
       enviromentConfiguration.SENDGRID_API_KEY)
+  }
+
+  static buildPrismaDbLogger (): Logger {
+    return new PrismaDbLogger(enviromentConfiguration.SOURCE)
   }
 }

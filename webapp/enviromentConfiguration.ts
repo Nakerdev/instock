@@ -7,7 +7,8 @@ export interface EnviromentConfiguration {
     SYMETRIC_ENCRYPTION_KEY: string,
     NO_REPPLY_EMAIL: string,
     SUPPORT_EMAIL: string,
-    WEBAPP_BASE_URL: string
+    WEBAPP_BASE_URL: string,
+    SOURCE: string
 }
 
 export const enviromentConfiguration: EnviromentConfiguration = {
@@ -16,5 +17,6 @@ export const enviromentConfiguration: EnviromentConfiguration = {
   SYMETRIC_ENCRYPTION_KEY: process.env.SYMETRIC_ENCRYPTION_KEY || '',
   NO_REPPLY_EMAIL: 'antoniojesussg96@gmail.com',
   SUPPORT_EMAIL: 'support.instock@gmail.com',
-  WEBAPP_BASE_URL: 'http://localhost:3000'
+  WEBAPP_BASE_URL: 'http://localhost:3000',
+  SOURCE: 'WebApp',
 }

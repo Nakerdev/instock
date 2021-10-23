@@ -2,6 +2,7 @@ import SessionService, { JwtSessionService } from '../../../application/session/
 import { enviromentConfiguration } from '../../../enviromentConfiguration'
 import MailService from '../../../business/infraestructure/mailService'
 import SendGridMailService from '../../../infraestructure/notifications/emails/sendGridMailSender'
+import PrismaDbLogger from '../../../infraestructure/monitoring/prismaDbLogger'
 
 export default class ServiceFactory {
   static buildSessionService (): SessionService {
@@ -9,6 +10,8 @@ export default class ServiceFactory {
   }
 
   static buildSendGridEmailService (): MailService {
-    return new SendGridMailService(enviromentConfiguration.SENDGRID_API_KEY)
+    return new SendGridMailService(
+      new PrismaDbLogger(enviromentConfiguration.SOURCE),
+      enviromentConfiguration.SENDGRID_API_KEY)
   }
 }

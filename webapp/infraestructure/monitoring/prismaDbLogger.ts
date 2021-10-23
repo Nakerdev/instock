@@ -20,6 +20,7 @@ export default class PrismaDbLogger implements Logger {
                     source: this.source,
                     level: 'info',
                     message: log.message,
+                    exception: null,
                     createdAt: now
                 }
             })
@@ -37,6 +38,7 @@ export default class PrismaDbLogger implements Logger {
                     source: this.source,
                     level: 'error',
                     message: log.message,
+                    exception: null,
                     createdAt: now
                 }
             })

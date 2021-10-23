@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 
-import { EnviromentConfiguration } from '../../enviromentConfiguration'
 import { User } from '../../business/users/user'
 
 export default interface SessionService {
@@ -8,15 +7,15 @@ export default interface SessionService {
 }
 
 export class JwtSessionService implements SessionService {
-  readonly enviromentConfiguration: EnviromentConfiguration
+  readonly jwtSecretKey: string
 
-  constructor (enviromentConfiguration: EnviromentConfiguration) {
-    this.enviromentConfiguration = enviromentConfiguration
+  constructor (jwtSecretKey: string) {
+    this.jwtSecretKey = jwtSecretKey
   }
 
   create (user: User): string {
     const tokenPayload = { userId: user.id.state.value }
     const tokenConfig = { expiresIn: '30d' }
-    return jwt.sign(tokenPayload, this.enviromentConfiguration.JWT_SECRET_KEY, tokenConfig)
+    return jwt.sign(tokenPayload, this.jwtSecretKey, tokenConfig)
   }
 }

@@ -14,7 +14,7 @@ export const enviromentConfiguration: EnviromentConfiguration = {
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || '',
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || '',
   SYMETRIC_ENCRYPTION_KEY: process.env.SYMETRIC_ENCRYPTION_KEY || '',
-  NO_REPPLY_EMAIL: 'no-repply@instock.com',
+  NO_REPPLY_EMAIL: 'antoniojesussg96@gmail.com',
   SUPPORT_EMAIL: 'support.instock@gmail.com',
   WEBAPP_BASE_URL: 'http://localhost:3000'
 }

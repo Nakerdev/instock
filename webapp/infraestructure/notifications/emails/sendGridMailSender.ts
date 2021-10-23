@@ -12,7 +12,7 @@ export default class SendGridMailService implements MailService {
       to: request.to,
       from: request.from,
       subject: request.subject,
-      text: '',
+      text: 'Hello',
       html: request.html
     }
 
@@ -23,7 +23,7 @@ export default class SendGridMailService implements MailService {
         console.log(response[0].headers)
       })
       .catch((error) => {
-        console.error(error)
+        console.error(error.response.body)
       })
   }
 }

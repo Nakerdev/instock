@@ -24,7 +24,7 @@ export function buildUserPasswordRecoveryController (res: NextApiResponse): User
       buildPasswordRecoveryEmailSender())
   }
 
-  function buildPasswordRecoveryEmailSender(): UserPasswordRecoveryEmailSender {
+  function buildPasswordRecoveryEmailSender (): UserPasswordRecoveryEmailSender {
     return new UserPasswordRecoveryEmailSender(
       ServiceFactory.buildSendGridEmailService(),
       new JsonSerializer(),

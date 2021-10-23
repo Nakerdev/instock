@@ -33,8 +33,8 @@ class UserPasswordRecoveryController {
   }
 
   private executeCommand (request: UserPasswordRecoveryRequest): void {
-      this.command.recovery(request)
-      return this.apiResponseBuilder.sendSuccessResponse({})
+    this.command.recovery(request)
+    return this.apiResponseBuilder.sendSuccessResponse({})
   }
 
   private buildCommandRequest (request: UserPasswordRecoveryControllerRequest) {
@@ -46,9 +46,9 @@ class UserPasswordRecoveryController {
 }
 
 class UserPasswordRecoveryControllerRequest {
-  readonly email: string;
+  readonly email: string
 
-  constructor(email: string){
+  constructor (email: string) {
     this.email = email
   }
 }

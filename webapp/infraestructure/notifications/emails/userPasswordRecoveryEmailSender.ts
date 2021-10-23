@@ -11,10 +11,11 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   readonly serializer: Serializer
   readonly encryptionService: EncryptionService
   readonly urlEncoder: UrlEncoder
-  readonly inStockNoReplyEmail: string
-  readonly inStockWebAppBaseUrl: string
+  readonly noReplyEmail: string
+  readonly webAppBaseUrl: string
+  readonly supportEmail: string
 
-  private readonly userPasswordRecoveryPageUrl = this.inStockWebAppBaseUrl + '/user/password/recovery?t={token}'
+  private readonly userPasswordRecoveryPageUrl = this.webAppBaseUrl + '/user/password/recovery?t={token}'
   private readonly emailSubject = 'Reset your InStock password'
 
   constructor (
@@ -22,15 +23,17 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
     serializer: Serializer,
     encryptionService: EncryptionService,
     urlEncoder: UrlEncoder,
-    inStockNoReplyEmail: string,
-    inStockWebAppBaseUrl: string
+    noReplyEmail: string,
+    webAppBaseUrl: string,
+    supportEmail: string
   ) {
     this.mailService = mailService
     this.serializer = serializer
     this.encryptionService = encryptionService
     this.urlEncoder = urlEncoder
-    this.inStockNoReplyEmail = inStockNoReplyEmail
-    this.inStockWebAppBaseUrl = inStockWebAppBaseUrl
+    this.noReplyEmail = noReplyEmail
+    this.webAppBaseUrl = webAppBaseUrl
+    this.supportEmail = supportEmail
   }
 
   send (request: UserPasswordRecoveryEmailSendingRequest): void {
@@ -40,10 +43,11 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
     const html = this.buildEmailTemplate(
       request.userName.state.value,
       request.userEmail.state.value,
-      resetPasswordUrl)
+      resetPasswordUrl,
+      this.supportEmail)
     const mailSendingRequest = new MailSendingRequest(
       request.userEmail.state.value,
-      this.inStockNoReplyEmail,
+      this.noReplyEmail,
       this.emailSubject,
       html
     )
@@ -67,7 +71,8 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   private buildEmailTemplate (
     userName: string,
     userEmail: string,
-    resetPasswordUrl: string
+    resetPasswordUrl: string,
+    supportEmail: string
   ) {
     return `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -153,7 +158,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                 </div>
                 <div class="footer">
                     <p>
-                    Problems or questions? send an email to support@instock.com
+                    Problems or questions? send an email to ${supportEmail}
                     </p>
                     <p>
                     © InStock

@@ -21,7 +21,7 @@ export default class UserPrismaRepository implements UserRepository {
     try {
       await this.prisma.$connect()
       const userState = user.state
-      await this.prisma.user.create({
+      await this.prisma.users.create({
         data: {
           id: userState.id.value,
           email: userState.email.value,
@@ -39,7 +39,7 @@ export default class UserPrismaRepository implements UserRepository {
   async searchByEmail (email: Email): Promise<Option<User>> {
     try {
       await this.prisma.$connect()
-      const dbModel: DbUserModel | null = await this.prisma.user.findFirst({
+      const dbModel: DbUserModel | null = await this.prisma.users.findFirst({
         where: {
           email: email.state.value
         }
@@ -54,7 +54,7 @@ export default class UserPrismaRepository implements UserRepository {
   async searchById (id: UserId): Promise<Option<User>> {
     try {
       await this.prisma.$connect()
-      const dbModel: DbUserModel | null = await this.prisma.user.findFirst({
+      const dbModel: DbUserModel | null = await this.prisma.users.findFirst({
         where: {
           id: id.state.value
         }
@@ -70,7 +70,7 @@ export default class UserPrismaRepository implements UserRepository {
     try {
       await this.prisma.$connect()
       const userState = user.state
-      await this.prisma.user.update({
+      await this.prisma.users.update({
         where: {
           id: userState.id.value
         },
@@ -86,7 +86,7 @@ export default class UserPrismaRepository implements UserRepository {
   async exist (email: Email): Promise<boolean> {
     try {
       await this.prisma.$connect()
-      const user = await this.prisma.user.findFirst({
+      const user = await this.prisma.users.findFirst({
         where: {
           email: email.state.value
         }

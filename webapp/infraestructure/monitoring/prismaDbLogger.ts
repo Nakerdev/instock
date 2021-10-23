@@ -15,12 +15,11 @@ export default class PrismaDbLogger implements Logger {
         try {
             await this.prisma.$connect()
             const now = new Date();
-            await this.prisma.log.create({
+            await this.prisma.logs.create({
                 data: {
                     source: this.source,
                     level: 'info',
                     message: log.message,
-                    exception: null,
                     createdAt: now
                 }
             })
@@ -33,12 +32,11 @@ export default class PrismaDbLogger implements Logger {
         try {
             await this.prisma.$connect()
             const now = new Date();
-            await this.prisma.log.create({
+            await this.prisma.logs.create({
                 data: {
                     source: this.source,
                     level: 'error',
                     message: log.message,
-                    exception: null,
                     createdAt: now
                 }
             })

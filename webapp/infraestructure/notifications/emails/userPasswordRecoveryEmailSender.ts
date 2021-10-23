@@ -80,120 +80,50 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
             <head>
                 <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
                 <title>Reset your InStock password</title>
-                <style>
-
-                    .title {
-                        color: #171616;
-                        padding-bottom: 10px;
-                        border-bottom: 1px solid #171616
-                    }
-
-                    .paragraph {
-                        color: #171616;
-                        font-size: 18px;
-                        margin-top: 10px;
-                        margin-bottom: 10px;
-                        line-height: 1.4em;
-                    }
-
-                    .button { 
-                        background-color: #FF3B3F;
-                        border: none;
-                        color: white;
-                        padding: 15px 32px;
-                        text-align: center;
-                        text-decoration: none;
-                        display: inline-block;
-                        font-size: 20px;
-                        font-weight: bold;
-                        border-radius: 10px;
-                        margin-top: 10px;
-                        margin-bottom: 10px;
-                    }
-
-                    .footer {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                    }
-
-                    .footer > p {
-                        color: #A9A9A9;
-                        font-size: 14px;
-                    }
-                </style>
             </head>
-            <body>
-              <div style="background-color: #EFEFEF; margin: 20px 20px;">
-               <div>
-              <h1 class="title">
-                InStock
-              </h1>
-          </div>
-          <div>
-          <p class="paragraph">
-              Hello ${userName},
-          </p>
-          <p class="paragraph">
-              We've received a request to reset the password for the InStock account
-              associated with ${userEmail}. No changes have been made to your account
-              yet.
-          </p>
-          <p class="paragraph">
-              You can reset your password by clicking the link below:
-          </p>
-          <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
-          <p class="paragraph">
-              If you did not request a new password, please ignore this notification.
-          </p>
-          <p class="paragraph">
-              -- The InStock Team
-          </p>
-          </div>
-          <div class="footer">
-              <p>
-              Problems or questions? send an email to ${supportEmail}
-              </p>
-              <p>
-              © InStock
-              </p>
-          </div>
+            <body style="background-color: #EFEFEF">
+              <div style="background-color: #EFEFEF; margin: 20px;padding-top: 10px; padding-bottom: 10px;">
+                <div>
+                  <h1 style="color: #171616;padding-bottom: 10px;border-bottom: 1px solid #171616">
+                    InStock
+                  </h1>
+                </div>
+                <div>
+                  <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
+                      Hello ${userName},
+                  </p>
+                  <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
+                      We've received a request to reset the password for the InStock account
+                      associated with ${userEmail}. No changes have been made to your account
+                      yet.
+                  </p>
+                  <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
+                      You can reset your password by clicking the link below:
+                  </p>
+                  <div style="display:block; margin: 0 auto; box-sizing: border-box;">
+                    <a clicktracking=off href="${resetPasswordUrl}" target="_blank" style="background-color: #FF3B3F;border: none;color: white;padding: 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 20px;font-weight: bold;border-radius: 10px;margin-top: 10px;margin-bottom: 10px;width:100%; box-sizing: border-box;">
+                      Reset your password
+                    </a>
+                  </div>
+                  <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
+                      If you did not request a new password, please ignore this notification.
+                  </p>
+                  <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
+                      -- The InStock Team
+                  </p>
+                </div>
+                <div>
+                  <p style="color: #A9A9A9;font-size: 14px;">
+                    Problems or questions? send an email to ${supportEmail}
+                  </p>
+                  <p style="color: #A9A9A9;font-size: 14px;">
+                    © InStock
+                  </p>
+                </div>
               </div>
-              <div>
-              <h1 class="title">
-                InStock
-              </h1>
-          </div>
-          <div>
-          <p class="paragraph">
-              Hello ${userName},
-          </p>
-          <p class="paragraph">
-              We've received a request to reset the password for the InStock account
-              associated with ${userEmail}. No changes have been made to your account
-              yet.
-          </p>
-          <p class="paragraph">
-              You can reset your password by clicking the link below:
-          </p>
-          <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
-          <p class="paragraph">
-              If you did not request a new password, please ignore this notification.
-          </p>
-          <p class="paragraph">
-              -- The InStock Team
-          </p>
-          </div>
-          <div class="footer">
-              <p>
-              Problems or questions? send an email to ${supportEmail}
-              </p>
-              <p>
-              © InStock
-              </p>
-          </div>
-            </body>
-            </html>
+            </div>
+          </body>
+        </html>
         `
   }
 }

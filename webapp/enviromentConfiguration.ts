@@ -18,5 +18,5 @@ export const enviromentConfiguration: EnviromentConfiguration = {
   NO_REPPLY_EMAIL: 'antoniojesussg96@gmail.com',
   SUPPORT_EMAIL: 'support.instock@gmail.com',
   WEBAPP_BASE_URL: 'http://localhost:3000',
-  SOURCE: 'WebApp',
+  SOURCE: 'WebApp'
 }

@@ -4,8 +4,7 @@ import MailService, { MailSendingRequest } from '../../../business/infraestructu
 import Logger, { Log } from '../../../business/monitoring/logger'
 
 export default class SendGridMailService implements MailService {
-
-  readonly logger: Logger;
+  readonly logger: Logger
 
   constructor (
     logger: Logger,
@@ -26,8 +25,8 @@ export default class SendGridMailService implements MailService {
 
     return sendGridMail
       .send(msg)
-      .then(() => { 
-        //do nothing
+      .then(() => {
+        // do nothing
       })
       .catch((error) => {
         const code = error.response.code

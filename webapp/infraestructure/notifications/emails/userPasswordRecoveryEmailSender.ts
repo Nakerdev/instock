@@ -81,8 +81,6 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                 <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
                 <title>Reset your InStock password</title>
                 <style>
-                    body {
-                    }
 
                     .title {
                         color: #171616;
@@ -125,40 +123,75 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                     }
                 </style>
             </head>
-            <body style="background-color: #EFEFEF; margin: 20px 20px;">
-                <div>
-                    <h1 class="title">
-                      InStock
-                    </h1>
-                </div>
-                <div>
-                <p class="paragraph">
-                    Hello ${userName},
-                </p>
-                <p class="paragraph">
-                    We've received a request to reset the password for the InStock account
-                    associated with ${userEmail}. No changes have been made to your account
-                    yet.
-                </p>
-                <p class="paragraph">
-                    You can reset your password by clicking the link below:
-                </p>
-                <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
-                <p class="paragraph">
-                    If you did not request a new password, please ignore this notification.
-                </p>
-                <p class="paragraph">
-                    -- The InStock Team
-                </p>
-                </div>
-                <div class="footer">
-                    <p>
-                    Problems or questions? send an email to ${supportEmail}
-                    </p>
-                    <p>
-                    © InStock
-                    </p>
-                </div>
+            <body>
+              <div style="background-color: #EFEFEF; margin: 20px 20px;">
+               <div>
+              <h1 class="title">
+                InStock
+              </h1>
+          </div>
+          <div>
+          <p class="paragraph">
+              Hello ${userName},
+          </p>
+          <p class="paragraph">
+              We've received a request to reset the password for the InStock account
+              associated with ${userEmail}. No changes have been made to your account
+              yet.
+          </p>
+          <p class="paragraph">
+              You can reset your password by clicking the link below:
+          </p>
+          <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
+          <p class="paragraph">
+              If you did not request a new password, please ignore this notification.
+          </p>
+          <p class="paragraph">
+              -- The InStock Team
+          </p>
+          </div>
+          <div class="footer">
+              <p>
+              Problems or questions? send an email to ${supportEmail}
+              </p>
+              <p>
+              © InStock
+              </p>
+          </div>
+              </div>
+              <div>
+              <h1 class="title">
+                InStock
+              </h1>
+          </div>
+          <div>
+          <p class="paragraph">
+              Hello ${userName},
+          </p>
+          <p class="paragraph">
+              We've received a request to reset the password for the InStock account
+              associated with ${userEmail}. No changes have been made to your account
+              yet.
+          </p>
+          <p class="paragraph">
+              You can reset your password by clicking the link below:
+          </p>
+          <a href="${resetPasswordUrl}" target="_blank" class="button">Reset your password</a>
+          <p class="paragraph">
+              If you did not request a new password, please ignore this notification.
+          </p>
+          <p class="paragraph">
+              -- The InStock Team
+          </p>
+          </div>
+          <div class="footer">
+              <p>
+              Problems or questions? send an email to ${supportEmail}
+              </p>
+              <p>
+              © InStock
+              </p>
+          </div>
             </body>
             </html>
         `

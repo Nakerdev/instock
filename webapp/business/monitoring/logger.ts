@@ -4,11 +4,11 @@ export default interface Logger {
 }
 
 export class Log {
-    readonly message: string;
+  readonly message: string
 
-    constructor(
-        message: string,
-    ){
-        this.message = message;
-    }
+  constructor (
+    message: string
+  ) {
+    this.message = message
+  }
 }

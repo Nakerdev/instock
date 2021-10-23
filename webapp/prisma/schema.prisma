@@ -18,3 +18,12 @@ model User {
   surname String
   signUpDate DateTime
 }
+
+model Log {
+  id Int @id @default(autoincrement())
+  source String
+  level String
+  message String
+  exception String
+  createdAt DateTime
+}

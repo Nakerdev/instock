@@ -1,8 +1,6 @@
-import { sort } from "fp-ts/lib/ReadonlyNonEmptyArray";
-
 export default interface Logger {
-    logInfo(log: Log): void;
-    lofError(log: Log): void;
+    logInfo(log: Log): Promise<void>;
+    logError(log: Log): Promise<void>;
 }
 
 export class Log {

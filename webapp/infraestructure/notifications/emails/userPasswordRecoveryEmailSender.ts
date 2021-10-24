@@ -81,7 +81,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                 <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
                 <title>Reset your InStock password</title>
             </head>
-            <body style="background-color: #fff">
+            <body style="background-color: #fff; max-width: 800px; margin: 0 auto;">
               <div style="background-color: #fff; margin: 20px;padding-top: 10px; padding-bottom: 10px;">
                 <div>
                   <h1 style="color: #171616;padding-bottom: 10px;border-bottom: 1px solid #EFEFEF">

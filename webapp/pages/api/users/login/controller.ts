@@ -9,7 +9,8 @@ import SessionService from '../../../../application/session/sessionService'
 
 export {
   UserLoginController,
-  UserLoginControllerRequest
+  UserLoginControllerRequest,
+  ResponseDto
 }
 
 class UserLoginController {

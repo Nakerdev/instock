@@ -44,6 +44,7 @@ const SignUp: NextPage = () => {
         if(response.status === 200){
 
             const successResponse: ResponseDto = await response.json()
+            localStorage.removeItem('session-token')
             localStorage.setItem('session-token', successResponse.token)
             Router.push("/dashboard")
             
@@ -110,6 +111,7 @@ const SignUp: NextPage = () => {
       setEmailError('')
       setPasswordError('')
       setTermsAndConditionsError('')
+      setServerError('')
   }
 
   function showPassword(e: MouseEvent<HTMLElement>): void {

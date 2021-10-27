@@ -11,6 +11,19 @@ export interface ApiResponseBuilder {
   sendUnauthorizedResponse(): void;
 }
 
+export class ErrorResponse {
+  validationErrors: FormValidationError<ValidationError>[];
+  commandError: string | null;
+
+  constructor(
+    validationErrors: FormValidationError<ValidationError>[],
+    commandError: string | null
+  ){
+    this.validationErrors = validationErrors;
+    this.commandError = commandError;
+  }
+}
+
 export function nextApiResponseBuilder (
   res: NextApiResponse
 ): ApiResponseBuilder {
@@ -26,11 +39,13 @@ export function nextApiResponseBuilder (
   }
 
   function sendValidtionErrorResponse (formValidationErrors: FormValidationError<ValidationError>[]): void {
-    res.status(404).json(formValidationErrors)
+    const error = new ErrorResponse(formValidationErrors, null)
+    res.status(404).json(error)
   }
 
   function sendCommandErrorResponse (commandError: string): void {
-    res.status(404).json({ commandError: commandError })
+    const error = new ErrorResponse([], commandError)
+    res.status(404).json(error)
   }
 
   function sendUnauthorizedResponse (): void {

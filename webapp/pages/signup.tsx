@@ -1,24 +1,30 @@
 import { NextPage } from 'next'
 import { useState, MouseEvent } from 'react'
+import Router from 'next/router'
 
 import { colors } from '../styles/theme'
-import { UserSignUpControllerRequest } from './api/users/signup/controller'
+import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/controller'
+import { ErrorResponse } from './api/utils/apiUtils'
 
 const SignUp: NextPage = () => {
 
-  const [name, setName] = useState('Antonio');
+  const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
-  const [surname, setSurname] = useState('Sanchez');
+  const [surname, setSurname] = useState('');
   const [surnameError, setSurnameError] = useState('');
-  const [email, setEmail] = useState('antonio@email.com');
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [password, setPassword] = useState('NoSecure');
+  const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [areTermsAndConditionsAccepted, setAreTermsAndConditionsAccepted] = useState(false);
+  const [termsAndConditionsError, setTermsAndConditionsError] = useState('');
+
+  const [serverError, setServerError] = useState('');
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSignUpBtnDisabled, setIsSignUpBtnDisabled] = useState(false);
 
-  function signup(e: MouseEvent<HTMLElement>) {
+  async function signup(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
     setIsSignUpBtnDisabled(true)
     cleanErrors()
@@ -27,12 +33,74 @@ const SignUp: NextPage = () => {
         password,
         name,
         surname,
-        true
+        areTermsAndConditionsAccepted
     );
-    fetch('/api/users/signup', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)})
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch();
+    try{
+
+        const response = await fetch(
+            '/api/users/signup', 
+            {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
+        )
+        if(response.status === 200){
+
+            const successResponse: ResponseDto = await response.json()
+            localStorage.setItem('session-token', successResponse.token)
+            Router.push("/dashboard")
+            
+        } else if (response.status === 404){
+
+            const errorResponse: ErrorResponse  = await response.json();
+            if(errorResponse.validationErrors.length > 0) {
+                errorResponse.validationErrors.forEach(error => {
+
+                    if(error.fieldId == 'email' && error.error == 'Required'){
+                        setEmailError('Email is required.')
+                    }else if(error.fieldId == 'email' && error.error == 'InvalidFormat'){
+                        setEmailError('Email format is invalid.')
+                    }else if(error.fieldId == 'email' && error.error == 'WrongLength'){
+                        setEmailError('The length of the email exceeds the allowed size.')
+                    }
+
+                    if(error.fieldId == 'name' && error.error == 'Required'){
+                        setNameError('Name is required.')
+                    }else if(error.fieldId == 'name' && error.error == 'WrongLength'){
+                        setNameError('The length of the name exceeds the allowed size.')
+                    }
+
+                    if(error.fieldId == 'surname' && error.error == 'Required'){
+                        setSurnameError('Surname is required.')
+                    }else if(error.fieldId == 'surname' && error.error == 'WrongLength'){
+                        setSurnameError('The length of the surname exceeds the allowed size.')
+                    }
+
+                    if(error.fieldId == 'password' && error.error == 'Required'){
+                        setPasswordError('Password is required.')
+                    }else if(error.fieldId == 'password' && error.error == 'InvalidFormat'){
+                        setPasswordError(`Password does not comply our security policy. Please use 8 or more characters, at least one uppercase letter and at least one simbol.`)
+                    }else if(error.fieldId == 'password' && error.error == 'WrongLength'){
+                        setPasswordError('The length of the password exceeds the allowed size.')
+                    }
+
+                    if(error.fieldId == 'legalTermsAndConditions' && error.error == 'Required'){
+                        setTermsAndConditionsError('Terms and conditions must be accepted.');
+                    }
+                })
+            } else {
+                if(errorResponse.commandError == 'UserAlreadyExist') {
+                    setServerError('We already have a registered user with the same email address.')
+                }else {
+                    setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+                }
+            }
+
+        } else {
+            setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+        }
+
+    } catch {
+        setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+    }
+
     setIsSignUpBtnDisabled(false)
   }
 
@@ -41,6 +109,7 @@ const SignUp: NextPage = () => {
       setSurnameError('')
       setEmailError('')
       setPasswordError('')
+      setTermsAndConditionsError('')
   }
 
   function showPassword(e: MouseEvent<HTMLElement>): void {
@@ -56,7 +125,6 @@ const SignUp: NextPage = () => {
   return (
     <>
       <main>
-        <h1>InStock</h1>
         <form>
             <fieldset>
                 <label>Name <span>- required</span></label>
@@ -97,13 +165,13 @@ const SignUp: NextPage = () => {
                                 type="text" 
                                 value={password} 
                                 onChange={e => setPassword(e.target.value)}
-                                className={`password field ${emailError ? 'field-error' : ''}`}>
+                                className={`password field ${passwordError ? 'field-error' : ''}`}>
                               </input>
                             : <input 
                                 type="password" 
                                 value={password} 
                                 onChange={e => setPassword(e.target.value)}
-                                className={`password field ${emailError ? 'field-error' : ''}`}>
+                                className={`password field ${passwordError ? 'field-error' : ''}`}>
                               </input>
                     }
                     {
@@ -124,6 +192,19 @@ const SignUp: NextPage = () => {
                     <p className="error" style={passwordError ? {display: 'block'} : {display: 'none'}}>{passwordError}</p>
                 </div>
             </fieldset>
+            <fieldset>
+                <div className='termsAndConditionsContainer'>
+                    <input 
+                        type="checkbox" 
+                        onChange={e => setAreTermsAndConditionsAccepted(e.target.checked)} 
+                        checked={areTermsAndConditionsAccepted}>
+                    </input>
+                    <label>
+                        I agree to the <a href='/terms-and-conditions' target='_blank'> Terms and Conditions</a>
+                    </label>
+                </div>
+                <p className="error" style={termsAndConditionsError ? {display: 'block'} : {display: 'none'}}>{termsAndConditionsError}</p>
+            </fieldset>
             <button className="cta" onClick={e => signup(e)} disabled={isSignUpBtnDisabled}>
                 {
                     isSignUpBtnDisabled
@@ -131,6 +212,7 @@ const SignUp: NextPage = () => {
                         : <span><img src='/icons/padlock-f.svg'></img>Create Account</span>
                 }
             </button>
+            <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
         </form>
       </main>
     <style jsx>{`
@@ -143,18 +225,10 @@ const SignUp: NextPage = () => {
             align-items: center;
         }
 
-        h1 {
-            min-width: 500px;
-            text-align: center;
-            font-size: 42px;
-            margin-bottom: 20px;
-            color: ${colors.black};
-            text-shadow: 3px 3px ${colors.grey};
-        }
-
         form {
-            width: 500px;
-            max-height: 400px;
+            min-width: 500px;
+            max-width: 500px;
+            position: absolute;
             background-color: ${colors.white};
             flex: 1;
             border: 1px solid ${colors.white};
@@ -209,6 +283,7 @@ const SignUp: NextPage = () => {
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
+            margin-bottom: 5px;
         }
 
         .cta:disabled  {
@@ -247,7 +322,22 @@ const SignUp: NextPage = () => {
             color: ${colors.error};
             margin-top: 5px;
             margin-left: 2px;
-            margin-bottom: 5px
+            margin-bottom: 5px;
+            line-height: 1.2rem;
+        }
+
+        .termsAndConditionsContainer {
+            display: inline;
+        }
+
+        .termsAndConditionsContainer > input {
+            margin-right: 10px;
+        }
+
+        .termsAndConditionsContainer > label > a {
+            color: ${colors.link};
+            font-weight: bold;
+            cursor: pointer;
         }
 
     `}</style>

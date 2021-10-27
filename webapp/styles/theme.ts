@@ -6,4 +6,5 @@ export const colors = {
     grey: '#868686',
     error: '#FF2327',
     success: '#38C804',
+    link: '#4281C1'
 }

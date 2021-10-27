@@ -4,6 +4,7 @@ import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
+import Link from 'next/link'
 
 const Login: NextPage = () => {
 
@@ -73,7 +74,12 @@ const Login: NextPage = () => {
                 </input>
             </fieldset>
             <fieldset>
-                <label>Password</label>
+                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px'}}>
+                    <label>Password</label>
+                    <Link href='/forgot-password'>
+                        <a className='link'>Forgot password?</a>
+                    </Link>
+                </div>
                 <div>
                     {
                         isPasswordVisible
@@ -115,6 +121,7 @@ const Login: NextPage = () => {
                 }
             </button>
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+            <p className='createAccountLink'>New to StockOut? <Link href='/signup'><a className='link'>Create an account</a></Link></p>
         </form>
       </main>
     <style jsx>{`
@@ -222,6 +229,18 @@ const Login: NextPage = () => {
             margin-left: 2px;
             margin-bottom: 5px;
             line-height: 1.2rem;
+        }
+
+        .createAccountLink {
+            margin-top: 20px;
+            color: ${colors.black};
+            font-size: 16px;
+        }
+
+        .link {
+            color: ${colors.link};
+            font-weight: bold;
+            cursor: pointer;
         }
 
     `}</style>

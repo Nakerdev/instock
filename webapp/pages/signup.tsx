@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { colors } from '../styles/theme'
 import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/controller'
 import { ErrorResponse } from './api/utils/apiUtils'
+import Link from 'next/link'
 
 const SignUp: NextPage = () => {
 
@@ -202,7 +203,7 @@ const SignUp: NextPage = () => {
                         checked={areTermsAndConditionsAccepted}>
                     </input>
                     <label>
-                        I agree to the <a href='/terms-and-conditions' target='_blank'> Terms and Conditions</a>
+                        I agree to the <a href='/terms-and-conditions' target='_blank' className='link'> Terms and Conditions</a>
                     </label>
                 </div>
                 <p className="error" style={termsAndConditionsError ? {display: 'block'} : {display: 'none'}}>{termsAndConditionsError}</p>
@@ -215,6 +216,7 @@ const SignUp: NextPage = () => {
                 }
             </button>
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+            <p className='loginLink'>Already have an account? <Link href='/login'><a className='link'>Login</a></Link></p>
         </form>
       </main>
     <style jsx>{`
@@ -336,10 +338,16 @@ const SignUp: NextPage = () => {
             margin-right: 10px;
         }
 
-        .termsAndConditionsContainer > label > a {
+        .link {
             color: ${colors.link};
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .loginLink {
+            margin-top: 20px;
+            color: ${colors.black};
+            font-size: 16px;
         }
 
     `}</style>

@@ -6,6 +6,8 @@ import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
 import Link from 'next/link'
 import CTA from '../components/cta/CTA'
+import PasswordField from '../components/paswordField/PasswordField'
+import TextField from '../components/textField/TextField'
 
 const Login: NextPage = () => {
 
@@ -13,7 +15,6 @@ const Login: NextPage = () => {
   const [password, setPassword] = useState('');
   const [serverError, setServerError] = useState('');
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
 
   async function login(e: MouseEvent<HTMLElement>) {
@@ -51,69 +52,24 @@ const Login: NextPage = () => {
       setServerError('')
   }
 
-  function showPassword(e: MouseEvent<HTMLElement>): void {
-      e.preventDefault();
-      setIsPasswordVisible(true);
-  }
-
-  function hidePassword(e: MouseEvent<HTMLElement>): void {
-      e.preventDefault();
-      setIsPasswordVisible(false);
-  }
-
   return (
     <>
       <main>
         <form>
-            <fieldset>
-                <label>Email</label>
-                <input 
-                    type="text" 
-                    onChange={e => setEmail(e.target.value)} 
-                    value={email} 
-                    className='field'>
-                </input>
-            </fieldset>
-            <fieldset>
-                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px'}}>
-                    <label>Password</label>
-                    <Link href='/forgot-password'>
-                        <a className='link'>Forgot password?</a>
-                    </Link>
-                </div>
-                <div>
-                    {
-                        isPasswordVisible
-                            ? <input 
-                                type="text" 
-                                value={password} 
-                                onChange={e => setPassword(e.target.value)}
-                                className='password field'>
-                              </input>
-                            : <input 
-                                type="password" 
-                                value={password} 
-                                onChange={e => setPassword(e.target.value)}
-                                className='password field'>
-                              </input>
-                    }
-                    {
-                        isPasswordVisible
-                            ? <button 
-                                className="eye" 
-                                onClick={e => hidePassword(e)}
-                              >
-                                  <img src='/icons/eye-close-f.svg'></img>
-                              </button>
-                            : <button 
-                                className="eye" 
-                                onClick={e => showPassword(e)}
-                              >
-                                <img src='/icons/eye-f.svg'></img>
-                              </button>
-                    }
-                </div>
-            </fieldset>
+            <TextField
+                title='Email'
+                isRequired={false}
+                value={email}
+                onChangeHandler={value => setEmail(value)}
+            />
+            <PasswordField
+                title='Password'
+                isRequired={false}
+                value={password}
+                onChangeHandler={value => setPassword(value)}
+                helperText='Forgot password?'
+                helperLink='/forgot-password'
+            />
             <CTA 
                 text='Login'
                 onClickHandler={e => login(e)}
@@ -146,55 +102,6 @@ const Login: NextPage = () => {
             border-radius: 10px;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             padding: 25px;
-        }
-
-        fieldset {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        fieldset > label {
-            margin-bottom: 10px;
-            color: ${colors.black};
-        }
-
-        fieldset > label > span {
-            color: ${colors.grey};
-            font-size: 14px
-        }
-
-        fieldset > div {
-            width: 100%;
-        }
-
-        .field {
-            color: ${colors.black};
-            border: 1px solid #C4C2C2;
-            font-size: 16px;
-            padding: 0.25em 0.5em;
-            border-radius: 5px;
-            line-height: 25px
-        }
-
-        .field:focus {
-            outline: none
-        }
-
-        .password {
-            width: 100%;
-            padding-right: 50px;
-        }
-
-        .eye {
-            display: inline;
-            margin-left: -37px;
-            padding-top: 4px;
-            background-color: ${colors.white};
-            border: none;
-            position: absolute;
-            margin-top: 1px;
-            cursor: pointer;
         }
 
         .error {

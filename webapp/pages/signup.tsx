@@ -7,6 +7,8 @@ import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/con
 import { ErrorResponse } from './api/utils/apiUtils'
 import Link from 'next/link'
 import CTA from '../components/cta/CTA'
+import TextField from '../components/textField/TextField'
+import PasswordField from '../components/paswordField/PasswordField'
 
 const SignUp: NextPage = () => {
 
@@ -23,7 +25,6 @@ const SignUp: NextPage = () => {
 
   const [serverError, setServerError] = useState('');
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isSignUpBtnDisabled, setIsSignUpBtnDisabled] = useState(false);
 
   async function signup(e: MouseEvent<HTMLElement>) {
@@ -116,86 +117,38 @@ const SignUp: NextPage = () => {
       setServerError('')
   }
 
-  function showPassword(e: MouseEvent<HTMLElement>): void {
-      e.preventDefault();
-      setIsPasswordVisible(true);
-  }
-
-  function hidePassword(e: MouseEvent<HTMLElement>): void {
-      e.preventDefault();
-      setIsPasswordVisible(false);
-  }
-
   return (
     <>
       <main>
         <form>
-            <fieldset>
-                <label>Name <span>- required</span></label>
-                <input 
-                    type="text" 
-                    onChange={e => setName(e.target.value)} 
-                    value={name} 
-                    className={`field ${nameError ? 'field-error' : ''}`}>
-                </input>
-                <p className="error" style={nameError ? {display: 'block'} : {display: 'none'}}>{nameError}</p>
-            </fieldset>
-            <fieldset>
-                <label>Surname <span>- required</span></label>
-                <input 
-                    type="text" 
-                    onChange={e => setSurname(e.target.value)} 
-                    value={surname} 
-                    className={`field ${surnameError ? 'field-error' : ''}`}>
-                </input>
-                <p className="error" style={surnameError ? {display: 'block'} : {display: 'none'}}>{surnameError}</p>
-            </fieldset>
-            <fieldset>
-                <label>Email <span>- required</span></label>
-                <input 
-                    type="text" 
-                    onChange={e => setEmail(e.target.value)} 
-                    value={email} 
-                    className={`field ${emailError ? 'field-error' : ''}`}>
-                </input>
-                <p className="error" style={emailError ? {display: 'block'} : {display: 'none'}}>{emailError}</p>
-            </fieldset>
-            <fieldset>
-                <label>Password <span>- required</span></label>
-                <div>
-                    {
-                        isPasswordVisible
-                            ? <input 
-                                type="text" 
-                                value={password} 
-                                onChange={e => setPassword(e.target.value)}
-                                className={`password field ${passwordError ? 'field-error' : ''}`}>
-                              </input>
-                            : <input 
-                                type="password" 
-                                value={password} 
-                                onChange={e => setPassword(e.target.value)}
-                                className={`password field ${passwordError ? 'field-error' : ''}`}>
-                              </input>
-                    }
-                    {
-                        isPasswordVisible
-                            ? <button 
-                                className="eye" 
-                                onClick={e => hidePassword(e)}
-                              >
-                                  <img src='/icons/eye-close-f.svg'></img>
-                              </button>
-                            : <button 
-                                className="eye" 
-                                onClick={e => showPassword(e)}
-                              >
-                                <img src='/icons/eye-f.svg'></img>
-                              </button>
-                    }
-                    <p className="error" style={passwordError ? {display: 'block'} : {display: 'none'}}>{passwordError}</p>
-                </div>
-            </fieldset>
+            <TextField
+                title='Name'
+                isRequired={true}
+                value={name}
+                onChangeHandler={value => setName(value)}
+                errorMessage={nameError}
+            />
+            <TextField
+                title='Surname'
+                isRequired={true}
+                value={surname}
+                onChangeHandler={value => setSurname(value)}
+                errorMessage={surnameError}
+            />
+            <TextField
+                title='Email'
+                isRequired={true}
+                value={email}
+                onChangeHandler={value => setEmail(value)}
+                errorMessage={emailError}
+            />
+            <PasswordField
+                title='Password'
+                isRequired={true}
+                value={password}
+                onChangeHandler={value => setPassword(value)}
+                errorMessage={passwordError}
+            />
             <fieldset>
                 <div className='termsAndConditionsContainer'>
                     <input 
@@ -249,51 +202,12 @@ const SignUp: NextPage = () => {
             margin-bottom: 15px;
         }
 
-        fieldset > label {
-            margin-bottom: 10px;
-            color: ${colors.black};
-        }
-
-        fieldset > label > span {
-            color: ${colors.grey};
-            font-size: 14px
-        }
-
         fieldset > div {
             width: 100%;
         }
 
-        .field {
-            color: ${colors.black};
-            border: 1px solid #C4C2C2;
-            font-size: 16px;
-            padding: 0.25em 0.5em;
-            border-radius: 5px;
-            line-height: 25px
-        }
-
-        .field:focus {
-            outline: none
-        }
-
         .field-error {
             border: 1px solid ${colors.error}
-        }
-
-        .password {
-            width: 100%;
-            padding-right: 50px;
-        }
-
-        .eye {
-            display: inline;
-            margin-left: -37px;
-            padding-top: 4px;
-            background-color: ${colors.white};
-            border: none;
-            position: absolute;
-            margin-top: 1px;
-            cursor: pointer;
         }
 
         .error {

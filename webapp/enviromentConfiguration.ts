@@ -16,7 +16,7 @@ export const enviromentConfiguration: EnviromentConfiguration = {
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || '',
   SYMETRIC_ENCRYPTION_KEY: process.env.SYMETRIC_ENCRYPTION_KEY || '',
   NO_REPPLY_EMAIL: 'antoniojesussg96@gmail.com',
-  SUPPORT_EMAIL: 'support.instock@gmail.com',
+  SUPPORT_EMAIL: 'support.stockout@gmail.com',
   WEBAPP_BASE_URL: 'http://localhost:3000',
   SOURCE: 'WebApp'
 }

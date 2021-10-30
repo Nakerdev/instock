@@ -15,8 +15,8 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   readonly webAppBaseUrl: string
   readonly supportEmail: string
 
-  private readonly userPasswordRecoveryPageEndpoint = '/user/password/recovery?t={token}'
-  private readonly emailSubject = 'Reset your InStock password'
+  private readonly userPasswordRecoveryPageEndpoint = '/change-password?t={token}'
+  private readonly emailSubject = 'Reset your StockOut password'
 
   constructor (
     mailService: MailService,
@@ -79,13 +79,13 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
             <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
-                <title>Reset your InStock password</title>
+                <title>Reset your StockOut password</title>
             </head>
             <body style="background-color: #fff; max-width: 800px; margin: 0 auto;">
               <div style="background-color: #fff; margin: 20px;padding-top: 10px; padding-bottom: 10px;">
                 <div>
                   <h1 style="color: #171616;padding-bottom: 10px;border-bottom: 1px solid #EFEFEF">
-                    InStock
+                    StockOut
                   </h1>
                 </div>
                 <div>
@@ -93,7 +93,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                       Hello ${userName},
                   </p>
                   <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
-                      We've received a request to reset the password for the InStock account
+                      We've received a request to reset the password for the StockOut account
                       associated with ${userEmail}. No changes have been made to your account
                       yet.
                   </p>
@@ -101,7 +101,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                       You can reset your password by clicking the link below:
                   </p>
                   <div style="display:block; margin: 0 auto; box-sizing: border-box;">
-                    <a clicktracking=off href="${resetPasswordUrl}" target="_blank" style="background-color: #FF3B3F;border: none;color: white;padding: 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 20px;font-weight: bold;border-radius: 10px;margin-top: 10px;margin-bottom: 10px;width:100%; box-sizing: border-box;">
+                    <a clicktracking=off href="${resetPasswordUrl}" target="_blank" style="background-color: #FF3B3F;border: none;color: white;padding: 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 20px;border-radius: 10px;margin-top: 10px;margin-bottom: 10px;width:100%; box-sizing: border-box;">
                       Reset your password
                     </a>
                   </div>
@@ -109,7 +109,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                       If you did not request a new password, please ignore this notification.
                   </p>
                   <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
-                      -- The InStock Team
+                      -- The StockOut Team
                   </p>
                 </div>
                 <div>
@@ -117,7 +117,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                     Problems or questions? send an email to ${supportEmail}
                   </p>
                   <p style="color: #A9A9A9;font-size: 14px;">
-                    © InStock
+                    © StockOut
                   </p>
                 </div>
               </div>

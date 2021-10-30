@@ -5,6 +5,7 @@ import { useState, MouseEvent } from 'react'
 import { colors } from '../styles/theme'
 import { UserPasswordRecoveryControllerRequest } from './api/users/password/recovery/controller'
 import CTA from '../components/cta/CTA'
+import TextField from '../components/textField/TextField'
 
 const ForgotPassword: NextPage = () => {
 
@@ -54,16 +55,13 @@ const ForgotPassword: NextPage = () => {
             <h2>Reset your password</h2>
             <h3>Enter your user account's verified email address and we will send you a password reset link.</h3>
             <div style={hasEmailToResetPasswordBeenSent ? {display: 'none'} : {display: 'block'}}>
-                <fieldset>
-                  <label>Email</label>
-                  <input 
-                      type="text" 
-                      onChange={e => setEmail(e.target.value)} 
-                      value={email} 
-                      className={`field ${emailError ? 'field-error' : ''}`}>
-                  </input>
-                  <p className="error" style={emailError ? {display: 'block'} : {display: 'none'}}>{emailError}</p>
-              </fieldset>
+              <TextField
+                  title='Email'
+                  isRequired={true}
+                  value={name}
+                  onChangeHandler={value => setEmail(value)}
+                  errorMessage={emailError}
+              />
               <CTA 
                   text='Send password reset email'
                   onClickHandler={e => recovery(e)}
@@ -118,49 +116,12 @@ const ForgotPassword: NextPage = () => {
             line-height: 1.3rem;
         }
 
-        fieldset {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        fieldset > label {
-            margin-bottom: 10px;
-            color: ${colors.black};
-        }
-
-        fieldset > label > span {
-            color: ${colors.grey};
-            font-size: 14px
-        }
-
-        fieldset > div {
-            width: 100%;
-        }
-
         .success-message {
           background-color: ${colors.success};
           border-radius: 5px;
           padding: 15px;
           color: ${colors.black};
           line-height: 1.3rem
-        }
-
-        .field {
-            color: ${colors.black};
-            border: 1px solid #C4C2C2;
-            font-size: 16px;
-            padding: 0.25em 0.5em;
-            border-radius: 5px;
-            line-height: 25px
-        }
-
-        .field:focus {
-            outline: none
-        }
-
-        .field-error {
-            border: 1px solid ${colors.error}
         }
 
         .error {

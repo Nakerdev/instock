@@ -8,6 +8,7 @@ import { UserPasswordRecoveryControllerRequest } from './api/users/password/reco
 const ForgotPassword: NextPage = () => {
 
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [serverError, setServerError] = useState('');
   const [hasEmailToResetPasswordBeenSent, setHasEmailToResetPasswordBeenSent] = useState(false);
 
@@ -16,6 +17,10 @@ const ForgotPassword: NextPage = () => {
   async function recovery(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
     cleanErrors()
+    if(!email){
+      setEmailError('Email is required.')
+      return;
+    }
     setIsRecoveryBtnDisabled(true)
     const request = new UserPasswordRecoveryControllerRequest(
         email
@@ -37,6 +42,7 @@ const ForgotPassword: NextPage = () => {
   }
 
   function cleanErrors(){
+    setEmailError('')
     setServerError('')
   }
 
@@ -53,8 +59,9 @@ const ForgotPassword: NextPage = () => {
                       type="text" 
                       onChange={e => setEmail(e.target.value)} 
                       value={email} 
-                      className='field'>
+                      className={`field ${emailError ? 'field-error' : ''}`}>
                   </input>
+                  <p className="error" style={emailError ? {display: 'block'} : {display: 'none'}}>{emailError}</p>
               </fieldset>
               <button className="cta" onClick={e => recovery(e)} disabled={isRecoveryBtnDisabled}>
                   {
@@ -179,6 +186,10 @@ const ForgotPassword: NextPage = () => {
             position: absolute;
             margin-left: -30px;
             margin-top: -3px;
+        }
+
+        .field-error {
+            border: 1px solid ${colors.error}
         }
 
         .error {

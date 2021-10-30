@@ -15,7 +15,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   readonly webAppBaseUrl: string
   readonly supportEmail: string
 
-  private readonly userPasswordRecoveryPageEndpoint = '/change-password?t={token}'
+  private readonly userPasswordRecoveryPageEndpoint = '/change-user-password?t={token}'
   private readonly emailSubject = 'Reset your StockOut password'
 
   constructor (

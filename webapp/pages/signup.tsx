@@ -78,7 +78,7 @@ const SignUp: NextPage = () => {
                     if(error.fieldId == 'password' && error.error == 'Required'){
                         setPasswordError('Password is required.')
                     }else if(error.fieldId == 'password' && error.error == 'InvalidFormat'){
-                        setPasswordError(`Password does not comply our security policy. Please use 8 or more characters, at least one uppercase letter and at least one simbol.`)
+                        setPasswordError(`Password does not comply our security policy. Please use 8 or more characters, at least one uppercase letter, at least one number and at least one simbol.`)
                     }else if(error.fieldId == 'password' && error.error == 'WrongLength'){
                         setPasswordError('The length of the password exceeds the allowed size.')
                     }

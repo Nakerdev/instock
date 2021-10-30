@@ -26,7 +26,7 @@ export async function getServerSideProps(context: Context) {
         context.res.writeHead(301, { Location: '/' })
         context.res.end()
     }
-    return new ServerSideProps(context.query.t)
+    return { props: { token: context.query.t } }
 }
 
 const ChangePassword: NextPage = (props: ServerSideProps) => {
@@ -42,8 +42,14 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
   async function changePassword(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
-    setIsChangePasswordBtnDisabled(true)
     cleanErrors()
+
+    if(password !== repeatedPassword) {
+        setPasswordError('Passwords are not the same.')
+        return;
+    }
+
+    setIsChangePasswordBtnDisabled(true)
     const request = new UserChangePasswordControllerRequest(
         props.token,
         password
@@ -51,7 +57,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
     try{
 
         const response = await fetch(
-            '/api/users/passwords/change', 
+            '/api/users/password/change', 
             {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
         )
         if(response.status === 200){
@@ -67,7 +73,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
                     }
 
                     if(error.fieldId == 'password' && error.error == 'InvalidFormat'){
-                        setPasswordError(`Password does not comply our security policy. Please use 8 or more characters, at least one uppercase letter and at least one simbol.`)
+                        setPasswordError(`Password does not comply our security policy. Please use 8 or more characters, at least one uppercase letter, at least one number and at least one simbol.`)
                     }else if(error.fieldId == 'password' && error.error == 'WrongLength'){
                         setPasswordError('The length of the password exceeds the allowed size.')
                     }
@@ -110,16 +116,16 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
               <fieldset>
                   <label>Password</label>
                   <input 
-                      type="text" 
+                      type="password" 
                       onChange={e => setPassword(e.target.value)} 
                       value={password} 
-                      className='field'>
+                      className={`field ${passwordError ? 'field-error' : ''}`}>
                   </input>
               </fieldset>
               <fieldset>
                   <label>Repeate password</label>
                   <input 
-                      type="text" 
+                      type="password" 
                       onChange={e => setRepeatedPassword(e.target.value)} 
                       value={repeatedPassword} 
                       className={`field ${passwordError ? 'field-error' : ''}`}>

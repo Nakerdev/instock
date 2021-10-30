@@ -138,6 +138,8 @@ const Login: NextPage = () => {
             min-width: 500px;
             max-width: 500px;
             position: absolute;
+            margin-top: 20px;
+            margin-bottom: 20px;
             background-color: ${colors.white};
             flex: 1;
             border: 1px solid ${colors.white};

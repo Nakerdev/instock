@@ -4,6 +4,7 @@ import { useState, MouseEvent } from 'react'
 
 import { colors } from '../styles/theme'
 import { UserPasswordRecoveryControllerRequest } from './api/users/password/recovery/controller'
+import CTA from '../components/cta/CTA'
 
 const ForgotPassword: NextPage = () => {
 
@@ -63,13 +64,11 @@ const ForgotPassword: NextPage = () => {
                   </input>
                   <p className="error" style={emailError ? {display: 'block'} : {display: 'none'}}>{emailError}</p>
               </fieldset>
-              <button className="cta" onClick={e => recovery(e)} disabled={isRecoveryBtnDisabled}>
-                  {
-                      isRecoveryBtnDisabled
-                          ? <img src='/gifs/eclipse-white.gif'></img>
-                          : <span>Send password reset email</span>
-                  }
-              </button>
+              <CTA 
+                  text='Send password reset email'
+                  onClickHandler={e => recovery(e)}
+                  isDisabled={isRecoveryBtnDisabled}
+              />
               <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
             </div>
             <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
@@ -158,34 +157,6 @@ const ForgotPassword: NextPage = () => {
 
         .field:focus {
             outline: none
-        }
-
-        .cta {
-            color: ${colors.white};
-            background-color: ${colors.CTA};
-            width: 100%;
-            height: 50px;
-            border: 0;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-
-        .cta:disabled  {
-            cursor: wait;
-            opacity: 80%;
-        }
-
-        .cta:disabled > img {
-            width: 30px;
-        }
-
-        .cta > span > img {
-            filter: invert(1);
-            position: absolute;
-            margin-left: -30px;
-            margin-top: -3px;
         }
 
         .field-error {

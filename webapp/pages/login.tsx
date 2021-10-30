@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
 import Link from 'next/link'
+import CTA from '../components/cta/CTA'
 
 const Login: NextPage = () => {
 
@@ -113,13 +114,12 @@ const Login: NextPage = () => {
                     }
                 </div>
             </fieldset>
-            <button className="cta" onClick={e => login(e)} disabled={isLoginBtnDisabled}>
-                {
-                    isLoginBtnDisabled
-                        ? <img src='/gifs/eclipse-white.gif'></img>
-                        : <span><img src='/icons/key-f.svg'></img>Login</span>
-                }
-            </button>
+            <CTA 
+                text='Login'
+                onClickHandler={e => login(e)}
+                isDisabled={isLoginBtnDisabled}
+                buttonInnerImgSrc='/icons/key-f.svg'
+            />
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
             <p className='createAccountLink'>New to StockOut? <Link href='/signup'><a className='link'>Create an account</a></Link></p>
         </form>
@@ -179,34 +179,6 @@ const Login: NextPage = () => {
 
         .field:focus {
             outline: none
-        }
-
-        .cta {
-            color: ${colors.white};
-            background-color: ${colors.CTA};
-            width: 100%;
-            height: 50px;
-            border: 0;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-
-        .cta:disabled  {
-            cursor: wait;
-            opacity: 80%;
-        }
-
-        .cta:disabled > img {
-            width: 30px;
-        }
-
-        .cta > span > img {
-            filter: invert(1);
-            position: absolute;
-            margin-left: -30px;
-            margin-top: -3px;
         }
 
         .password {

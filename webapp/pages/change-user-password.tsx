@@ -5,6 +5,7 @@ import { useState, MouseEvent } from 'react'
 import { colors } from '../styles/theme'
 import { UserChangePasswordControllerRequest } from './api/users/password/change/controller'
 import { ErrorResponse } from './api/utils/apiUtils';
+import CTA from '../components/cta/CTA'
 
 interface Context {
 	query: {
@@ -132,13 +133,11 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
                   </input>
                   <p className="error" style={passwordError ? {display: 'block'} : {display: 'none'}}>{passwordError}</p>
               </fieldset>
-              <button className="cta" onClick={e => changePassword(e)} disabled={isChangePasswordBtnDisabled}>
-                  {
-                      isChangePasswordBtnDisabled
-                          ? <img src='/gifs/eclipse-white.gif'></img>
-                          : <span>Change password</span>
-                  }
-              </button>
+              <CTA 
+                  text='Change password'
+                  onClickHandler={e => changePassword(e)}
+                  isDisabled={isChangePasswordBtnDisabled}
+              />
               <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
             </div>
             <div style={hasPasswordBeenChanged ? {display: 'block'} : {display: 'none'}}>
@@ -226,34 +225,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
         .field:focus {
             outline: none
-        }
-
-        .cta {
-            color: ${colors.white};
-            background-color: ${colors.CTA};
-            width: 100%;
-            height: 50px;
-            border: 0;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-
-        .cta:disabled  {
-            cursor: wait;
-            opacity: 80%;
-        }
-
-        .cta:disabled > img {
-            width: 30px;
-        }
-
-        .cta > span > img {
-            filter: invert(1);
-            position: absolute;
-            margin-left: -30px;
-            margin-top: -3px;
         }
 
         .field-error {

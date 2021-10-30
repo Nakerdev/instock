@@ -6,6 +6,7 @@ import { colors } from '../styles/theme'
 import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/controller'
 import { ErrorResponse } from './api/utils/apiUtils'
 import Link from 'next/link'
+import CTA from '../components/cta/CTA'
 
 const SignUp: NextPage = () => {
 
@@ -208,13 +209,12 @@ const SignUp: NextPage = () => {
                 </div>
                 <p className="error" style={termsAndConditionsError ? {display: 'block'} : {display: 'none'}}>{termsAndConditionsError}</p>
             </fieldset>
-            <button className="cta" onClick={e => signup(e)} disabled={isSignUpBtnDisabled}>
-                {
-                    isSignUpBtnDisabled
-                        ? <img src='/gifs/eclipse-white.gif'></img>
-                        : <span><img src='/icons/padlock-f.svg'></img>Create Account</span>
-                }
-            </button>
+            <CTA 
+                text='Create Account'
+                onClickHandler={e => signup(e)}
+                isDisabled={isSignUpBtnDisabled}
+                buttonInnerImgSrc='/icons/padlock-f.svg'
+            />
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
             <p className='loginLink'>Already have an account? <Link href='/login'><a className='link'>Login</a></Link></p>
         </form>
@@ -278,34 +278,6 @@ const SignUp: NextPage = () => {
 
         .field-error {
             border: 1px solid ${colors.error}
-        }
-
-        .cta {
-            color: ${colors.white};
-            background-color: ${colors.CTA};
-            width: 100%;
-            height: 50px;
-            border: 0;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 5px;
-        }
-
-        .cta:disabled  {
-            cursor: wait;
-            opacity: 80%;
-        }
-
-        .cta:disabled > img {
-            width: 30px;
-        }
-
-        .cta > span > img {
-            filter: invert(1);
-            position: absolute;
-            margin-left: -30px;
-            margin-top: -3px;
         }
 
         .password {

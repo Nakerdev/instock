@@ -1,5 +1,4 @@
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useState, MouseEvent } from 'react'
 
 import { colors } from '../styles/theme'
@@ -8,6 +7,7 @@ import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
+import SuccessMessage from '../components/successMessage/SuccessMessage'
 
 const ForgotPassword: NextPage = () => {
 
@@ -72,10 +72,10 @@ const ForgotPassword: NextPage = () => {
               <ErrorMessage message={serverError}/>
             </div>
             <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
-              <p className='success-message'>
+              <SuccessMessage>
                 Check your email for a link to reset your password. 
                 If it doesn’t appear within a few minutes, check your spam folder. 
-              </p>
+              </SuccessMessage>
               <ClientSideLink 
                 text='Go to' 
                 href='/login' 
@@ -120,14 +120,6 @@ const ForgotPassword: NextPage = () => {
             font-size: 16px;
             margin-bottom: 10px;
             line-height: 1.3rem;
-        }
-
-        .success-message {
-          background-color: ${colors.success};
-          border-radius: 5px;
-          padding: 15px;
-          color: ${colors.black};
-          line-height: 1.3rem
         }
     `}</style>
     </>

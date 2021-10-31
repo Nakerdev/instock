@@ -7,6 +7,7 @@ import { ErrorResponse } from './api/utils/apiUtils';
 import CTA from '../components/cta/CTA'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
+import SuccessMessage from '../components/successMessage/SuccessMessage';
 
 interface Context {
 	query: {
@@ -36,7 +37,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [hasPasswordBeenChanged, setHasPasswordBeenChanged] = useState(false);
+  const [hasPasswordBeenChanged, setHasPasswordBeenChanged] = useState(true);
 
   const [serverError, setServerError] = useState('');
 
@@ -142,9 +143,9 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
               <ErrorMessage message={serverError}/>
             </div>
             <div style={hasPasswordBeenChanged ? {display: 'block'} : {display: 'none'}}>
-              <p className='success-message'>
+              <SuccessMessage>
                   Your password was successfully changed.
-              </p>
+              </SuccessMessage>
               <ClientSideLink 
                 text='Go to' 
                 href='/login' 
@@ -209,14 +210,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
         fieldset > div {
             width: 100%;
-        }
-
-        .success-message {
-          background-color: ${colors.success};
-          border-radius: 5px;
-          padding: 15px;
-          color: ${colors.black};
-          line-height: 1.3rem
         }
 
         .field {

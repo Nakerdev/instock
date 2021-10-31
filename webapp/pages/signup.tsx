@@ -189,17 +189,23 @@ const SignUp: NextPage = () => {
         }
 
         form {
-            min-width: 500px;
-            max-width: 500px;
+            left: 0;
+            right: 0;
             position: absolute;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin: 20px;
             background-color: ${colors.white};
             flex: 1;
             border: 1px solid ${colors.white};
             border-radius: 10px;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             padding: 25px;
+        }
+
+        @media (min-width: 600px) {
+            form {
+                min-width: 500px;
+                max-width: 500px;
+            }
         }
 
         fieldset {
@@ -222,6 +228,13 @@ const SignUp: NextPage = () => {
 
         .termsAndConditionsContainer > input {
             margin-right: 10px;
+        }
+
+        .link {
+            color: ${colors.link};
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1.3rem;
         }
     `}</style>
     </>

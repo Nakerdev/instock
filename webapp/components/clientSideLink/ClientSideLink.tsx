@@ -27,6 +27,7 @@ export default function ClientSideLink(props: ClientSideLinkComponentProps) {
                 margin-top: 20px;
                 color: ${colors.black};
                 font-size: 16px;
+                line-height: 1.3rem;
             }
         `}</style>
         </>

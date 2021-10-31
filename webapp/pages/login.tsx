@@ -9,6 +9,7 @@ import CTA from '../components/cta/CTA'
 import PasswordField from '../components/paswordField/PasswordField'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
+import ErrorMessage from '../components/errorMessage/ErrorMessage'
 
 const Login: NextPage = () => {
 
@@ -77,7 +78,7 @@ const Login: NextPage = () => {
                 isDisabled={isLoginBtnDisabled}
                 buttonInnerImgSrc='/icons/key-f.svg'
             />
-            <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+            <ErrorMessage message={serverError}/>
             <ClientSideLink 
                 text='New to Stockout?'
                 href='/signup'
@@ -107,14 +108,6 @@ const Login: NextPage = () => {
             border-radius: 10px;
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             padding: 25px;
-        }
-
-        .error {
-            color: ${colors.error};
-            margin-top: 5px;
-            margin-left: 2px;
-            margin-bottom: 5px;
-            line-height: 1.2rem;
         }
     `}</style>
     </>

@@ -10,6 +10,7 @@ import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
 import PasswordField from '../components/paswordField/PasswordField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
+import ErrorMessage from '../components/errorMessage/ErrorMessage'
 
 const SignUp: NextPage = () => {
 
@@ -161,7 +162,7 @@ const SignUp: NextPage = () => {
                         I agree to the <a href='/terms-and-conditions' target='_blank' className='link'> Terms and Conditions</a>
                     </label>
                 </div>
-                <p className="error" style={termsAndConditionsError ? {display: 'block'} : {display: 'none'}}>{termsAndConditionsError}</p>
+                <ErrorMessage message={termsAndConditionsError}/>
             </fieldset>
             <CTA 
                 text='Create Account'
@@ -169,7 +170,7 @@ const SignUp: NextPage = () => {
                 isDisabled={isSignUpBtnDisabled}
                 buttonInnerImgSrc='/icons/padlock-f.svg'
             />
-            <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+            <ErrorMessage message={serverError}/>
             <ClientSideLink 
                 text='Already have an account?'
                 href='/login'
@@ -213,14 +214,6 @@ const SignUp: NextPage = () => {
 
         .field-error {
             border: 1px solid ${colors.error}
-        }
-
-        .error {
-            color: ${colors.error};
-            margin-top: 5px;
-            margin-left: 2px;
-            margin-bottom: 5px;
-            line-height: 1.2rem;
         }
 
         .termsAndConditionsContainer {

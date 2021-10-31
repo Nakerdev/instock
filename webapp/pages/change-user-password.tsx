@@ -6,6 +6,7 @@ import { UserChangePasswordControllerRequest } from './api/users/password/change
 import { ErrorResponse } from './api/utils/apiUtils';
 import CTA from '../components/cta/CTA'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
+import ErrorMessage from '../components/errorMessage/ErrorMessage';
 
 interface Context {
 	query: {
@@ -131,14 +132,14 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
                       value={repeatedPassword} 
                       className={`field ${passwordError ? 'field-error' : ''}`}>
                   </input>
-                  <p className="error" style={passwordError ? {display: 'block'} : {display: 'none'}}>{passwordError}</p>
+                  <ErrorMessage message={passwordError}/>
               </fieldset>
               <CTA 
                   text='Change password'
                   onClickHandler={e => changePassword(e)}
                   isDisabled={isChangePasswordBtnDisabled}
               />
-              <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+              <ErrorMessage message={serverError}/>
             </div>
             <div style={hasPasswordBeenChanged ? {display: 'block'} : {display: 'none'}}>
               <p className='success-message'>
@@ -234,15 +235,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
         .field-error {
             border: 1px solid ${colors.error}
         }
-
-        .error {
-            color: ${colors.error};
-            margin-top: 5px;
-            margin-left: 2px;
-            margin-bottom: 5px;
-            line-height: 1.2rem;
-        }
-
     `}</style>
     </>
   )

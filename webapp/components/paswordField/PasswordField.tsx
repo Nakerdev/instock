@@ -2,6 +2,7 @@ import { useState, MouseEvent  } from 'react'
 
 import { colors } from '../../styles/theme'
 import ClientSideLink from '../clientSideLink/ClientSideLink';
+import ErrorMessage from '../errorMessage/ErrorMessage';
 
 interface PasswordFieldComponentProps {
     title: string;
@@ -69,7 +70,11 @@ export default function PasswordField(props: PasswordFieldComponentProps) {
                             <img src='/icons/eye-f.svg'></img>
                             </button>
                 }
-                <p className="error" style={props.errorMessage ? {display: 'block'} : {display: 'none'}}>{props.errorMessage}</p>
+                {
+                    props.errorMessage
+                        ? <ErrorMessage message={props.errorMessage}/>
+                        : ''
+                }
             </div>
         </fieldset>
         <style jsx>{`
@@ -102,14 +107,6 @@ export default function PasswordField(props: PasswordFieldComponentProps) {
 
             .field-error {
                 border: 1px solid ${colors.error}
-            }
-
-            .error {
-                color: ${colors.error};
-                margin-top: 5px;
-                margin-left: 2px;
-                margin-bottom: 5px;
-                line-height: 1.2rem;
             }
 
             .password {

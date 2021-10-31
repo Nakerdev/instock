@@ -1,4 +1,5 @@
 import { colors } from '../../styles/theme'
+import ErrorMessage from '../errorMessage/ErrorMessage'
 
 interface TextFieldComponentProps {
     title: string;
@@ -20,7 +21,11 @@ export default function TextField(props: TextFieldComponentProps) {
                 value={props.value} 
                 className={`field ${props.errorMessage ? 'field-error' : ''}`}>
             </input>
-            <p className="error" style={props.errorMessage ? {display: 'block'} : {display: 'none'}}>{props.errorMessage}</p>
+            {
+                props.errorMessage
+                    ? <ErrorMessage message={props.errorMessage}/>
+                    : ''
+            }
         </fieldset>
         <style jsx>{`
             fieldset {
@@ -53,14 +58,6 @@ export default function TextField(props: TextFieldComponentProps) {
 
             .field-error {
                 border: 1px solid ${colors.error}
-            }
-
-            .error {
-                color: ${colors.error};
-                margin-top: 5px;
-                margin-left: 2px;
-                margin-bottom: 5px;
-                line-height: 1.2rem;
             }
         `}</style>
         </>

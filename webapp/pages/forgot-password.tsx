@@ -7,6 +7,7 @@ import { UserPasswordRecoveryControllerRequest } from './api/users/password/reco
 import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
+import ErrorMessage from '../components/errorMessage/ErrorMessage'
 
 const ForgotPassword: NextPage = () => {
 
@@ -68,7 +69,7 @@ const ForgotPassword: NextPage = () => {
                   onClickHandler={e => recovery(e)}
                   isDisabled={isRecoveryBtnDisabled}
               />
-              <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
+              <ErrorMessage message={serverError}/>
             </div>
             <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
               <p className='success-message'>
@@ -127,14 +128,6 @@ const ForgotPassword: NextPage = () => {
           padding: 15px;
           color: ${colors.black};
           line-height: 1.3rem
-        }
-
-        .error {
-            color: ${colors.error};
-            margin-top: 5px;
-            margin-left: 2px;
-            margin-bottom: 5px;
-            line-height: 1.2rem;
         }
     `}</style>
     </>

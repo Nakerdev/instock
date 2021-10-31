@@ -12,8 +12,7 @@ export default function Form(props: PropsWithChildren<FormComponentProps>) {
         </form>
         <style jsx>{`
             form {
-                left: 0;
-                right: 0;
+                min-width: 300px;
                 position: absolute;
                 margin: 20px;
                 background-color: ${colors.white};

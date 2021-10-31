@@ -8,6 +8,7 @@ import CTA from '../components/cta/CTA'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import SuccessMessage from '../components/successMessage/SuccessMessage';
+import Form from '../components/form/Form';
 
 interface Context {
 	query: {
@@ -113,7 +114,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
   return (
     <>
       <main>
-        <form >
+        <Form>
             <h2>Reset your password</h2>
             <div style={hasPasswordBeenChanged ? {display: 'none'} : {display: 'block'}}>
               <fieldset>
@@ -152,7 +153,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
                 linkText='Login Page'
               />
             </div>
-          </form>
+          </Form>
       </main>
     <style jsx>{`
         main {
@@ -162,26 +163,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-
-        form {
-            left: 0;
-            right: 0;
-            position: absolute;
-            margin: 20px;
-            background-color: ${colors.white};
-            flex: 1;
-            border: 1px solid ${colors.white};
-            border-radius: 10px;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-            padding: 25px;
-        }
-
-        @media (min-width: 600px) {
-            form {
-                min-width: 500px;
-                max-width: 500px;
-            }
         }
 
         h2 {

@@ -5,12 +5,12 @@ import Router from 'next/router'
 import { colors } from '../styles/theme'
 import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/controller'
 import { ErrorResponse } from './api/utils/apiUtils'
-import Link from 'next/link'
 import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
 import PasswordField from '../components/paswordField/PasswordField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
+import Form from '../components/form/Form'
 
 const SignUp: NextPage = () => {
 
@@ -122,7 +122,7 @@ const SignUp: NextPage = () => {
   return (
     <>
       <main>
-        <form>
+        <Form>
             <TextField
                 title='Name'
                 isRequired={true}
@@ -176,7 +176,7 @@ const SignUp: NextPage = () => {
                 href='/login'
                 linkText='Login'
             />
-        </form>
+        </Form>
       </main>
     <style jsx>{`
         main {
@@ -186,26 +186,6 @@ const SignUp: NextPage = () => {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-
-        form {
-            left: 0;
-            right: 0;
-            position: absolute;
-            margin: 20px;
-            background-color: ${colors.white};
-            flex: 1;
-            border: 1px solid ${colors.white};
-            border-radius: 10px;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-            padding: 25px;
-        }
-
-        @media (min-width: 600px) {
-            form {
-                min-width: 500px;
-                max-width: 500px;
-            }
         }
 
         fieldset {

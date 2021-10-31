@@ -4,12 +4,12 @@ import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
-import Link from 'next/link'
 import CTA from '../components/cta/CTA'
 import PasswordField from '../components/paswordField/PasswordField'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
+import Form from '../components/form/Form'
 
 const Login: NextPage = () => {
 
@@ -57,7 +57,7 @@ const Login: NextPage = () => {
   return (
     <>
       <main>
-        <form>
+        <Form>
             <TextField
                 title='Email'
                 isRequired={false}
@@ -84,7 +84,7 @@ const Login: NextPage = () => {
                 href='/signup'
                 linkText='Create an account'
             />
-        </form>
+        </Form>
       </main>
     <style jsx>{`
         main {
@@ -95,27 +95,6 @@ const Login: NextPage = () => {
             justify-content: center;
             align-items: center;
         }
-
-        form {
-            left: 0;
-            right: 0;
-            position: absolute;
-            margin: 20px;
-            background-color: ${colors.white};
-            flex: 1;
-            border: 1px solid ${colors.white};
-            border-radius: 10px;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-            padding: 25px;
-        }
-
-        @media (min-width: 600px) {
-            form {
-                min-width: 500px;
-                max-width: 500px;
-            }
-        }
-
     `}</style>
     </>
   )

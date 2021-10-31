@@ -37,7 +37,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [hasPasswordBeenChanged, setHasPasswordBeenChanged] = useState(true);
+  const [hasPasswordBeenChanged, setHasPasswordBeenChanged] = useState(false);
 
   const [serverError, setServerError] = useState('');
 

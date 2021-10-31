@@ -60,7 +60,7 @@ const ForgotPassword: NextPage = () => {
               <TextField
                   title='Email'
                   isRequired={true}
-                  value={name}
+                  value={email}
                   onChangeHandler={value => setEmail(value)}
                   errorMessage={emailError}
               />

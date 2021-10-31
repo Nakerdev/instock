@@ -1,11 +1,11 @@
 import { NextPage, NextApiResponse } from 'next'
-import Link from 'next/link'
 import { useState, MouseEvent } from 'react'
 
 import { colors } from '../styles/theme'
 import { UserChangePasswordControllerRequest } from './api/users/password/change/controller'
 import { ErrorResponse } from './api/utils/apiUtils';
 import CTA from '../components/cta/CTA'
+import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 
 interface Context {
 	query: {
@@ -144,7 +144,11 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
               <p className='success-message'>
                   Your password was successfully changed.
               </p>
-              <p className='goToLoginPage'>Go to <Link href='/login'><a className='link'>Login Page</a></Link></p>
+              <ClientSideLink 
+                text='Go to' 
+                href='/login' 
+                linkText='Login Page'
+              />
             </div>
           </form>
       </main>
@@ -239,17 +243,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
             line-height: 1.2rem;
         }
 
-        .goToLoginPage {
-            margin-top: 20px;
-            color: ${colors.black};
-            font-size: 16px;
-        }
-
-        .link {
-            color: ${colors.link};
-            font-weight: bold;
-            cursor: pointer;
-        }
     `}</style>
     </>
   )

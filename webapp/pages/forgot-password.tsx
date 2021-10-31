@@ -6,6 +6,7 @@ import { colors } from '../styles/theme'
 import { UserPasswordRecoveryControllerRequest } from './api/users/password/recovery/controller'
 import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
+import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 
 const ForgotPassword: NextPage = () => {
 
@@ -74,7 +75,11 @@ const ForgotPassword: NextPage = () => {
                 Check your email for a link to reset your password. 
                 If it doesn’t appear within a few minutes, check your spam folder. 
               </p>
-              <p className='goToLoginPage'>Go to <Link href='/login'><a className='link'>Login Page</a></Link></p>
+              <ClientSideLink 
+                text='Go to' 
+                href='/login' 
+                linkText='Login Page'
+              />
             </div>
           </form>
       </main>
@@ -130,18 +135,6 @@ const ForgotPassword: NextPage = () => {
             margin-left: 2px;
             margin-bottom: 5px;
             line-height: 1.2rem;
-        }
-
-        .goToLoginPage {
-            margin-top: 20px;
-            color: ${colors.black};
-            font-size: 16px;
-        }
-
-        .link {
-            color: ${colors.link};
-            font-weight: bold;
-            cursor: pointer;
         }
     `}</style>
     </>

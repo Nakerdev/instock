@@ -1,7 +1,7 @@
 import { useState, MouseEvent  } from 'react'
-import Link from 'next/link'
 
 import { colors } from '../../styles/theme'
+import ClientSideLink from '../clientSideLink/ClientSideLink';
 
 interface PasswordFieldComponentProps {
     title: string;
@@ -33,8 +33,8 @@ export default function PasswordField(props: PasswordFieldComponentProps) {
             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px'}}>
                 <label>{props.title} {props.isRequired ? <span>- required</span> : '' }</label>
                 {
-                    props.helperLink
-                        ? <Link href={props.helperLink}><a className='link'>{props.helperText}</a></Link>
+                    props.helperLink && props.helperText
+                        ? <ClientSideLink href={props.helperLink} linkText={props.helperText}/>
                         : ''
                 }
             </div>
@@ -125,12 +125,6 @@ export default function PasswordField(props: PasswordFieldComponentProps) {
                 border: none;
                 position: absolute;
                 margin-top: 1px;
-                cursor: pointer;
-            }
-
-            .link {
-                color: ${colors.link};
-                font-weight: bold;
                 cursor: pointer;
             }
         `}</style>

@@ -8,6 +8,7 @@ import Link from 'next/link'
 import CTA from '../components/cta/CTA'
 import PasswordField from '../components/paswordField/PasswordField'
 import TextField from '../components/textField/TextField'
+import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 
 const Login: NextPage = () => {
 
@@ -77,7 +78,11 @@ const Login: NextPage = () => {
                 buttonInnerImgSrc='/icons/key-f.svg'
             />
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
-            <p className='createAccountLink'>New to StockOut? <Link href='/signup'><a className='link'>Create an account</a></Link></p>
+            <ClientSideLink 
+                text='New to Stockout?'
+                href='/signup'
+                linkText='Create an account'
+            />
         </form>
       </main>
     <style jsx>{`
@@ -111,19 +116,6 @@ const Login: NextPage = () => {
             margin-bottom: 5px;
             line-height: 1.2rem;
         }
-
-        .createAccountLink {
-            margin-top: 20px;
-            color: ${colors.black};
-            font-size: 16px;
-        }
-
-        .link {
-            color: ${colors.link};
-            font-weight: bold;
-            cursor: pointer;
-        }
-
     `}</style>
     </>
   )

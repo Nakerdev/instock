@@ -9,6 +9,7 @@ import Link from 'next/link'
 import CTA from '../components/cta/CTA'
 import TextField from '../components/textField/TextField'
 import PasswordField from '../components/paswordField/PasswordField'
+import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 
 const SignUp: NextPage = () => {
 
@@ -169,7 +170,11 @@ const SignUp: NextPage = () => {
                 buttonInnerImgSrc='/icons/padlock-f.svg'
             />
             <p className="error" style={serverError ? {display: 'block'} : {display: 'none'}}>{serverError}</p>
-            <p className='loginLink'>Already have an account? <Link href='/login'><a className='link'>Login</a></Link></p>
+            <ClientSideLink 
+                text='Already have an account?'
+                href='/login'
+                linkText='Login'
+            />
         </form>
       </main>
     <style jsx>{`
@@ -225,19 +230,6 @@ const SignUp: NextPage = () => {
         .termsAndConditionsContainer > input {
             margin-right: 10px;
         }
-
-        .link {
-            color: ${colors.link};
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .loginLink {
-            margin-top: 20px;
-            color: ${colors.black};
-            font-size: 16px;
-        }
-
     `}</style>
     </>
   )

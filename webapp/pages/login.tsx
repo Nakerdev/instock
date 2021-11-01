@@ -10,6 +10,7 @@ import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import Form from '../components/form/Form'
+import Layout from '../components/layout/Layout'
 
 const Login: NextPage = () => {
 
@@ -56,38 +57,40 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <main>
-        <Form>
-            <TextField
-                title='Email'
-                isRequired={false}
-                value={email}
-                onChangeHandler={value => setEmail(value)}
-            />
-            <PasswordField
-                title='Password'
-                isRequired={false}
-                value={password}
-                onChangeHandler={value => setPassword(value)}
-                helperText='Forgot password?'
-                helperLink='/forgot-password'
-            />
-            <CTA 
-                text='Login'
-                onClickHandler={e => login(e)}
-                isDisabled={isLoginBtnDisabled}
-                buttonInnerImgSrc='/icons/key-f.svg'
-            />
-            <ErrorMessage message={serverError}/>
-            <ClientSideLink 
-                text='New to Stockout?'
-                href='/signup'
-                linkText='Create an account'
-            />
-        </Form>
-      </main>
-    <style jsx>{`
-        main {
+      <Layout>
+        <section>
+            <Form>
+                <TextField
+                    title='Email'
+                    isRequired={false}
+                    value={email}
+                    onChangeHandler={value => setEmail(value)}
+                />
+                <PasswordField
+                    title='Password'
+                    isRequired={false}
+                    value={password}
+                    onChangeHandler={value => setPassword(value)}
+                    helperText='Forgot password?'
+                    helperLink='/forgot-password'
+                />
+                <CTA 
+                    text='Login'
+                    onClickHandler={e => login(e)}
+                    isDisabled={isLoginBtnDisabled}
+                    buttonInnerImgSrc='/icons/key-f.svg'
+                />
+                <ErrorMessage message={serverError}/>
+                <ClientSideLink 
+                    text='New to Stockout?'
+                    href='/signup'
+                    linkText='Create an account'
+                />
+            </Form>
+        </section>
+      </Layout>
+      <style jsx>{`
+        section {
             background-color: ${colors.background};
             height: 100vh;
             display: flex;
@@ -95,7 +98,7 @@ const Login: NextPage = () => {
             justify-content: center;
             align-items: center;
         }
-    `}</style>
+      `}</style>
     </>
   )
 }

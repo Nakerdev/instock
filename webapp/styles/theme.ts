@@ -8,3 +8,7 @@ export const colors = {
     success: '#A0FD7E',
     link: '#4281C1'
 }
+
+export const fonts = {
+    base: '\'Montserrat\', sans-serif'
+}

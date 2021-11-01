@@ -9,6 +9,7 @@ import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import SuccessMessage from '../components/successMessage/SuccessMessage'
 import Form from '../components/form/Form'
+import Layout from '../components/layout/Layout'
 
 const ForgotPassword: NextPage = () => {
 
@@ -53,40 +54,42 @@ const ForgotPassword: NextPage = () => {
 
   return (
     <>
-      <main>
-        <Form>
-            <h2>Reset your password</h2>
-            <h3>Enter your user account's verified email address and we will send you a password reset link.</h3>
-            <div style={hasEmailToResetPasswordBeenSent ? {display: 'none'} : {display: 'block'}}>
-              <TextField
-                  title='Email'
-                  isRequired={true}
-                  value={email}
-                  onChangeHandler={value => setEmail(value)}
-                  errorMessage={emailError}
-              />
-              <CTA 
-                  text='Send password reset email'
-                  onClickHandler={e => recovery(e)}
-                  isDisabled={isRecoveryBtnDisabled}
-              />
-              <ErrorMessage message={serverError}/>
-            </div>
-            <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
-              <SuccessMessage>
-                Check your email for a link to reset your password. 
-                If it doesn’t appear within a few minutes, check your spam folder. 
-              </SuccessMessage>
-              <ClientSideLink 
-                text='Go to' 
-                href='/login' 
-                linkText='Login Page'
-              />
-            </div>
-          </Form>
-      </main>
+      <Layout>
+        <section>
+          <Form>
+              <h2>Reset your password</h2>
+              <h3>Enter your user account's verified email address and we will send you a password reset link.</h3>
+              <div style={hasEmailToResetPasswordBeenSent ? {display: 'none'} : {display: 'block'}}>
+                <TextField
+                    title='Email'
+                    isRequired={true}
+                    value={email}
+                    onChangeHandler={value => setEmail(value)}
+                    errorMessage={emailError}
+                />
+                <CTA 
+                    text='Send password reset email'
+                    onClickHandler={e => recovery(e)}
+                    isDisabled={isRecoveryBtnDisabled}
+                />
+                <ErrorMessage message={serverError}/>
+              </div>
+              <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
+                <SuccessMessage>
+                  Check your email for a link to reset your password. 
+                  If it doesn’t appear within a few minutes, check your spam folder. 
+                </SuccessMessage>
+                <ClientSideLink 
+                  text='Go to' 
+                  href='/login' 
+                  linkText='Login Page'
+                />
+              </div>
+            </Form>
+        </section> 
+      </Layout> 
     <style jsx>{`
-        main {
+        section {
             background-color: ${colors.background};
             height: 100vh;
             display: flex;

@@ -1,6 +1,9 @@
 import { PropsWithChildren } from 'react'
 import Head from 'next/head'
 
+import { fonts } from '../../styles/theme'
+import Header from '../header/Header'
+
 interface LayoutComponentProps {}
 
 export default function Layout(props: PropsWithChildren<LayoutComponentProps>) {
@@ -11,9 +14,27 @@ export default function Layout(props: PropsWithChildren<LayoutComponentProps>) {
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet"/> 
         </Head>
+        <Header/>
         <main>
             {props.children}
         </main>
+        <style jsx global>{`
+            html,
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            * {
+                box-sizing: border-box;
+                font-family: ${fonts.base}
+            } 
+        `}</style>
         </>
     )
 }

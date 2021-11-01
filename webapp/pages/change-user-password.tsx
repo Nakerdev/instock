@@ -9,6 +9,7 @@ import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import SuccessMessage from '../components/successMessage/SuccessMessage';
 import Form from '../components/form/Form';
+import Layout from '../components/layout/Layout';
 
 interface Context {
 	query: {
@@ -113,50 +114,52 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
   return (
     <>
-      <main>
-        <Form>
-            <h2>Reset your password</h2>
-            <div style={hasPasswordBeenChanged ? {display: 'none'} : {display: 'block'}}>
-              <fieldset>
-                  <label>Password</label>
-                  <input 
-                      type="password" 
-                      onChange={e => setPassword(e.target.value)} 
-                      value={password} 
-                      className={`field ${passwordError ? 'field-error' : ''}`}>
-                  </input>
-              </fieldset>
-              <fieldset>
-                  <label>Repeate password</label>
-                  <input 
-                      type="password" 
-                      onChange={e => setRepeatedPassword(e.target.value)} 
-                      value={repeatedPassword} 
-                      className={`field ${passwordError ? 'field-error' : ''}`}>
-                  </input>
-                  <ErrorMessage message={passwordError}/>
-              </fieldset>
-              <CTA 
-                  text='Change password'
-                  onClickHandler={e => changePassword(e)}
-                  isDisabled={isChangePasswordBtnDisabled}
-              />
-              <ErrorMessage message={serverError}/>
-            </div>
-            <div style={hasPasswordBeenChanged ? {display: 'block'} : {display: 'none'}}>
-              <SuccessMessage>
-                  Your password was successfully changed.
-              </SuccessMessage>
-              <ClientSideLink 
-                text='Go to' 
-                href='/login' 
-                linkText='Login Page'
-              />
-            </div>
-          </Form>
-      </main>
+      <Layout>
+        <section>
+            <Form>
+                <h2>Reset your password</h2>
+                <div style={hasPasswordBeenChanged ? {display: 'none'} : {display: 'block'}}>
+                <fieldset>
+                    <label>Password</label>
+                    <input 
+                        type="password" 
+                        onChange={e => setPassword(e.target.value)} 
+                        value={password} 
+                        className={`field ${passwordError ? 'field-error' : ''}`}>
+                    </input>
+                </fieldset>
+                <fieldset>
+                    <label>Repeate password</label>
+                    <input 
+                        type="password" 
+                        onChange={e => setRepeatedPassword(e.target.value)} 
+                        value={repeatedPassword} 
+                        className={`field ${passwordError ? 'field-error' : ''}`}>
+                    </input>
+                    <ErrorMessage message={passwordError}/>
+                </fieldset>
+                <CTA 
+                    text='Change password'
+                    onClickHandler={e => changePassword(e)}
+                    isDisabled={isChangePasswordBtnDisabled}
+                />
+                <ErrorMessage message={serverError}/>
+                </div>
+                <div style={hasPasswordBeenChanged ? {display: 'block'} : {display: 'none'}}>
+                <SuccessMessage>
+                    Your password was successfully changed.
+                </SuccessMessage>
+                <ClientSideLink 
+                    text='Go to' 
+                    href='/login' 
+                    linkText='Login Page'
+                />
+                </div>
+            </Form>
+        </section>
+      </Layout>
     <style jsx>{`
-        main {
+        section {
             background-color: ${colors.background};
             height: 100vh;
             display: flex;

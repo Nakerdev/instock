@@ -11,6 +11,7 @@ import PasswordField from '../components/paswordField/PasswordField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import Form from '../components/form/Form'
+import Layout from '../components/layout/Layout'
 
 const SignUp: NextPage = () => {
 
@@ -121,65 +122,67 @@ const SignUp: NextPage = () => {
 
   return (
     <>
-      <main>
-        <Form>
-            <TextField
-                title='Name'
-                isRequired={true}
-                value={name}
-                onChangeHandler={value => setName(value)}
-                errorMessage={nameError}
-            />
-            <TextField
-                title='Surname'
-                isRequired={true}
-                value={surname}
-                onChangeHandler={value => setSurname(value)}
-                errorMessage={surnameError}
-            />
-            <TextField
-                title='Email'
-                isRequired={true}
-                value={email}
-                onChangeHandler={value => setEmail(value)}
-                errorMessage={emailError}
-            />
-            <PasswordField
-                title='Password'
-                isRequired={true}
-                value={password}
-                onChangeHandler={value => setPassword(value)}
-                errorMessage={passwordError}
-            />
-            <fieldset>
-                <div className='termsAndConditionsContainer'>
-                    <input 
-                        type="checkbox" 
-                        onChange={e => setAreTermsAndConditionsAccepted(e.target.checked)} 
-                        checked={areTermsAndConditionsAccepted}>
-                    </input>
-                    <label>
-                        I agree to the <a href='/terms-and-conditions' target='_blank' className='link'> Terms and Conditions</a>
-                    </label>
-                </div>
-                <ErrorMessage message={termsAndConditionsError}/>
-            </fieldset>
-            <CTA 
-                text='Create Account'
-                onClickHandler={e => signup(e)}
-                isDisabled={isSignUpBtnDisabled}
-                buttonInnerImgSrc='/icons/padlock-f.svg'
-            />
-            <ErrorMessage message={serverError}/>
-            <ClientSideLink 
-                text='Already have an account?'
-                href='/login'
-                linkText='Login'
-            />
-        </Form>
-      </main>
+      <Layout>
+        <section>
+            <Form>
+                <TextField
+                    title='Name'
+                    isRequired={true}
+                    value={name}
+                    onChangeHandler={value => setName(value)}
+                    errorMessage={nameError}
+                />
+                <TextField
+                    title='Surname'
+                    isRequired={true}
+                    value={surname}
+                    onChangeHandler={value => setSurname(value)}
+                    errorMessage={surnameError}
+                />
+                <TextField
+                    title='Email'
+                    isRequired={true}
+                    value={email}
+                    onChangeHandler={value => setEmail(value)}
+                    errorMessage={emailError}
+                />
+                <PasswordField
+                    title='Password'
+                    isRequired={true}
+                    value={password}
+                    onChangeHandler={value => setPassword(value)}
+                    errorMessage={passwordError}
+                />
+                <fieldset>
+                    <div className='termsAndConditionsContainer'>
+                        <input 
+                            type="checkbox" 
+                            onChange={e => setAreTermsAndConditionsAccepted(e.target.checked)} 
+                            checked={areTermsAndConditionsAccepted}>
+                        </input>
+                        <label>
+                            I agree to the <a href='/terms-and-conditions' target='_blank' className='link'> Terms and Conditions</a>
+                        </label>
+                    </div>
+                    <ErrorMessage message={termsAndConditionsError}/>
+                </fieldset>
+                <CTA 
+                    text='Create Account'
+                    onClickHandler={e => signup(e)}
+                    isDisabled={isSignUpBtnDisabled}
+                    buttonInnerImgSrc='/icons/padlock-f.svg'
+                />
+                <ErrorMessage message={serverError}/>
+                <ClientSideLink 
+                    text='Already have an account?'
+                    href='/login'
+                    linkText='Login'
+                />
+            </Form>
+        </section>
+      </Layout>
     <style jsx>{`
-        main {
+        section {
             background-color: ${colors.background};
             height: 100vh;
             display: flex;

@@ -1,5 +1,7 @@
 import { NextPage } from 'next'
 import { useState, MouseEvent } from 'react'
+import { useEffect } from 'react'
+import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserPasswordRecoveryControllerRequest } from './api/users/password/recovery/controller'
@@ -11,14 +13,23 @@ import SuccessMessage from '../components/successMessage/SuccessMessage'
 import Form from '../components/form/Form'
 import Layout from '../components/layout/Layout'
 
+import useSession from '../hooks/useSession'
+
 const ForgotPassword: NextPage = () => {
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [serverError, setServerError] = useState('');
   const [hasEmailToResetPasswordBeenSent, setHasEmailToResetPasswordBeenSent] = useState(false);
-
   const [isRecoveryBtnDisabled, setIsRecoveryBtnDisabled] = useState(false);
+
+  const { isLogged } = useSession()
+
+  useEffect(() => {
+    if(isLogged){
+        Router.push('/dashboard');
+    }
+  }, [isLogged])
 
   async function recovery(e: MouseEvent<HTMLElement>) {
     e.preventDefault();

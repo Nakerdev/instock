@@ -1,5 +1,5 @@
 import { NextPage } from 'next'
-import { useState, MouseEvent } from 'react'
+import { useState, MouseEvent, useEffect } from 'react'
 import Router from 'next/router'
 
 import { colors } from '../styles/theme'
@@ -13,6 +13,8 @@ import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import Form from '../components/form/Form'
 import Layout from '../components/layout/Layout'
 
+import useSession from '../hooks/useSession'
+
 const SignUp: NextPage = () => {
 
   const [name, setName] = useState('');
@@ -25,10 +27,15 @@ const SignUp: NextPage = () => {
   const [passwordError, setPasswordError] = useState('');
   const [areTermsAndConditionsAccepted, setAreTermsAndConditionsAccepted] = useState(false);
   const [termsAndConditionsError, setTermsAndConditionsError] = useState('');
-
   const [serverError, setServerError] = useState('');
-
   const [isSignUpBtnDisabled, setIsSignUpBtnDisabled] = useState(false);
+  const { setSession, isLogged } = useSession()
+
+  useEffect(() => {
+    if(isLogged){
+        Router.push('/dashboard');
+    }
+  }, [isLogged])
 
   async function signup(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
@@ -48,12 +55,8 @@ const SignUp: NextPage = () => {
             {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
         )
         if(response.status === 200){
-
             const successResponse: ResponseDto = await response.json()
-            localStorage.removeItem('session-token')
-            localStorage.setItem('session-token', successResponse.token)
-            Router.push("/dashboard")
-            
+            setSession(successResponse.token)
         } else if (response.status === 404){
 
             const errorResponse: ErrorResponse  = await response.json();

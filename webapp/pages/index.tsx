@@ -1,8 +1,21 @@
 import { NextPage } from 'next'
+import Router from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useEffect } from 'react'
+
+import useSession from '../hooks/useSession'
 
 const Home: NextPage = () => {
+
+  const { isLogged } = useSession()
+
+  useEffect(() => {
+    if(isLogged){
+        Router.push('/dashboard');
+    }
+  }, [isLogged])
+
   return (
     <div>
       <Head>
@@ -12,7 +25,8 @@ const Home: NextPage = () => {
       </Head>
 
       <h1>Landing Page</h1>
-      <Link href='/signup'>SignUp</Link>
+      <Link href='/signup'>Sign up</Link>
+      <Link href='/signin'>Sign in</Link>
     </div>
   )
 }

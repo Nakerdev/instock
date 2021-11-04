@@ -1,5 +1,5 @@
 import { NextPage } from 'next'
-import { useState, MouseEvent } from 'react'
+import { useState, MouseEvent, useEffect } from 'react'
 import Router from 'next/router'
 
 import { colors } from '../styles/theme'
@@ -12,13 +12,21 @@ import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import Form from '../components/form/Form'
 import Layout from '../components/layout/Layout'
 
-const Login: NextPage = () => {
+import useSession from '../hooks/useSession'
+
+const Signin: NextPage = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [serverError, setServerError] = useState('');
-
+  const { setSession, isLogged } = useSession()
   const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
+
+  useEffect(() => {
+    if(isLogged){
+        Router.push('/dashboard');
+    }
+  }, [isLogged])
 
   async function login(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
@@ -29,16 +37,13 @@ const Login: NextPage = () => {
         password
     );
     try{
-
         const response = await fetch(
             '/api/users/login', 
             {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
         )
         if(response.status === 200){
             const successResponse: ResponseDto = await response.json()
-            localStorage.removeItem('session-token')
-            localStorage.setItem('session-token', successResponse.token)
-            Router.push("/dashboard")
+            setSession(successResponse.token)
         } else if (response.status === 401){
             setServerError('Invalid credentials.')
         } else {
@@ -75,7 +80,7 @@ const Login: NextPage = () => {
                     helperLink='/forgot-password'
                 />
                 <CTA 
-                    text='Login'
+                    text='Sign in'
                     onClickHandler={e => login(e)}
                     isDisabled={isLoginBtnDisabled}
                     buttonInnerImgSrc='/icons/key-f.svg'
@@ -103,4 +108,4 @@ const Login: NextPage = () => {
   )
 }
 
-export default Login
+export default Signin

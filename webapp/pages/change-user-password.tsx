@@ -1,5 +1,7 @@
 import { NextPage, NextApiResponse } from 'next'
 import { useState, MouseEvent } from 'react'
+import { useEffect } from 'react'
+import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserChangePasswordControllerRequest } from './api/users/password/change/controller'
@@ -10,6 +12,8 @@ import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import SuccessMessage from '../components/successMessage/SuccessMessage';
 import Form from '../components/form/Form';
 import Layout from '../components/layout/Layout';
+
+import useSession from '../hooks/useSession'
 
 interface Context {
 	query: {
@@ -40,10 +44,16 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
   const [repeatedPassword, setRepeatedPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [hasPasswordBeenChanged, setHasPasswordBeenChanged] = useState(false);
-
   const [serverError, setServerError] = useState('');
-
   const [isChangePasswordBtnDisabled, setIsChangePasswordBtnDisabled] = useState(false);
+
+  const { isLogged } = useSession()
+
+  useEffect(() => {
+    if(isLogged){
+        Router.push('/dashboard');
+    }
+  }, [isLogged])
 
   async function changePassword(e: MouseEvent<HTMLElement>) {
     e.preventDefault();

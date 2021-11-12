@@ -92,7 +92,7 @@ const ForgotPassword: NextPage = () => {
                 </SuccessMessage>
                 <ClientSideLink 
                   text='Go to' 
-                  href='/login' 
+                  href='/signin' 
                   linkText='Login Page'
                 />
               </div>

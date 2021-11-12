@@ -16,7 +16,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
   readonly supportEmail: string
 
   private readonly userPasswordRecoveryPageEndpoint = '/change-user-password?t={token}'
-  private readonly emailSubject = 'Reset your StockOut password'
+  private readonly emailSubject = 'Reset your Stockout password'
 
   constructor (
     mailService: MailService,
@@ -79,13 +79,13 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
             <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
-                <title>Reset your StockOut password</title>
+                <title>Reset your Stockout password</title>
             </head>
             <body style="background-color: #fff; max-width: 800px; margin: 0 auto;">
               <div style="background-color: #fff; margin: 20px;padding-top: 10px; padding-bottom: 10px;">
                 <div>
                   <h1 style="color: #171616;padding-bottom: 10px;border-bottom: 1px solid #EFEFEF">
-                    StockOut
+                    Stockout
                   </h1>
                 </div>
                 <div>
@@ -93,7 +93,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                       Hello ${userName},
                   </p>
                   <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
-                      We've received a request to reset the password for the StockOut account
+                      We've received a request to reset the password for the Stockout account
                       associated with ${userEmail}. No changes have been made to your account
                       yet.
                   </p>
@@ -109,7 +109,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                       If you did not request a new password, please ignore this notification.
                   </p>
                   <p style="color: #171616;font-size: 18px;margin-top: 10px;margin-bottom: 10px;line-height: 1.4em;">
-                      -- The StockOut Team
+                      -- The Stockout Team
                   </p>
                 </div>
                 <div>
@@ -117,7 +117,7 @@ export default class UserPasswordRecoveryEmailSender implements IUserPasswordRec
                     Problems or questions? send an email to ${supportEmail}
                   </p>
                   <p style="color: #A9A9A9;font-size: 14px;">
-                    © StockOut
+                    © Stockout
                   </p>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Option, some, none } from 'fp-ts/lib/Option'
-import { NextApiResponse } from 'next'
+import { NextApiRequest } from 'next'
 
 import { User } from '../../business/users/user'
 
@@ -11,11 +11,11 @@ export default interface SessionService {
 
 export class JwtSessionService implements SessionService {
   readonly jwtSecretKey: string
-  readonly res: NextApiResponse
+  readonly req: NextApiRequest
 
-  constructor (jwtSecretKey: string, req: NextApiResponse) {
+  constructor (jwtSecretKey: string, req: NextApiRequest) {
     this.jwtSecretKey = jwtSecretKey
-    this.res = req
+    this.req = req
   }
 
   create (user: User): string {
@@ -25,7 +25,7 @@ export class JwtSessionService implements SessionService {
   }
 
   currentUser(): Option<UserSession> {
-    const sessionToken = this.res.getHeader('x-stockout-token')
+    const sessionToken = this.req.headers['x-stockout-token']
     try{
       const decodedToken = <SessionToken>jwt.verify(sessionToken, this.jwtSecretKey)
       const userSession = new UserSession(decodedToken.userId)

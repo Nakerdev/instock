@@ -1,18 +1,17 @@
-import { NextApiResponse } from 'next'
+import { NextApiResponse, NextApiRequest } from 'next'
 
 import { nextApiResponseBuilder } from '../../utils/apiUtils'
 import { UserLoginController } from './controller'
 import UserPrismaRepository from '../../../../infraestructure/users/userRepository'
 import BCryptPasswordHasingService from '../../../../infraestructure/security/cryptography/passwordHashingService'
 import { UserLogin } from '../../../../business/users/login/userLogin'
-import SessionService, { JwtSessionService } from '../../../../application/session/sessionService'
 import ServiceFactory from '../../factory/serviceFactory'
 
-export function buildUserLoginController (res: NextApiResponse): UserLoginController {
+export function buildUserLoginController (res: NextApiResponse, req: NextApiRequest): UserLoginController {
   return new UserLoginController(
     buildCommand(),
     nextApiResponseBuilder(res),
-    ServiceFactory.buildSessionService(res))
+    ServiceFactory.buildSessionService(req))
 
   function buildCommand (): UserLogin {
     return new UserLogin(

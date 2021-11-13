@@ -8,7 +8,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse) {
   switch (method) {
     case 'POST': {
       const requestDto: ProjectCreationControllerRequest = req.body
-      const controller = buildCreateProjectController(res)
+      const controller = buildCreateProjectController(res, req)
       controller.create(requestDto)
       break
     }

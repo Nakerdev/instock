@@ -1,4 +1,4 @@
-import { NextApiResponse } from 'next'
+import { NextApiResponse, NextApiRequest } from 'next'
 
 import { nextApiResponseBuilder } from '../../utils/apiUtils'
 import { CreateProjectController } from './controller'
@@ -9,11 +9,11 @@ import SystemTimeService from '../../../../infraestructure/systemTimeService'
 import ServiceFactory from '../../factory/serviceFactory'
 import { CreateProject } from '../../../../business/projects/create/createProject'
 
-export function buildCreateProjectController (res: NextApiResponse): CreateProjectController {
+export function buildCreateProjectController (res: NextApiResponse, req: NextApiRequest): CreateProjectController {
   return new CreateProjectController(
     buildCommand(),
     nextApiResponseBuilder(res),
-    ServiceFactory.buildSessionService(res))
+    ServiceFactory.buildSessionService(req))
 
   function buildCommand (): CreateProject {
     return new CreateProject(

@@ -1,4 +1,4 @@
-import { NextApiResponse } from 'next'
+import { NextApiResponse, NextApiRequest } from 'next'
 
 import { nextApiResponseBuilder } from '../../utils/apiUtils'
 import { UserSignUpController } from './controller'
@@ -9,11 +9,11 @@ import BCryptPasswordHasingService from '../../../../infraestructure/security/cr
 import SystemTimeService from '../../../../infraestructure/systemTimeService'
 import ServiceFactory from '../../factory/serviceFactory'
 
-export function buildUserSignUpController (res: NextApiResponse): UserSignUpController {
+export function buildUserSignUpController (res: NextApiResponse, req: NextApiRequest): UserSignUpController {
   return new UserSignUpController(
     buildCommand(),
     nextApiResponseBuilder(res),
-    ServiceFactory.buildSessionService(res))
+    ServiceFactory.buildSessionService(req))
 
   function buildCommand (): UserSignUp {
     return new UserSignUp(

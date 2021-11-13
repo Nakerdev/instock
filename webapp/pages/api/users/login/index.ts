@@ -8,7 +8,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse) {
   switch (method) {
     case 'POST': {
       const requestDto: UserLoginControllerRequest = req.body
-      const controller = buildUserLoginController(res)
+      const controller = buildUserLoginController(res, req)
       controller.login(requestDto)
       break
     }

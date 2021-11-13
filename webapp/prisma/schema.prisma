@@ -26,3 +26,10 @@ model Logs {
   message String
   createdAt DateTime
 }
+
+model Projects {
+  id String @id
+  userId String
+  name String
+  created_at DateTime
+}

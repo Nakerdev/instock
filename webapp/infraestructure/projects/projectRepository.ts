@@ -4,8 +4,10 @@ import { UserId } from '../../business/valueObjects/userId'
 import { Name } from '../../business/valueObjects/name'
 import ProjectRepository from '../../business/projects/projectRepository'
 import { Project } from '../../business/projects/project'
+import { ProjectId } from '../../business/valueObjects/projectId'
 
 export default class ProjectPrismaRepository implements ProjectRepository {
+  
   readonly prisma: PrismaClient
 
   constructor () {
@@ -39,6 +41,20 @@ export default class ProjectPrismaRepository implements ProjectRepository {
         }
       })
       return project !== null
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async deleteAll(projectsId: ProjectId[], userId: UserId): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      await this.prisma.projects.deleteMany({
+        where: {
+          id: { in: projectsId.map(x => x.state.value) },
+          userId: userId.state.value
+        }
+      })
     } finally {
       this.prisma.$disconnect()
     }

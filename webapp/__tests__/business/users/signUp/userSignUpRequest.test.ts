@@ -57,8 +57,14 @@ describe('User SignUp Request', () => {
       expectedFieldId: 'password'
     },
     {
+      name: 'does not create request when legal terms and conditions value is empty',
+      requestDto: buildRequestDto({ areLegalTermsAndConditionsAccepted: '' }),
+      expectedFieldId: 'legalTermsAndConditions',
+      expectedError: ValidationError.Required
+    },
+    {
       name: 'does not create request when legal terms and conditions are not accepted',
-      requestDto: buildRequestDto({ areLegalTermsAndConditionsAccepted: false }),
+      requestDto: buildRequestDto({ areLegalTermsAndConditionsAccepted: 'false' }),
       expectedFieldId: 'legalTermsAndConditions',
       expectedError: ValidationError.Required
     }
@@ -90,7 +96,7 @@ describe('User SignUp Request', () => {
         name?: string,
         surname?: string,
         password?: string,
-        areLegalTermsAndConditionsAccepted?: boolean
+        areLegalTermsAndConditionsAccepted?: string
     }
 
     function buildRequestDto ({
@@ -98,7 +104,7 @@ describe('User SignUp Request', () => {
       name = 'Alvaro',
       surname = 'Gonzalez',
       password = 'MyStr0ngPass*',
-      areLegalTermsAndConditionsAccepted = true
+      areLegalTermsAndConditionsAccepted = 'true'
     }: requestDtoBuilderParams): UserSignUpRequestDto {
       return new UserSignUpRequestDto(
         email,

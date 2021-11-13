@@ -71,14 +71,14 @@ class UserSignUpControllerRequest {
   readonly password: string
   readonly name: string
   readonly surname: string
-  readonly areLegalTermsAndConditionsAccepted: boolean
+  readonly areLegalTermsAndConditionsAccepted: string
 
   constructor (
     email: string,
     password: string,
     name: string,
     surname: string,
-    areLegalTermsAndConditionsAccepted: boolean
+    areLegalTermsAndConditionsAccepted: string
   ) {
     this.email = email
     this.password = password

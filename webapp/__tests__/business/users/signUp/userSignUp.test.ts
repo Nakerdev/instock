@@ -99,7 +99,7 @@ describe('User SignUp', () => {
         'Alvaro',
         'Gonzalez',
         password,
-        true
+        'true'
       )
       return pipe(
         UserSignUpRequest.create(requestDto),

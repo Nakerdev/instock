@@ -27,20 +27,21 @@ class UserSignUpRequest {
     const nameValidationResult = Name.create(requestDto.name)
     const surnameValidationResult = Surname.create(requestDto.surname)
     const passwordValidationResult = Password.create(requestDto.password)
+    const termsAndConditionsBoolValue = (/true/i).test(requestDto.areLegalTermsAndConditionsAccepted)
 
     if (
       isLeft(emailValidationResult) ||
       isLeft(nameValidationResult) ||
       isLeft(surnameValidationResult) ||
       isLeft(passwordValidationResult) ||
-      !requestDto.areLegalTermsAndConditionsAccepted
+      !requestDto.areLegalTermsAndConditionsAccepted || !termsAndConditionsBoolValue
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), _ => 0))
       pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), _ => 0))
       pipe(surnameValidationResult, match(error => formValidations.push(new FormValidationError('surname', error)), _ => 0))
       pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), _ => 0))
-      if (!requestDto.areLegalTermsAndConditionsAccepted) {
+      if (!requestDto.areLegalTermsAndConditionsAccepted || !termsAndConditionsBoolValue) {
         formValidations.push(new FormValidationError('legalTermsAndConditions', ValidationError.Required))
       }
       return left(formValidations)
@@ -72,19 +73,19 @@ class UserSignUpRequestDto {
   readonly name: string
   readonly surname: string
   readonly password: string
-  readonly areLegalTermsAndConditionsAccepted: boolean
+  readonly areLegalTermsAndConditionsAccepted: string
 
   constructor (
     email: string,
     name: string,
     surname: string,
     password: string,
-    areLegalTermsAndConditionsAccepted: boolean
+    areLegalTermsAndConditionsAccepted: string
   ) {
     this.email = email.trim()
     this.name = name.trim()
     this.surname = surname.trim()
     this.password = password
-    this.areLegalTermsAndConditionsAccepted = areLegalTermsAndConditionsAccepted
+    this.areLegalTermsAndConditionsAccepted = areLegalTermsAndConditionsAccepted.trim()
   }
 }

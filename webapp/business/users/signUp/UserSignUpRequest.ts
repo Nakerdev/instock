@@ -30,10 +30,10 @@ class UserSignUpRequest {
 
     if (
       isLeft(emailValidationResult) ||
-            isLeft(nameValidationResult) ||
-            isLeft(surnameValidationResult) ||
-            isLeft(passwordValidationResult) ||
-            !requestDto.areLegalTermsAndConditionsAccepted
+      isLeft(nameValidationResult) ||
+      isLeft(surnameValidationResult) ||
+      isLeft(passwordValidationResult) ||
+      !requestDto.areLegalTermsAndConditionsAccepted
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), _ => 0))

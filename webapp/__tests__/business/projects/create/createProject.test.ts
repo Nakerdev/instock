@@ -37,6 +37,7 @@ describe('Crete Project', () => {
   it('creates project', async () => {
     const request = <ProjectCreationRequest>buildRequest({createEvenIfAnotherProjectAlreadyExistsWithTheSameName: 'true'})
     userRepository.searchById
+      .calledWith(request.userId)
       .mockResolvedValue(some(buildUser({})))
     const uuid = 'deb74e35-ea5f-535f-890f-5779b5d8e27f'
     uuidService.create
@@ -70,8 +71,10 @@ describe('Crete Project', () => {
   it('does not create project when project with the same name already exist', async () => {
     const request = <ProjectCreationRequest>buildRequest({createEvenIfAnotherProjectAlreadyExistsWithTheSameName: 'false'})
     userRepository.searchById
+      .calledWith(request.userId)
       .mockResolvedValue(some(buildUser({})))
     projectRepository.exist
+      .calledWith(request.userId, request.name)
       .mockResolvedValue(true)
 
     const result = await command.create(request)
@@ -90,6 +93,7 @@ describe('Crete Project', () => {
   it('does not create project when user not found', async () => {
     const request = <ProjectCreationRequest>buildRequest({})
     userRepository.searchById
+      .calledWith(request.userId)
       .mockResolvedValue(none)
 
     const result = await command.create(request)

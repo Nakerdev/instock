@@ -45,7 +45,7 @@ class CreateProject {
     }
 
     if(!request.createEvenIfAnotherProjectAlreadyExistsWithTheSameName){
-      const isThereAlreadyProjectWithTheSameName = await this.projectRepository.exist(request.name, request.userId)
+      const isThereAlreadyProjectWithTheSameName = await this.projectRepository.exist(request.userId, request.name)
       if(isThereAlreadyProjectWithTheSameName){
         return left(ProjectCreationError.ProjectWithTheSameNameAlreadyExist)
       }

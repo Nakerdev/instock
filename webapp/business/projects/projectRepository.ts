@@ -4,5 +4,5 @@ import { UserId } from '../valueObjects/userId'
 
 export default interface ProjectRepository {
     save(project: Project): Promise<void>;
-    exist(name: Name, userId: UserId): Promise<boolean>;
+    exist(userId: UserId, name: Name): Promise<boolean>;
 }

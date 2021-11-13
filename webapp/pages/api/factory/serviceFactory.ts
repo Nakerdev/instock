@@ -4,10 +4,13 @@ import MailService from '../../../business/infraestructure/mailService'
 import SendGridMailService from '../../../infraestructure/notifications/emails/sendGridMailSender'
 import PrismaDbLogger from '../../../infraestructure/monitoring/prismaDbLogger'
 import Logger from '../../../business/monitoring/logger'
+import { NextApiResponse } from 'next'
 
 export default class ServiceFactory {
-  static buildSessionService (): SessionService {
-    return new JwtSessionService(enviromentConfiguration.JWT_SECRET_KEY)
+  static buildSessionService (res: NextApiResponse): SessionService {
+    return new JwtSessionService(
+      enviromentConfiguration.JWT_SECRET_KEY,
+      res)
   }
 
   static buildSendGridEmailService (): MailService {

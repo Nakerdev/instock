@@ -12,7 +12,7 @@ export function buildUserLoginController (res: NextApiResponse): UserLoginContro
   return new UserLoginController(
     buildCommand(),
     nextApiResponseBuilder(res),
-    ServiceFactory.buildSessionService())
+    ServiceFactory.buildSessionService(res))
 
   function buildCommand (): UserLogin {
     return new UserLogin(

@@ -14,7 +14,7 @@ import { CreateProject, ProjectCreationError } from '../../../../business/projec
 import buildUser from '../../builders/users/userBuilder'
 
 
-describe('Crete Project', () => {
+describe('Create Project', () => {
   let projectRepository: MockProxy<ProjectRepository>
   let userRepository: MockProxy<UserRepository>
   let uuidService: MockProxy<UuidService>

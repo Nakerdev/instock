@@ -1,13 +1,14 @@
+import {Option, none, some} from 'fp-ts/lib/Option'
 import { PrismaClient } from '@prisma/client'
 
-import { UserId } from '../../business/valueObjects/userId'
-import { Name } from '../../business/valueObjects/name'
+import DbProjectModel from '../../prisma/models/projects/project'
+import { UserId, UserIdPersistenceState } from '../../business/valueObjects/userId'
+import { Name, NamePersistenceState } from '../../business/valueObjects/name'
 import ProjectRepository from '../../business/projects/projectRepository'
-import { Project } from '../../business/projects/project'
-import { ProjectId } from '../../business/valueObjects/projectId'
+import { Project, ProjectPersistenceState } from '../../business/projects/project'
+import { ProjectId, ProjectIdPersistenceState } from '../../business/valueObjects/projectId'
 
 export default class ProjectPrismaRepository implements ProjectRepository {
-  
   readonly prisma: PrismaClient
 
   constructor () {
@@ -58,5 +59,48 @@ export default class ProjectPrismaRepository implements ProjectRepository {
     } finally {
       this.prisma.$disconnect()
     }
+  }
+
+  async searchBy(projectId: ProjectId, userId: UserId): Promise<Option<Project>> {
+    try {
+      await this.prisma.$connect()
+      const dbModel: DbProjectModel | null = await this.prisma.projects.findFirst({
+        where: {
+          id: projectId.state.value,
+          userId: userId.state.value
+        }
+      })
+      if (dbModel === null) return none
+      return some(this.buildProject(dbModel))
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async update(project: Project): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      await this.prisma.projects.update({
+        where: {
+          id: project.id.state.value,
+          userId: project.userId.state.value
+        },
+        data: {
+          name: project.name.state.value
+        }
+      })
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  private buildProject (dbModel: DbProjectModel): Project {
+    const userState = new ProjectPersistenceState(
+      new ProjectIdPersistenceState(dbModel.id),
+      new UserIdPersistenceState(dbModel.userId),
+      new NamePersistenceState(dbModel.name),
+      dbModel.created_at
+    )
+    return Project.createFromState(userState)
   }
 }

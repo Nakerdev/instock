@@ -1,16 +1,17 @@
 import { isLeft, isRight, match } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/pipeable'
 
-import { ProjectCreationRequest, ProjectCreationRequestDto } from '../../../../business/projects/create/ProjectCreationRequest'
 import { UserId } from '../../../../business/valueObjects/userId'
 import { Name } from '../../../../business/valueObjects/name'
 import { ValidationError } from '../../../../business/types/validationError'
+import { ProjectUpdatingRequestDto, ProjectUpdatingRequest } from '../../../../business/projects/update/ProjectUpdatingRequest'
+import { ProjectId } from '../../../../business/valueObjects/projectId'
 
-describe('Project Creation Request', () => {
+describe('Project Updating Request', () => {
   it('creates request', () => {
     const requestDto = buildRequestDto({})
 
-    const result = ProjectCreationRequest.create(requestDto)
+    const result = ProjectUpdatingRequest.create(requestDto)
 
     expect(isRight(result)).toBeTruthy()
     pipe(
@@ -18,12 +19,13 @@ describe('Project Creation Request', () => {
       match(
         _ => expect(true).toBeFalsy(),
         request => {
+          const expectedProjectId = ProjectId.create(requestDto.projectId)
           const expectedUserId = UserId.create(requestDto.userId)
           const expectedName = Name.create(requestDto.name)
           expect(request).toEqual({
+            projectId: isRight(expectedProjectId) ? expectedProjectId.right : null,
             userId: isRight(expectedUserId) ? expectedUserId.right : null,
-            name: isRight(expectedName) ? expectedName.right : null,
-            createEvenIfAnotherProjectAlreadyExistsWithTheSameName: (/true/i).test(requestDto.createEvenIfAnotherProjectAlreadyExistsWithTheSameName)
+            name: isRight(expectedName) ? expectedName.right : null
           })
         }
       )
@@ -31,6 +33,11 @@ describe('Project Creation Request', () => {
   })
 
   const validationErrorTestCases: ValidationErrorTestCase[] = [
+    {
+      name: 'does not create request when project id has validaiton errors',
+      requestDto: buildRequestDto({ projectId: '' }),
+      expectedFieldId: 'projectId'
+    },
     {
       name: 'does not create request when user id has validaiton errors',
       requestDto: buildRequestDto({ userId: '' }),
@@ -40,18 +47,12 @@ describe('Project Creation Request', () => {
       name: 'does not create request when name has validaiton errors',
       requestDto: buildRequestDto({ name: '' }),
       expectedFieldId: 'name'
-    },
-    {
-      name: 'does not create request when creation rule is empty',
-      requestDto: buildRequestDto({ createEvenIfAnotherProjectAlreadyExistsWithTheSameName: '' }),
-      expectedFieldId: 'createEvenIfAnotherProjectAlreadyExistsWithTheSameName',
-      expectedError: ValidationError.Required
     }
   ]
 
   validationErrorTestCases.forEach(testCase => {
     it(testCase.name, () => {
-      const result = ProjectCreationRequest.create(testCase.requestDto)
+      const result = ProjectUpdatingRequest.create(testCase.requestDto)
 
       expect(isLeft(result)).toBeTruthy()
       pipe(
@@ -71,27 +72,27 @@ describe('Project Creation Request', () => {
   })
 
     interface requestDtoBuilderParams {
+        projectId?: string,
         userId?: string,
-        name?: string,
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName?: string
+        name?: string
     }
 
     function buildRequestDto ({
+      projectId = '211376cc-54f0-4991-ab50-a1f2cc35a291',
       userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-      name = 'Xataka.com',
-      createEvenIfAnotherProjectAlreadyExistsWithTheSameName = 'true'
-    }: requestDtoBuilderParams): ProjectCreationRequestDto {
-      return new ProjectCreationRequestDto(
+      name = 'Xataka.com'
+    }: requestDtoBuilderParams): ProjectUpdatingRequestDto {
+      return new ProjectUpdatingRequestDto(
+        projectId,
         userId,
-        name,
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName 
+        name
       )
     }
 })
 
 interface ValidationErrorTestCase {
     name: string,
-    requestDto: ProjectCreationRequestDto,
+    requestDto: ProjectUpdatingRequestDto,
     expectedFieldId: string,
     expectedError?: ValidationError
 }

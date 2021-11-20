@@ -25,7 +25,7 @@ class ProjectBulkDeletionRequest {
     if (
       isLeft(userIdValidationResult) 
       || projectsIdValidationResult.some(x => isLeft(x))
-      || projectsIdValidationResult.length === 0
+      || requestDto.projectsId.length === 0
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
@@ -34,7 +34,7 @@ class ProjectBulkDeletionRequest {
           if(!isLeft(result)) return
           pipe(result, match(error => formValidations.push(new FormValidationError(`projectsId[${index}]`, error)), _ => 0))
         })
-      if (projectsIdValidationResult.length === 0) {
+      if (requestDto.projectsId.length === 0) {
         formValidations.push(new FormValidationError('projectsId', ValidationError.Required))
       }
       return left(formValidations)

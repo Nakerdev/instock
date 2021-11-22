@@ -1,7 +1,7 @@
 import {Option, none, some} from 'fp-ts/lib/Option'
 import { PrismaClient } from '@prisma/client'
 
-import DbProjectModel from '../../prisma/models/projects/project'
+import DbProjectModel from '../../../prisma/models/projects/project'
 import { UserId, UserIdPersistenceState } from '../../business/valueObjects/userId'
 import { Name, NamePersistenceState } from '../../../business/valueObjects/name'
 import { Project, ProjectPersistenceState } from '../../../business/projects/project'

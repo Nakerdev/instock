@@ -5,13 +5,13 @@ import { ProjectId } from '../../../../../../business/valueObjects/projectId'
 import { ProductId } from '../../../../../../business/valueObjects/productId'
 import { UserId } from '../../../../../../business/valueObjects/userId'
 import { ValidationError } from '../../../../../../business/types/validationError'
-import { ProductsCreationInBulkRequestDto, ProductsCreationInBulkRequest } from '../../../../../../business/projects/products/attach/bulk/ProductsCreationInBulkRequest'
+import { ProductsAttachingInBulkRequestDto, ProductsAttachingInBulkRequest } from '../../../../../../business/projects/products/attach/bulk/ProductsAttachingInBulkRequest'
 
-describe('Products Creation in Bulk Request', () => {
+describe('Products Attaching in Bulk Request', () => {
   it('creates request', () => {
     const requestDto = buildRequestDto({})
 
-    const result = ProductsCreationInBulkRequest.create(requestDto)
+    const result = ProductsAttachingInBulkRequest.create(requestDto)
 
     expect(isRight(result)).toBeTruthy()
     pipe(
@@ -65,7 +65,7 @@ describe('Products Creation in Bulk Request', () => {
 
   validationErrorTestCases.forEach(testCase => {
     it(testCase.name, () => {
-      const result = ProductsCreationInBulkRequest.create(testCase.requestDto)
+      const result = ProductsAttachingInBulkRequest.create(testCase.requestDto)
 
       expect(isLeft(result)).toBeTruthy()
       pipe(
@@ -94,8 +94,8 @@ describe('Products Creation in Bulk Request', () => {
       userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
       projectId = '5f8e31d2-4a17-11ec-81d3-0242ac130003',
       productsId = ['B08QW794WD']
-    }: requestDtoBuilderParams): ProductsCreationInBulkRequestDto {
-        return new ProductsCreationInBulkRequestDto(
+    }: requestDtoBuilderParams): ProductsAttachingInBulkRequestDto {
+        return new ProductsAttachingInBulkRequestDto(
         userId,
         projectId,
         productsId 
@@ -105,7 +105,7 @@ describe('Products Creation in Bulk Request', () => {
 
 interface ValidationErrorTestCase {
     name: string,
-    requestDto: ProductsCreationInBulkRequestDto,
+    requestDto: ProductsAttachingInBulkRequestDto,
     expectedFieldId: string,
     expectedError?: ValidationError
 }

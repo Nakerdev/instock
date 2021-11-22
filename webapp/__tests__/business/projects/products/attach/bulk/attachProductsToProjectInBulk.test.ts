@@ -7,7 +7,7 @@ import ProjectRepository from '../../../../../../business/projects/projectReposi
 import ProductRepository from '../../../../../../business/projects/products/productRepository'
 import TimeService from '../../../../../../business/infraestructure/timeService'
 import { AttachProductsToProjectInBulk, ProductsAttachingToProjectError } from '../../../../../../business/projects/products/attach/bulk/attachProductsToProjectInBulk'
-import { ProductsCreationInBulkRequest, ProductsCreationInBulkRequestDto } from '../../../../../../business/projects/products/attach/bulk/ProductsCreationInBulkRequest'
+import { ProductsAttachingInBulkRequest, ProductsAttachingInBulkRequestDto } from '../../../../../../business/projects/products/attach/bulk/ProductsAttachingInBulkRequest'
 import buildProject from '../../../../builders/projects/projectBuilder'
 import buildProduct from '../../../../builders/projects/products/productBuilder'
 
@@ -29,7 +29,7 @@ describe('Attach products to project in bluk', () => {
   })
 
   it('attaches products to project', async () => {
-    const request = <ProductsCreationInBulkRequest>buildRequest({})
+    const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
@@ -64,7 +64,7 @@ describe('Attach products to project in bluk', () => {
   })
 
   it('does not duplicate products if already exist one with the same id', async () => {
-    const request = <ProductsCreationInBulkRequest>buildRequest({})
+    const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
@@ -88,7 +88,7 @@ describe('Attach products to project in bluk', () => {
   })
 
   it('does not duplicate products if user set the same id twice', async () => {
-    const request = <ProductsCreationInBulkRequest>buildRequest({productsId: ['B08QW794WD', 'B08QW794WD']})
+    const request = <ProductsAttachingInBulkRequest>buildRequest({productsId: ['B08QW794WD', 'B08QW794WD']})
     projectRepository.searchBy
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
@@ -113,7 +113,7 @@ describe('Attach products to project in bluk', () => {
   })
 
   it('does not attach products if project not exist', async () => {
-    const request = <ProductsCreationInBulkRequest>buildRequest({})
+    const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(none)
@@ -137,14 +137,14 @@ describe('Attach products to project in bluk', () => {
 
   function buildRequest ({
     productsId = ['B08QW794WD']
-  }: RequestBuilderParams): ProductsCreationInBulkRequest | null {
-    const requestDto = new ProductsCreationInBulkRequestDto(
+  }: RequestBuilderParams): ProductsAttachingInBulkRequest | null {
+    const requestDto = new ProductsAttachingInBulkRequestDto(
       'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
       '5f8e31d2-4a17-11ec-81d3-0242ac130003',
       productsId
     )
     return pipe(
-      ProductsCreationInBulkRequest.create(requestDto),
+      ProductsAttachingInBulkRequest.create(requestDto),
       match(
         _ => null,
         request => request

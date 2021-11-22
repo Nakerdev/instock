@@ -8,18 +8,18 @@ import { ValidationError } from '../../../../types/validationError'
 import FormValidationError from '../../../../types/formValidationError'
 
 export {
-  ProductsCreationInBulkRequest,
-  ProductsCreationInBulkRequestDto
+  ProductsAttachingInBulkRequest,
+  ProductsAttachingInBulkRequestDto
 }
 
-class ProductsCreationInBulkRequest {
+class ProductsAttachingInBulkRequest {
   readonly userId: UserId 
   readonly projectId: ProjectId 
   readonly productsId: ProductId[]
 
-  static create (requestDto: ProductsCreationInBulkRequestDto): Either<
+  static create (requestDto: ProductsAttachingInBulkRequestDto): Either<
         Array<FormValidationError<ValidationError>>,
-        ProductsCreationInBulkRequest
+        ProductsAttachingInBulkRequest
     > {
     const userIdValidationResult = UserId.create(requestDto.userId)
     const projectIdValidationResult = ProjectId.create(requestDto.projectId)
@@ -50,7 +50,7 @@ class ProductsCreationInBulkRequest {
         if(isLeft(result)) throw new Error('invalid object state')
         return result.right
       })
-    const request = new ProductsCreationInBulkRequest(
+    const request = new ProductsAttachingInBulkRequest(
       userIdValidationResult.right,
       projectIdValidationResult.right,
       productsId)
@@ -68,7 +68,7 @@ class ProductsCreationInBulkRequest {
   }
 }
 
-class ProductsCreationInBulkRequestDto {
+class ProductsAttachingInBulkRequestDto {
   readonly userId: string
   readonly projectId: string
   readonly productsId: string[]

@@ -5,7 +5,7 @@ import ProjectRepository from '../../../projectRepository'
 import ProductRepository from '../../productRepository' 
 import TimeService from '../../../../infraestructure/timeService'
 
-import { ProductsCreationInBulkRequest } from './ProductsCreationInBulkRequest'
+import { ProductsAttachingInBulkRequest } from './ProductsAttachingInBulkRequest'
 import { Product } from '../../product'
 import { ProductId } from '../../../../valueObjects/productId'
 import { ProjectId } from '../../../../valueObjects/projectId'
@@ -33,7 +33,7 @@ class AttachProductsToProjectInBulk {
   }
 
   async attach (
-    request: ProductsCreationInBulkRequest
+    request: ProductsAttachingInBulkRequest
   ): Promise<Either<ProductsAttachingToProjectError, Product[]>> {
 
     const project = await this.projectRepository.searchBy(request.projectId, request.userId)

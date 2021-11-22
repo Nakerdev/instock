@@ -47,7 +47,7 @@ export default class ProjectPrismaRepository implements ProjectRepository {
     }
   }
 
-  async deleteAll(projectsId: ProjectId[], userId: UserId): Promise<void> {
+  async deleteAll(userId: UserId, projectsId: ProjectId[]): Promise<void> {
     try {
       await this.prisma.$connect()
       await this.prisma.projects.deleteMany({
@@ -61,7 +61,7 @@ export default class ProjectPrismaRepository implements ProjectRepository {
     }
   }
 
-  async searchBy(projectId: ProjectId, userId: UserId): Promise<Option<Project>> {
+  async searchBy(userId: UserId, projectId: ProjectId): Promise<Option<Project>> {
     try {
       await this.prisma.$connect()
       const dbModel: DbProjectModel | null = await this.prisma.projects.findFirst({

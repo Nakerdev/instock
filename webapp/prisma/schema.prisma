@@ -33,3 +33,10 @@ model Projects {
   name String
   created_at DateTime
 }
+
+model Products {
+  id String @id
+  projectId String
+  userId String
+  created_at DateTime
+}

@@ -31,7 +31,7 @@ describe('Attach products to project in bluk', () => {
   it('attaches products to project', async () => {
     const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
       .calledWith(request.userId, request.projectId)
@@ -66,7 +66,7 @@ describe('Attach products to project in bluk', () => {
   it('does not duplicate products if already exist one with the same id', async () => {
     const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
       .calledWith(request.userId, request.projectId)
@@ -90,7 +90,7 @@ describe('Attach products to project in bluk', () => {
   it('does not duplicate products if user set the same id twice', async () => {
     const request = <ProductsAttachingInBulkRequest>buildRequest({productsId: ['B08QW794WD', 'B08QW794WD']})
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
       .calledWith(request.userId, request.projectId)
@@ -115,7 +115,7 @@ describe('Attach products to project in bluk', () => {
   it('does not attach products if project not exist', async () => {
     const request = <ProductsAttachingInBulkRequest>buildRequest({})
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(none)
 
     const result = await command.attach(request)

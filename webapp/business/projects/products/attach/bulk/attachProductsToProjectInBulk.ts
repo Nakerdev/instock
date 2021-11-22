@@ -36,7 +36,7 @@ class AttachProductsToProjectInBulk {
     request: ProductsAttachingInBulkRequest
   ): Promise<Either<ProductsAttachingToProjectError, Product[]>> {
 
-    const project = await this.projectRepository.searchBy(request.projectId, request.userId)
+    const project = await this.projectRepository.searchBy(request.userId, request.projectId)
     if(isNone(project)){
       return left(ProductsAttachingToProjectError.ProjectNotExist)
     }

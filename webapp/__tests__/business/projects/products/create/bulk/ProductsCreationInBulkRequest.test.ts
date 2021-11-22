@@ -5,7 +5,7 @@ import { ProjectId } from '../../../../../../business/valueObjects/projectId'
 import { ProductId } from '../../../../../../business/valueObjects/productId'
 import { UserId } from '../../../../../../business/valueObjects/userId'
 import { ValidationError } from '../../../../../../business/types/validationError'
-import { ProductsCreationInBulkRequestDto, ProductsCreationInBulkRequest } from '../../../../../../business/projects/products/create/bulk/ProductsCreationInBulkRequest'
+import { ProductsCreationInBulkRequestDto, ProductsCreationInBulkRequest } from '../../../../../../business/projects/products/attach/bulk/ProductsCreationInBulkRequest'
 
 describe('Products Creation in Bulk Request', () => {
   it('creates request', () => {

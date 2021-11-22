@@ -44,7 +44,7 @@ class Product {
 }
 
 class ProductPersistenceState {
-  readonly id: ProducttIdPersistenceState
+  readonly id: ProductIdPersistenceState
   readonly projectId: ProjectIdPersistenceState
   readonly userId: UserIdPersistenceState
   readonly created_at: Date

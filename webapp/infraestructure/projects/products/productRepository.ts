@@ -1,12 +1,11 @@
-import {Option, none, some} from 'fp-ts/lib/Option'
 import { PrismaClient } from '@prisma/client'
 
-import DbProjectModel from '../../../prisma/models/projects/project'
-import { UserId, UserIdPersistenceState } from '../../business/valueObjects/userId'
-import { Name, NamePersistenceState } from '../../../business/valueObjects/name'
-import { Project, ProjectPersistenceState } from '../../../business/projects/project'
+import DbProductModel from '../../../prisma/models/projects/products/product'
+import { UserId, UserIdPersistenceState } from '../../../business/valueObjects/userId'
 import { ProjectId, ProjectIdPersistenceState } from '../../../business/valueObjects/projectId'
 import ProductRepository from '../../../business/projects/products/productRepository'
+import { Product, ProductPersistenceState } from '../../../business/projects/products/product'
+import { ProductId, ProductIdPersistenceState } from '../../../business/valueObjects/productId'
 
 export default class ProductPrismaRepository implements ProductRepository {
 
@@ -16,23 +15,68 @@ export default class ProductPrismaRepository implements ProductRepository {
     this.prisma = new PrismaClient()
   }
 
-  searchAll(userId: import("../../../business/valueObjects/userId").UserId, projectId: import("../../../business/valueObjects/projectId").ProjectId): Promise<import("../../../business/projects/products/product").Product[]> {
-    throw new Error("Method not implemented.")
-  }
-  saveAll(products: import("../../../business/projects/products/product").Product[]): Promise<void> {
-    throw new Error("Method not implemented.")
-  }
-  deleteAll(userId: import("../../../business/valueObjects/userId").UserId, projectId: import("../../../business/valueObjects/projectId").ProjectId, productsId: import("../../../business/valueObjects/productId").ProductId[]): Promise<void> {
-    throw new Error("Method not implemented.")
+  async searchAll(userId: UserId, projectId: ProjectId): Promise<Product[]> {
+    try {
+      await this.prisma.$connect()
+      const dbModels: DbProductModel[]  = await this.prisma.products.findMany({
+        where: {
+          userId: userId.state.value,
+          projectId: projectId.state.value
+        }
+      })
+      const products = dbModels.map(model => this.buildProduct(model))
+      return products
+    } finally {
+      this.prisma.$disconnect()
+    }
   }
 
-  private buildProject (dbModel: DbProjectModel): Project {
-    const userState = new ProjectPersistenceState(
+  async saveAll(products: Product[]): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      const dbEntities = products.map(p => this.buildDbEntity(p))
+      await this.prisma.products.createMany({
+        data: [dbEntities],
+        skipDuplicated: true
+      })
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async deleteAll(userId: UserId, projectId: ProjectId, productsId: ProductId[]): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      await this.prisma.products.deleteMany({
+        where: {
+          id: { in: productsId.map(x => x.state.value) },
+          userId: userId.state.value,
+          projectId: projectId.state.value
+        }
+      })
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  private buildProduct (dbModel: DbProductModel): Product {
+    const userState = new ProductPersistenceState(
+      new ProductIdPersistenceState(dbModel.id),
       new ProjectIdPersistenceState(dbModel.id),
       new UserIdPersistenceState(dbModel.userId),
-      new NamePersistenceState(dbModel.name),
       dbModel.created_at
     )
-    return Project.createFromState(userState)
+    return Product.createFromState(userState)
   }
-}
+
+  private buildDbEntity (product: Product): DbProductModel {
+    const state = product.state
+    const dbEntity: DbProductModel = {
+      id: state.id.value,
+      userId: state.userId.value,
+      projectId: state.projectId.value,
+      created_at: state.created_at
+    } 
+    return dbEntity 
+  }
+ }

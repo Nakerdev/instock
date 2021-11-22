@@ -22,13 +22,17 @@ class ProductId {
     return right(productId)
   }
 
-  static createFromState (state: ProductIdPersistenceState): ProjectId {
+  static createFromState (state: ProductIdPersistenceState): ProductId {
     return new ProductId(state.value)
   }
 
   private constructor (value: string) {
     this.value = value
     this.state = new ProductIdPersistenceState(value)
+  }
+
+  equals(anotherId: ProductId): boolean {
+    return anotherId.value === this.value;
   }
 }
 

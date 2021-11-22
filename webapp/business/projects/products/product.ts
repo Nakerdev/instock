@@ -1,6 +1,6 @@
-import { ProjectId, ProjectIdPersistenceState } from '../valueObjects/projectId'
-import { UserId, UserIdPersistenceState } from '../valueObjects/userId'
-import { ProductId, ProductIdPersistenceState } from '../valueObjects/productId'
+import { ProjectId, ProjectIdPersistenceState } from '../../valueObjects/projectId'
+import { UserId, UserIdPersistenceState } from '../../valueObjects/userId'
+import { ProductId, ProductIdPersistenceState } from '../../valueObjects/productId'
 
 export {
   Product,
@@ -15,8 +15,8 @@ class Product {
 
   readonly state: ProductPersistenceState
 
-  static createFromState (state: ProductPersistenceState): Project {
-      return new Project(
+  static createFromState (state: ProductPersistenceState): Product {
+      return new Product(
         ProductId.createFromState(state.id),
         ProjectId.createFromState(state.projectId),
         UserId.createFromState(state.userId),

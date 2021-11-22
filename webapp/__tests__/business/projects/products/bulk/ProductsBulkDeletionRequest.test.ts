@@ -1,17 +1,17 @@
 import { isLeft, isRight, match } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/pipeable'
 
-import { ProjectId } from '../../../../../../business/valueObjects/projectId'
-import { ProductId } from '../../../../../../business/valueObjects/productId'
-import { UserId } from '../../../../../../business/valueObjects/userId'
-import { ValidationError } from '../../../../../../business/types/validationError'
-import { ProductsAttachingInBulkRequestDto, ProductsAttachingInBulkRequest } from '../../../../../../business/projects/products/attach/bulk/ProductsAttachingInBulkRequest'
+import { UserId } from '../../../../../business/valueObjects/userId'
+import { ValidationError } from '../../../../../business/types/validationError'
+import { ProductsBulkDeletionRequest, ProductsBulkDeletionRequestDto } from '../../../../../business/projects/products/delete/bulk/ProductsBulkDeletionRequest'
+import { ProjectId } from '../../../../../business/valueObjects/projectId'
+import { ProductId } from '../../../../../business/valueObjects/productId'
 
-describe('Products Attaching in Bulk Request', () => {
+describe('Products Bulk Deletion Request', () => {
   it('creates request', () => {
     const requestDto = buildRequestDto({})
 
-    const result = ProductsAttachingInBulkRequest.create(requestDto)
+    const result = ProductsBulkDeletionRequest.create(requestDto)
 
     expect(isRight(result)).toBeTruthy()
     pipe(
@@ -22,7 +22,7 @@ describe('Products Attaching in Bulk Request', () => {
           const expectedUserId = UserId.create(requestDto.userId)
           const expectedProjectId = ProjectId.create(requestDto.projectId)
           const expectedProductsId = requestDto.productsId
-            .map(id => ProductId.create(id))
+            .map(x => ProductId.create(x))
             .map(x => {
               if(isLeft(x)) throw new Error('invalid object state') 
               return x.right
@@ -49,7 +49,7 @@ describe('Products Attaching in Bulk Request', () => {
       expectedFieldId: 'projectId'
     },
     {
-      name: 'does not create request when projects id list is empty',
+      name: 'does not create request when some of products id list is empty',
       requestDto: buildRequestDto({ productsId: [] }),
       expectedFieldId: 'productsId',
       expectedError: ValidationError.Required
@@ -58,7 +58,7 @@ describe('Products Attaching in Bulk Request', () => {
 
   validationErrorTestCases.forEach(testCase => {
     it(testCase.name, () => {
-      const result = ProductsAttachingInBulkRequest.create(testCase.requestDto)
+      const result = ProductsBulkDeletionRequest.create(testCase.requestDto)
 
       expect(isLeft(result)).toBeTruthy()
       pipe(
@@ -75,9 +75,9 @@ describe('Products Attaching in Bulk Request', () => {
         )
       )
     })
-  }) 
-    
-  interface requestDtoBuilderParams {
+  })
+
+    interface requestDtoBuilderParams {
         userId?: string,
         projectId?: string,
         productsId?: string[]
@@ -85,20 +85,20 @@ describe('Products Attaching in Bulk Request', () => {
 
     function buildRequestDto ({
       userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-      projectId = '5f8e31d2-4a17-11ec-81d3-0242ac130003',
+      projectId = '4b149208-44bf-11ec-81d3-0242ac130003',
       productsId = ['B08QW794WD']
-    }: requestDtoBuilderParams): ProductsAttachingInBulkRequestDto {
-        return new ProductsAttachingInBulkRequestDto(
+    }: requestDtoBuilderParams): ProductsBulkDeletionRequestDto{
+      return new ProductsBulkDeletionRequestDto(
         userId,
         projectId,
-        productsId 
+        productsId
       )
     }
 })
 
 interface ValidationErrorTestCase {
     name: string,
-    requestDto: ProductsAttachingInBulkRequestDto,
+    requestDto: ProductsBulkDeletionRequestDto,
     expectedFieldId: string,
     expectedError?: ValidationError
 }

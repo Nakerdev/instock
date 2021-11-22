@@ -2,24 +2,24 @@ import { Either, left, right, isLeft, match } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/pipeable'
 
 import { UserId } from '../../../../valueObjects/userId'
-import { ProjectId } from '../../../../valueObjects/projectId'
-import { ProductId } from '../../../../valueObjects/productId'
 import { ValidationError } from '../../../../types/validationError'
 import FormValidationError from '../../../../types/formValidationError'
+import { ProductId } from '../../../../valueObjects/productId'
+import { ProjectId } from '../../../../valueObjects/projectId'
 
 export {
-  ProductsAttachingInBulkRequest,
-  ProductsAttachingInBulkRequestDto
+  ProductsBulkDeletionRequest,
+  ProductsBulkDeletionRequestDto
 }
 
-class ProductsAttachingInBulkRequest {
+class ProductsBulkDeletionRequest {
   readonly userId: UserId 
   readonly projectId: ProjectId 
   readonly productsId: ProductId[]
 
-  static create (requestDto: ProductsAttachingInBulkRequestDto): Either<
+  static create (requestDto: ProductsBulkDeletionRequestDto): Either<
         Array<FormValidationError<ValidationError>>,
-        ProductsAttachingInBulkRequest
+        ProductsBulkDeletionRequest
     > {
     const userIdValidationResult = UserId.create(requestDto.userId)
     const projectIdValidationResult = ProjectId.create(requestDto.projectId)
@@ -27,7 +27,7 @@ class ProductsAttachingInBulkRequest {
 
     if (
       isLeft(userIdValidationResult) 
-      || isLeft(projectIdValidationResult)
+      || isLeft(projectIdValidationResult) 
       || productsIdValidationResult.some(x => isLeft(x))
       || requestDto.productsId.length === 0
     ) {
@@ -50,10 +50,11 @@ class ProductsAttachingInBulkRequest {
         if(isLeft(result)) throw new Error('invalid object state')
         return result.right
       })
-    const request = new ProductsAttachingInBulkRequest(
+    const request = new ProductsBulkDeletionRequest(
       userIdValidationResult.right,
       projectIdValidationResult.right,
-      productsId)
+      productsId 
+    )
     return right(request)
   }
 
@@ -63,12 +64,12 @@ class ProductsAttachingInBulkRequest {
     productsId: ProductId[]
   ) {
     this.userId = userId 
-    this.projectId = projectId
-    this.productsId = productsId 
+    this.projectId = projectId 
+    this.productsId = productsId
   }
 }
 
-class ProductsAttachingInBulkRequestDto {
+class ProductsBulkDeletionRequestDto {
   readonly userId: string
   readonly projectId: string
   readonly productsId: string[]
@@ -81,7 +82,7 @@ class ProductsAttachingInBulkRequestDto {
     this.userId = userId.trim()
     this.projectId = projectId.trim()
     this.productsId = productsId
-      .map(id => id.trim())
+      .map(x => x.trim())
       .filter(x => x !== '')
   }
 }

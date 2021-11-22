@@ -41,7 +41,7 @@ class AttachProductsToProjectInBulk {
       return left(ProductsAttachingToProjectError.ProjectNotExist)
     }
 
-    const projectProducts = await this.productRepository.searchAll(request.projectId, request.userId)
+    const projectProducts = await this.productRepository.searchAll(request.userId, request.projectId)
     const nonExistentProductsId = request.productsId
       .filter((value, index, self) => self.findIndex(id => id.equals(value)) === index)
       .filter(id => !projectProducts.some(existentProduct => existentProduct.id.equals(id)))

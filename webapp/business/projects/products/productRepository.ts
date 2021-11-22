@@ -1,8 +1,10 @@
 import { Product } from './product'
 import { UserId } from '../../valueObjects/userId'
 import { ProjectId } from '../../valueObjects/projectId'
+import { ProductId } from '../../valueObjects/productId'
 
 export default interface ProductRepository {
-    searchAll(projectId: ProjectId, userId: UserId): Promise<Product[]>;
+    searchAll(userId: UserId, projectId: ProjectId): Promise<Product[]>;
     saveAll(products: Product[]): Promise<void>;
+    deleteAll(userId: UserId, projectId: ProjectId, productsId: ProductId[]): Promise<void>;
 }

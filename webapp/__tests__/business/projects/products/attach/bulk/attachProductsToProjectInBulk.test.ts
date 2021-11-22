@@ -34,7 +34,7 @@ describe('Attach products to project in bluk', () => {
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue([])
     const utcNow = new Date(2021, 10, 10)
     timeService.utcNow
@@ -69,7 +69,7 @@ describe('Attach products to project in bluk', () => {
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue([buildProduct({id: request.productsId[0].state.value})])
 
     const result = await command.attach(request)
@@ -93,7 +93,7 @@ describe('Attach products to project in bluk', () => {
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue([])
 
     const result = await command.attach(request)

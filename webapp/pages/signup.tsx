@@ -46,8 +46,8 @@ const SignUp: NextPage = () => {
         password,
         name,
         surname,
-        areTermsAndConditionsAccepted
-    );
+        JSON.stringify(areTermsAndConditionsAccepted)
+    )
     try{
 
         const response = await fetch(

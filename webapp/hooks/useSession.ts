@@ -25,6 +25,7 @@ export default function useSession() {
     return {
         setSession,
         removeSession,
+        getSession,
         isLogged: session !== null
     }
 }

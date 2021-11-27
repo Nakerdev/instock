@@ -51,7 +51,7 @@ const Dashboard: NextPage = () => {
         )
         setIsCreateProjectButtonDisabled(false)
         if(response.status === 200){
-            projects.push(newProjectName)
+            projects.push(new Project('', newProjectName))
             setProjects(projects);
             setIsNewProjectModalShown(false)
             setNewProjectName('')

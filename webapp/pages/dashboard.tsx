@@ -11,6 +11,7 @@ import TextField from '../components/textField/TextField';
 import { ProjectCreationControllerRequest } from './api/projects/create/controller';
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import { ErrorResponse } from './api/utils/apiUtils';
+import { ProjectList, Project } from '../components/projectList/ProjectList';
 
 const Dashboard: NextPage = () => {
 
@@ -22,7 +23,7 @@ const Dashboard: NextPage = () => {
   const [ isCreateProjectButtonDisabled, setIsCreateProjectButtonDisabled ] = useState(false)
 
   //Projects
-  const [ projects, setProjects ] = useState<string[]>([])
+  const [ projects, setProjects ] = useState<Project[]>([new Project('', 'MejoresPaelleras.com'), new Project('', 'Xataka.com')])
 
   const { removeSession, getSession, isLogged } = useSession()
 
@@ -93,11 +94,7 @@ const Dashboard: NextPage = () => {
 
       <aside>
         <h1>Stockout</h1>
-        <div>
-          {
-            projects.map(project => <button>{project}</button>)
-          }
-        </div>
+        <ProjectList projects={projects}/>        
         <div className='actionButtonsContainer'>
           <Button 
             text='New Project' 

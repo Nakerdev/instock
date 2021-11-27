@@ -6,7 +6,8 @@ export const colors = {
     grey: '#868686',
     error: '#FF2327',
     success: '#A0FD7E',
-    link: '#4281C1'
+    link: '#4281C1',
+    blue: '#CAEBF2'
 }
 
 export const fonts = {

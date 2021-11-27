@@ -1,4 +1,4 @@
-import { colors } from '../../styles/theme'
+import { colors, fonts } from '../../styles/theme'
 import ErrorMessage from '../errorMessage/ErrorMessage'
 
 interface TextFieldComponentProps {
@@ -44,12 +44,14 @@ export default function TextField(props: TextFieldComponentProps) {
                 font-size: 14px
             }
 
-            .field { color: ${colors.black};
+            .field { 
+                font-family: ${fonts.base};
+                color: ${colors.black};
                 border: 1px solid #C4C2C2;
                 font-size: 16px;
                 padding: 0.25em 0.5em;
                 border-radius: 5px;
-                line-height: 25px
+                line-height: 1.5rem;
             }
 
             .field:focus {

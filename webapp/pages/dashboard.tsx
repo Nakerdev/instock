@@ -1,14 +1,18 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme';
 import Button from '../components/button/Button';
 import RocketIcon from '../components/icons/Rocket';
+import Modal from '../components/modal/Modal';
+import TextField from '../components/textField/TextField';
 
 const Dashboard: NextPage = () => {
 
+  const [ isNewProjectModalShown, setIsNewProjectModalShown ] = useState(false)
+  const [ newProjectName, setNewProjectName ] = useState('')
   const { removeSession, isLogged } = useSession()
 
   useEffect(() => {
@@ -20,10 +24,11 @@ const Dashboard: NextPage = () => {
   return (
     <>
     <main>
+
       <aside>
         <h1>Stockout</h1>
         <div className='actionButtonsContainer'>
-          <Button text='New Project' onClickHandler={() => {}} isDisabled={false} />
+          <Button text='New Project' onClickHandler={() => setIsNewProjectModalShown(true)} isDisabled={false} />
           <Button 
             text='Settings' 
             onClickHandler={() => {}} 
@@ -38,11 +43,32 @@ const Dashboard: NextPage = () => {
             buttonInnerImgSrc='/icons/log-out.svg'/> 
         </div> 
       </aside>
+
       <section>
         <RocketIcon color={colors.black} width={100}/>
         <h2>Create new project and start tracking your products!</h2>
       </section>
+
+      <Modal 
+        isShown={isNewProjectModalShown} 
+        title='New Project' 
+        onClose={() => setIsNewProjectModalShown(false)} 
+      >
+        <p className='create-project-modal__paragraph'>
+          We recommend you use the domain name of your website, 
+          a project is used to group and organise your products. 
+        </p>
+        <TextField
+          title='Project name'
+          isRequired={true}
+          value={newProjectName}
+          onChangeHandler={value => setNewProjectName(value)}
+        />
+        <Button text='Create' onClickHandler={() => {}} isDisabled={false}/>
+      </Modal>
+
     </main>
+
     <style jsx>{`
         main {
             background-color: ${colors.background};
@@ -88,6 +114,14 @@ const Dashboard: NextPage = () => {
         .actionButtonsContainer {
           width: 100%;
           padding-bottom: 20px
+        }
+
+        .create-project-modal__paragraph {
+          font-size: 18px;
+          line-height: 1.5rem;
+          font-family: ${fonts.base};
+          max-width: 500px;
+          margin-bottom: 20px;
         }
 
     `}</style>

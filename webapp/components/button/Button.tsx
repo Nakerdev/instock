@@ -2,14 +2,16 @@ import { MouseEvent } from 'react'
 
 import { colors } from '../../styles/theme'
 
-interface CTAComponentProps {
+interface ButtonComponentProps {
     text: string;
     onClickHandler: (event: MouseEvent<HTMLElement>) => void;
     isDisabled: boolean;
     buttonInnerImgSrc?: string;
+    textColor?: string;
+    bgColor?: string;
 }
 
-export default function CTA(props: CTAComponentProps) {
+export default function Button(props: ButtonComponentProps) {
     return (
         <>
         <button className="cta" onClick={e => props.onClickHandler(e)} disabled={props.isDisabled}>
@@ -23,8 +25,8 @@ export default function CTA(props: CTAComponentProps) {
         </button>
         <style jsx>{`
             .cta {
-                color: ${colors.white};
-                background-color: ${colors.CTA};
+                color: ${props.textColor ? props.textColor : colors.white};
+                background-color: ${props.bgColor ? props.bgColor : colors.CTA};
                 width: 100%;
                 height: 50px;
                 border: 0;

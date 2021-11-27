@@ -4,7 +4,7 @@ import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
-import CTA from '../components/cta/CTA'
+import Button from '../components/button/Button'
 import PasswordField from '../components/paswordField/PasswordField'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
@@ -79,7 +79,7 @@ const Signin: NextPage = () => {
                     helperText='Forgot password?'
                     helperLink='/forgot-password'
                 />
-                <CTA 
+                <Button 
                     text='Sign in'
                     onClickHandler={e => login(e)}
                     isDisabled={isLoginBtnDisabled}

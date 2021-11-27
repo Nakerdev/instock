@@ -5,7 +5,7 @@ import Router from 'next/router'
 
 import { colors } from '../styles/theme'
 import { UserPasswordRecoveryControllerRequest } from './api/users/password/recovery/controller'
-import CTA from '../components/cta/CTA'
+import Button from '../components/button/Button'
 import TextField from '../components/textField/TextField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
@@ -78,7 +78,7 @@ const ForgotPassword: NextPage = () => {
                     onChangeHandler={value => setEmail(value)}
                     errorMessage={emailError}
                 />
-                <CTA 
+                <Button 
                     text='Send password reset email'
                     onClickHandler={e => recovery(e)}
                     isDisabled={isRecoveryBtnDisabled}

@@ -5,7 +5,7 @@ import Router from 'next/router'
 import { colors } from '../styles/theme'
 import { UserSignUpControllerRequest, ResponseDto } from './api/users/signup/controller'
 import { ErrorResponse } from './api/utils/apiUtils'
-import CTA from '../components/cta/CTA'
+import Button from '../components/button/Button'
 import TextField from '../components/textField/TextField'
 import PasswordField from '../components/paswordField/PasswordField'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
@@ -169,7 +169,7 @@ const SignUp: NextPage = () => {
                     </div>
                     <ErrorMessage message={termsAndConditionsError}/>
                 </fieldset>
-                <CTA 
+                <Button 
                     text='Create Account'
                     onClickHandler={e => signup(e)}
                     isDisabled={isSignUpBtnDisabled}

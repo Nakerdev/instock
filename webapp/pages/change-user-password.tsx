@@ -6,7 +6,7 @@ import Router from 'next/router'
 import { colors } from '../styles/theme'
 import { UserChangePasswordControllerRequest } from './api/users/password/change/controller'
 import { ErrorResponse } from './api/utils/apiUtils';
-import CTA from '../components/cta/CTA'
+import Button from '../components/button/Button'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import SuccessMessage from '../components/successMessage/SuccessMessage';
@@ -148,7 +148,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
                     </input>
                     <ErrorMessage message={passwordError}/>
                 </fieldset>
-                <CTA 
+                <Button 
                     text='Change password'
                     onClickHandler={e => changePassword(e)}
                     isDisabled={isChangePasswordBtnDisabled}

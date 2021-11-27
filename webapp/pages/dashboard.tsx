@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme';
-import CTA from '../components/cta/CTA';
+import Button from '../components/button/Button';
 import RocketIcon from '../components/icons/Rocket';
 
 const Dashboard: NextPage = () => {
@@ -22,8 +22,21 @@ const Dashboard: NextPage = () => {
     <main>
       <aside>
         <h1>Stockout</h1>
-        <CTA text='New Project' onClickHandler={() => {}} isDisabled={false} />
-        <button onClick={() => removeSession()}>Logout</button>
+        <div className='actionButtonsContainer'>
+          <Button text='New Project' onClickHandler={() => {}} isDisabled={false} />
+          <Button 
+            text='Settings' 
+            onClickHandler={() => {}} 
+            bgColor={colors.grey} 
+            isDisabled={false} 
+            buttonInnerImgSrc='/icons/cogs.svg'/>
+          <Button 
+            text='Logout' 
+            onClickHandler={() => removeSession()} 
+            bgColor={colors.grey} 
+            isDisabled={false} 
+            buttonInnerImgSrc='/icons/log-out.svg'/> 
+        </div> 
       </aside>
       <section>
         <RocketIcon color={colors.black} width={100}/>
@@ -45,9 +58,9 @@ const Dashboard: NextPage = () => {
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             display: flex;
             flex-direction: column;
-            justify-content: start;
+            justify-content: space-between;
             align-items: center;
-            padding: 0 10px
+            padding: 0 20px
         }
 
         h1 {
@@ -70,6 +83,11 @@ const Dashboard: NextPage = () => {
         main > section > h2 {
           font-size: 24px;
           font-family: ${fonts.base};
+        }
+
+        .actionButtonsContainer {
+          width: 100%;
+          padding-bottom: 20px
         }
 
     `}</style>

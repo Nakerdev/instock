@@ -13,7 +13,6 @@ import { ProjectCreationRequest, ProjectCreationRequestDto } from '../../../../b
 import { CreateProject, ProjectCreationError } from '../../../../business/projects/create/createProject'
 import buildUser from '../../builders/users/userBuilder'
 
-
 describe('Create Project', () => {
   let projectRepository: MockProxy<ProjectRepository>
   let userRepository: MockProxy<UserRepository>
@@ -111,17 +110,17 @@ describe('Create Project', () => {
     expect(projectRepository.save).not.toHaveBeenCalled()
   })
 
-    function buildRequest (): ProjectCreationRequest | null {
-      const requestDto = new ProjectCreationRequestDto(
-        'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-        'Xataka.com'
+  function buildRequest (): ProjectCreationRequest | null {
+    const requestDto = new ProjectCreationRequestDto(
+      'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
+      'Xataka.com'
+    )
+    return pipe(
+      ProjectCreationRequest.create(requestDto),
+      match(
+        _ => null,
+        request => request
       )
-      return pipe(
-        ProjectCreationRequest.create(requestDto),
-        match(
-          _ => null,
-          request => request
-        )
-      )
-    }
+    )
+  }
 })

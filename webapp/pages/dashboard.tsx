@@ -1,88 +1,81 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useState, MouseEvent } from 'react'
 
 import useSession from '../hooks/useSession'
-import { colors, fonts } from '../styles/theme';
-import Button from '../components/button/Button';
-import RocketIcon from '../components/icons/Rocket';
-import Modal from '../components/modal/Modal';
-import TextField from '../components/textField/TextField';
-import { ProjectCreationControllerRequest, ResponseDto } from './api/projects/create/controller';
-import ErrorMessage from '../components/errorMessage/ErrorMessage';
-import { ErrorResponse } from './api/utils/apiUtils';
-import { ProjectList, Project } from '../components/projectList/ProjectList';
+import { colors, fonts } from '../styles/theme'
+import Button from '../components/button/Button'
+import RocketIcon from '../components/icons/Rocket'
+import Modal from '../components/modal/Modal'
+import TextField from '../components/textField/TextField'
+import { ProjectCreationControllerRequest } from './api/projects/create/controller'
+import ErrorMessage from '../components/errorMessage/ErrorMessage'
+import { ErrorResponse } from './api/utils/apiUtils'
+import { ProjectList } from '../components/projectList/ProjectList'
 
 const Dashboard: NextPage = () => {
-
-  //Create Project modal
-  const [ isNewProjectModalShown, setIsNewProjectModalShown ] = useState(false)
-  const [ newProjectName, setNewProjectName ] = useState('')
-  const [ projectNameError, setProjectNameError ] = useState('')
-  const [projectCreationServerError, setProjectCreationServerError ] = useState('')
-  const [ isCreateProjectButtonDisabled, setIsCreateProjectButtonDisabled ] = useState(false)
+  const [isNewProjectModalShown, setIsNewProjectModalShown] = useState(false)
+  const [newProjectName, setNewProjectName] = useState('')
+  const [projectNameError, setProjectNameError] = useState('')
+  const [projectCreationServerError, setProjectCreationServerError] = useState('')
+  const [isCreateProjectButtonDisabled, setIsCreateProjectButtonDisabled] = useState(false)
 
   const { removeSession, getSession, isLogged } = useSession()
 
   useEffect(() => {
-    if(!isLogged){
-      Router.push('/');
+    if (!isLogged) {
+      Router.push('/')
     }
   }, [isLogged])
 
-  async function createProject(e: MouseEvent<HTMLElement>): Promise<void> {
-    e.preventDefault();
+  async function createProject (e: MouseEvent<HTMLElement>): Promise<void> {
+    e.preventDefault()
     setIsCreateProjectButtonDisabled(true)
-    try{
-        const request = new ProjectCreationControllerRequest(newProjectName)
-        const session: string | null = getSession()
-        const response = await fetch(
-            '/api/projects/create', 
-            {
-              method: 'POST', 
-              headers: {
-                'Content-Type': 'application/json',
-                'x-stockout-token': session === null ? '' : session
-              }, 
-              body: JSON.stringify(request)}
-        )
-        setIsCreateProjectButtonDisabled(false)
-        if(response.status === 200){
-            const successResponse: ResponseDto = await response.json()
-            //projects.push(new Project(successResponse.projectId, newProjectName))
-            //setProjects(projects);
-            setIsNewProjectModalShown(false)
-            setNewProjectName('')
-        } else if (response.status === 401){
-            Router.push('/signin')
-        } else if (response.status === 404){
-
-            const errorResponse: ErrorResponse  = await response.json();
-            if(errorResponse.validationErrors.length > 0) {
-
-                errorResponse.validationErrors.forEach(error => {
-
-                    if(error.fieldId == 'name' && error.error == 'Required'){
-                        setProjectNameError('Name is required.')
-                    }else if(error.fieldId == 'name' && error.error == 'WrongLength'){
-                        setProjectNameError('The length of the name exceeds the allowed size.')
-                    }
-
-                })
-
-            } else {
-                if(errorResponse.commandError == 'ProjectWithTheSameNameAlreadyExist') {
-                    setProjectCreationServerError('Another project with the same name already exists.')
-                }else {
-                    setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
-                }
-            }
-
-        } else {
-            setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+    try {
+      const request = new ProjectCreationControllerRequest(newProjectName)
+      const session: string | null = getSession()
+      const response = await fetch(
+        '/api/projects/create',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-stockout-token': session === null ? '' : session
+          },
+          body: JSON.stringify(request)
         }
-    } catch {
+      )
+      setIsCreateProjectButtonDisabled(false)
+      if (response.status === 200) {
+        // const successResponse: ResponseDto = await response.json()
+        // projects.push(new Project(successResponse.projectId, newProjectName))
+        // setProjects(projects);
+        setIsNewProjectModalShown(false)
+        setNewProjectName('')
+      } else if (response.status === 401) {
+        Router.push('/signin')
+      } else if (response.status === 404) {
+        const errorResponse: ErrorResponse = await response.json()
+        if (errorResponse.validationErrors.length > 0) {
+          errorResponse.validationErrors.forEach(error => {
+            if (error.fieldId === 'name' && error.error === 'Required') {
+              setProjectNameError('Name is required.')
+            } else if (error.fieldId === 'name' && error.error === 'WrongLength') {
+              setProjectNameError('The length of the name exceeds the allowed size.')
+            }
+          })
+        } else {
+          if (errorResponse.commandError === 'ProjectWithTheSameNameAlreadyExist') {
+            setProjectCreationServerError('Another project with the same name already exists.')
+          } else {
+            setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+          }
+        }
+      } else {
         setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
+    } catch {
+      setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
     }
   }
 
@@ -92,28 +85,28 @@ const Dashboard: NextPage = () => {
 
       <aside>
         <h1>Stockout</h1>
-        <ProjectList />        
+        <ProjectList />
         <div className='actionButtonsContainer'>
-          <Button 
-            text='New Project' 
-            onClickHandler={() => setIsNewProjectModalShown(true)} 
-            isDisabled={false} 
+          <Button
+            text='New Project'
+            onClickHandler={() => setIsNewProjectModalShown(true)}
+            isDisabled={false}
           />
-          <Button 
-            text='Settings' 
-            onClickHandler={() => {}} 
-            bgColor={colors.grey} 
-            isDisabled={false} 
+          <Button
+            text='Settings'
+            onClickHandler={() => {}}
+            bgColor={colors.grey}
+            isDisabled={false}
             buttonInnerImgSrc='/icons/cogs.svg'
           />
-          <Button 
-            text='Logout' 
-            onClickHandler={() => removeSession()} 
-            bgColor={colors.grey} 
-            isDisabled={false} 
+          <Button
+            text='Logout'
+            onClickHandler={() => removeSession()}
+            bgColor={colors.grey}
+            isDisabled={false}
             buttonInnerImgSrc='/icons/log-out.svg'
-          /> 
-        </div> 
+          />
+        </div>
       </aside>
 
       <section>
@@ -121,14 +114,14 @@ const Dashboard: NextPage = () => {
         <h2>Create new project and start tracking your products!</h2>
       </section>
 
-      <Modal 
-        isShown={isNewProjectModalShown} 
-        title='New Project' 
-        onClose={() => setIsNewProjectModalShown(false)} 
+      <Modal
+        isShown={isNewProjectModalShown}
+        title='New Project'
+        onClose={() => setIsNewProjectModalShown(false)}
       >
         <p className='create-project-modal__paragraph'>
-          We recommend you use the domain name of your website, 
-          a project is used to group and organise your products. 
+          We recommend you use the domain name of your website,
+          a project is used to group and organise your products.
         </p>
         <TextField
           title='Project name'
@@ -137,9 +130,9 @@ const Dashboard: NextPage = () => {
           onChangeHandler={value => setNewProjectName(value)}
           errorMessage={projectNameError}
         />
-        <Button 
-          text='Create' 
-          onClickHandler={createProject} 
+        <Button
+          text='Create'
+          onClickHandler={createProject}
           isDisabled={isCreateProjectButtonDisabled}
         />
         <ErrorMessage message={projectCreationServerError}/>

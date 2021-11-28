@@ -38,17 +38,16 @@ class CreateProject {
   async create (
     request: ProjectCreationRequest
   ): Promise<Either<ProjectCreationError, Project>> {
-
     const user = await this.userRepository.searchById(request.userId)
     if (isNone(user)) {
       return left(ProjectCreationError.UserNotExist)
     }
 
     const isThereAlreadyProjectWithTheSameName = await this.projectRepository.exist(request.userId, request.name)
-    if(isThereAlreadyProjectWithTheSameName){
+    if (isThereAlreadyProjectWithTheSameName) {
       return left(ProjectCreationError.ProjectWithTheSameNameAlreadyExist)
     }
-    
+
     const project = await this.buildProject(request)
     await this.projectRepository.save(project)
     return right(project)

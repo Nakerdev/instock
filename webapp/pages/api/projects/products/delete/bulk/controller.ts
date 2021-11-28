@@ -30,7 +30,7 @@ class DeleteProductsInBulkController {
   delete (request: DeleteProductsInBulkControllerRequest): void {
     pipe(
       this.sessionService.currentUser(),
-      matchOption (
+      matchOption(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.buildCommandRequest(request, currentUser)
       )
@@ -41,7 +41,7 @@ class DeleteProductsInBulkController {
     const commandRequestDto = new ProductsBulkDeletionRequestDto(
       currentUser.userId,
       controllerRequest.projectId,
-      controllerRequest.productsId,
+      controllerRequest.productsId
     )
     pipe(
       ProductsBulkDeletionRequest.create(commandRequestDto),
@@ -67,6 +67,6 @@ class DeleteProductsInBulkControllerRequest {
     productsId: string[]
   ) {
     this.projectId = projectId
-    this.productsId = productsId 
+    this.productsId = productsId
   }
 }

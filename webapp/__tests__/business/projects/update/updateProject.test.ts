@@ -9,7 +9,6 @@ import buildProject from '../../builders/projects/projectBuilder'
 import { UpdateProject } from '../../../../business/projects/update/updateProject'
 import { ProjectUpdatingRequest, ProjectUpdatingRequestDto } from '../../../../business/projects/update/ProjectUpdatingRequest'
 
-
 describe('Update Project', () => {
   let projectRepository: MockProxy<ProjectRepository>
   let command: UpdateProject
@@ -20,8 +19,8 @@ describe('Update Project', () => {
   })
 
   it('updated project', async () => {
-    const request = <ProjectUpdatingRequest>buildRequest({name: "MundoManitas.com"})
-    const project = buildProject({name: 'Xataka.com'})
+    const request = <ProjectUpdatingRequest>buildRequest({ name: 'MundoManitas.com' })
+    const project = buildProject({ name: 'Xataka.com' })
     projectRepository.searchBy
       .calledWith(request.projectId, request.userId)
       .mockResolvedValue(some(project))

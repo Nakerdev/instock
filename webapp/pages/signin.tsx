@@ -15,49 +15,48 @@ import Layout from '../components/layout/Layout'
 import useSession from '../hooks/useSession'
 
 const Signin: NextPage = () => {
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [serverError, setServerError] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [serverError, setServerError] = useState('')
   const { setSession, isLogged } = useSession()
-  const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
+  const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false)
 
   useEffect(() => {
-    if(isLogged){
-        Router.push('/dashboard');
+    if (isLogged) {
+      Router.push('/dashboard')
     }
   }, [isLogged])
 
-  async function login(e: MouseEvent<HTMLElement>) {
-    e.preventDefault();
+  async function login (e: MouseEvent<HTMLElement>) {
+    e.preventDefault()
     setIsLoginBtnDisabled(true)
     cleanErrors()
     const request = new UserLoginControllerRequest(
-        email,
-        password
-    );
-    try{
-        const response = await fetch(
-            '/api/users/login', 
-            {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
-        )
-        if(response.status === 200){
-            const successResponse: ResponseDto = await response.json()
-            setSession(successResponse.token)
-        } else if (response.status === 401){
-            setServerError('Invalid credentials.')
-        } else {
-            setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
-        }
-    } catch {
+      email,
+      password
+    )
+    try {
+      const response = await fetch(
+        '/api/users/login',
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request) }
+      )
+      if (response.status === 200) {
+        const successResponse: ResponseDto = await response.json()
+        setSession(successResponse.token)
+      } else if (response.status === 401) {
+        setServerError('Invalid credentials.')
+      } else {
         setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
+    } catch {
+      setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
     }
 
     setIsLoginBtnDisabled(false)
   }
 
-  function cleanErrors(): void {
-      setServerError('')
+  function cleanErrors (): void {
+    setServerError('')
   }
 
   return (
@@ -79,14 +78,14 @@ const Signin: NextPage = () => {
                     helperText='Forgot password?'
                     helperLink='/forgot-password'
                 />
-                <Button 
+                <Button
                     text='Sign in'
                     onClickHandler={e => login(e)}
                     isDisabled={isLoginBtnDisabled}
                     buttonInnerImgSrc='/icons/key-f.svg'
                 />
                 <ErrorMessage message={serverError}/>
-                <ClientSideLink 
+                <ClientSideLink
                     text='New to Stockout?'
                     href='/signup'
                     linkText='Create an account'

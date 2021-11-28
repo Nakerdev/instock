@@ -2,7 +2,8 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true
+    node: true,
+    'jest/globals': true
   },
   extends: [
     'plugin:react/recommended',
@@ -28,9 +29,7 @@ module.exports = {
   ],
   rules: {
     'no-use-before-define': 'off',
-    "no-unused-vars": "off"
-  },
-  env: {
-    'jest/globals': true
+    'react/react-in-jsx-scope': 'off',
+    camelcase: 'off'
   }
 }

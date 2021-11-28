@@ -9,7 +9,7 @@
     "test": "jest --watch",
     "migration:create": "prisma migrate dev --create-only --name",
     "migration:apply": "prisma migrate dev",
-    "lint": "npx eslint . --fix --ext .ts"
+    "lint": "npx eslint . --fix --ext .ts,.tsx,.js"
   },
   "dependencies": {
     "@prisma/client": "3.2.1",

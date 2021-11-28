@@ -30,7 +30,7 @@ class ProjectId {
     return new ProjectId(state.value)
   }
 
-  static newId (uuidService: UuidService): ProjectId  {
+  static newId (uuidService: UuidService): ProjectId {
     return new ProjectId(uuidService.create())
   }
 

@@ -4,10 +4,10 @@ interface ErrorMessageComponentProps {
     message: string;
 }
 
-export default function ErrorMessage(props: ErrorMessageComponentProps) {
-    return (
+export default function ErrorMessage (props: ErrorMessageComponentProps) {
+  return (
         <>
-        <p className="error" style={props.message ? {display: 'block'} : {display: 'none'}}>{props.message}</p>
+        <p className="error" style={props.message ? { display: 'block' } : { display: 'none' }}>{props.message}</p>
         <style jsx>{`
             .error {
                 color: ${colors.error};
@@ -18,5 +18,5 @@ export default function ErrorMessage(props: ErrorMessageComponentProps) {
             }
         `}</style>
         </>
-    )
+  )
 }

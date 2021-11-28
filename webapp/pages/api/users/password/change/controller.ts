@@ -29,8 +29,8 @@ class UserChangePasswordController {
     apiResponseBuilder: ApiResponseBuilder
   ) {
     this.command = command
-    this.urlEncoder = urlEncoder 
-    this.serializer = serializer 
+    this.urlEncoder = urlEncoder
+    this.serializer = serializer
     this.encryptionService = encryptionService
     this.apiResponseBuilder = apiResponseBuilder
   }
@@ -65,11 +65,11 @@ class UserChangePasswordController {
     return UserChangePasswordRequest.create(commandRequestDto)
   }
 
-  decryptToken(encryptedToken: string): Token {
+  decryptToken (encryptedToken: string): Token {
     const decodedToken = this.urlEncoder.decode(encryptedToken)
-    const encryptedResult = this.serializer.deserialize<EncryptedResult>(decodedToken);
+    const encryptedResult = this.serializer.deserialize<EncryptedResult>(decodedToken)
     const decryptedResult = this.encryptionService.decrypt(encryptedResult)
-    return this.serializer.deserialize<Token>(decryptedResult);
+    return this.serializer.deserialize<Token>(decryptedResult)
   }
 }
 

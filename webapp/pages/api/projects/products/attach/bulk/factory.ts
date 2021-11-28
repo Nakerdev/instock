@@ -9,7 +9,7 @@ import SystemTimeService from '../../../../../../infraestructure/systemTimeServi
 import ProductPrismaRepository from '../../../../../../infraestructure/projects/products/productRepository'
 
 export function buildAttachProductsInBulkController (
-  res: NextApiResponse, 
+  res: NextApiResponse,
   req: NextApiRequest
 ): AttachProductsInBulkController {
   return new AttachProductsInBulkController(

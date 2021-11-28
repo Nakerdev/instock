@@ -30,15 +30,15 @@ class SearchAllProjectsController {
   search (): void {
     pipe(
       this.sessionService.currentUser(),
-      match (
+      match(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.searchProjects(currentUser)
       )
     )
   }
 
-  private async searchProjects(currentUser: UserSession){
-    const projects = await this.projectRepository.searchAll(currentUser.userId) 
+  private async searchProjects (currentUser: UserSession) {
+    const projects = await this.projectRepository.searchAll(currentUser.userId)
     this.apiResponseBuilder.sendSuccessResponse(projects)
   }
 }
@@ -54,8 +54,7 @@ class ProjectPrismaRepository implements ProjectRepository {
     this.prisma = new PrismaClient()
   }
 
-
-  async searchAll(userId: string): Promise<ProjectDto[]> {
+  async searchAll (userId: string): Promise<ProjectDto[]> {
     try {
       await this.prisma.$connect()
       const dbModels: DbProjectModel[] = await this.prisma.projects.findMany({
@@ -70,17 +69,16 @@ class ProjectPrismaRepository implements ProjectRepository {
     }
   }
 
-  private buildProject(dbEntity: DbProjectModel): ProjectDto {
+  private buildProject (dbEntity: DbProjectModel): ProjectDto {
     return new ProjectDto(dbEntity.id, dbEntity.name)
   }
-
 }
 
 class ProjectDto {
   readonly id: string
   readonly name: string
 
-  constructor(id: string, name: string){
+  constructor (id: string, name: string) {
     this.id = id
     this.name = name
   }

@@ -1,6 +1,5 @@
 import { NextPage } from 'next'
-import { useState, MouseEvent } from 'react'
-import { useEffect } from 'react'
+import { useState, MouseEvent, useEffect } from 'react'
 import Router from 'next/router'
 
 import { colors } from '../styles/theme'
@@ -16,49 +15,48 @@ import Layout from '../components/layout/Layout'
 import useSession from '../hooks/useSession'
 
 const ForgotPassword: NextPage = () => {
-
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [serverError, setServerError] = useState('');
-  const [hasEmailToResetPasswordBeenSent, setHasEmailToResetPasswordBeenSent] = useState(false);
-  const [isRecoveryBtnDisabled, setIsRecoveryBtnDisabled] = useState(false);
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [serverError, setServerError] = useState('')
+  const [hasEmailToResetPasswordBeenSent, setHasEmailToResetPasswordBeenSent] = useState(false)
+  const [isRecoveryBtnDisabled, setIsRecoveryBtnDisabled] = useState(false)
 
   const { isLogged } = useSession()
 
   useEffect(() => {
-    if(isLogged){
-        Router.push('/dashboard');
+    if (isLogged) {
+      Router.push('/dashboard')
     }
   }, [isLogged])
 
-  async function recovery(e: MouseEvent<HTMLElement>) {
-    e.preventDefault();
+  async function recovery (e: MouseEvent<HTMLElement>) {
+    e.preventDefault()
     cleanErrors()
-    if(!email){
+    if (!email) {
       setEmailError('Email is required.')
-      return;
+      return
     }
     setIsRecoveryBtnDisabled(true)
     const request = new UserPasswordRecoveryControllerRequest(
-        email
-    );
-    try{
-        const response = await fetch(
-            '/api/users/password/recovery', 
-            {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)}
-        )
-        if(response.status === 200){
-          setHasEmailToResetPasswordBeenSent(true)
-        } else {
-            setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
-        }
-    } catch {
+      email
+    )
+    try {
+      const response = await fetch(
+        '/api/users/password/recovery',
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request) }
+      )
+      if (response.status === 200) {
+        setHasEmailToResetPasswordBeenSent(true)
+      } else {
         setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
+    } catch {
+      setServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
     }
     setIsRecoveryBtnDisabled(false)
   }
 
-  function cleanErrors(){
+  function cleanErrors () {
     setEmailError('')
     setServerError('')
   }
@@ -69,8 +67,8 @@ const ForgotPassword: NextPage = () => {
         <section>
           <Form>
               <h2>Reset your password</h2>
-              <h3>Enter your user account's verified email address and we will send you a password reset link.</h3>
-              <div style={hasEmailToResetPasswordBeenSent ? {display: 'none'} : {display: 'block'}}>
+              <h3>Enter your user account&apos;s verified email address and we will send you a password reset link.</h3>
+              <div style={hasEmailToResetPasswordBeenSent ? { display: 'none' } : { display: 'block' }}>
                 <TextField
                     title='Email'
                     isRequired={true}
@@ -78,27 +76,27 @@ const ForgotPassword: NextPage = () => {
                     onChangeHandler={value => setEmail(value)}
                     errorMessage={emailError}
                 />
-                <Button 
+                <Button
                     text='Send password reset email'
                     onClickHandler={e => recovery(e)}
                     isDisabled={isRecoveryBtnDisabled}
                 />
                 <ErrorMessage message={serverError}/>
               </div>
-              <div style={hasEmailToResetPasswordBeenSent ? {display: 'block'} : {display: 'none'}}>
+              <div style={hasEmailToResetPasswordBeenSent ? { display: 'block' } : { display: 'none' }}>
                 <SuccessMessage>
-                  Check your email for a link to reset your password. 
-                  If it doesn’t appear within a few minutes, check your spam folder. 
+                  Check your email for a link to reset your password.
+                  If it doesn’t appear within a few minutes, check your spam folder.
                 </SuccessMessage>
-                <ClientSideLink 
-                  text='Go to' 
-                  href='/signin' 
+                <ClientSideLink
+                  text='Go to'
+                  href='/signin'
                   linkText='Login Page'
                 />
               </div>
             </Form>
-        </section> 
-      </Layout> 
+        </section>
+      </Layout>
     <style jsx>{`
         section {
             background-color: ${colors.background};
@@ -125,7 +123,6 @@ const ForgotPassword: NextPage = () => {
     `}</style>
     </>
   )
-
 }
 
 export default ForgotPassword

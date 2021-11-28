@@ -10,7 +10,7 @@ export class UpdateProject {
   readonly projectRepository: ProjectRepository
 
   constructor (
-    projectRepository: ProjectRepository,
+    projectRepository: ProjectRepository
   ) {
     this.projectRepository = projectRepository
   }
@@ -25,11 +25,11 @@ export class UpdateProject {
     )
   }
 
-  private async updateProject(project: Project, request: ProjectUpdatingRequest) {
+  private async updateProject (project: Project, request: ProjectUpdatingRequest) {
     const newProject = new Project(
-      project.id, 
-      project.userId, 
-      request.name, 
+      project.id,
+      project.userId,
+      request.name,
       project.created_at
     )
     await this.projectRepository.update(newProject)

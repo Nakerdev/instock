@@ -13,6 +13,6 @@ export function buildUpdateProjectController (res: NextApiResponse, req: NextApi
     ServiceFactory.buildSessionService(req))
 
   function buildCommand (): UpdateProject {
-    return new UpdateProject (new ProjectPrismaRepository())
+    return new UpdateProject(new ProjectPrismaRepository())
   }
 }

@@ -24,13 +24,13 @@ describe('Products Attaching in Bulk Request', () => {
           const expectedProductsId = requestDto.productsId
             .map(id => ProductId.create(id))
             .map(x => {
-              if(isLeft(x)) throw new Error('invalid object state') 
+              if (isLeft(x)) throw new Error('invalid object state')
               return x.right
             })
           expect(request).toEqual({
             userId: isRight(expectedUserId) ? expectedUserId.right : null,
             projectId: isRight(expectedProjectId) ? expectedProjectId.right : null,
-            productsId: expectedProductsId,
+            productsId: expectedProductsId
           })
         }
       )
@@ -75,25 +75,25 @@ describe('Products Attaching in Bulk Request', () => {
         )
       )
     })
-  }) 
-    
+  })
+
   interface requestDtoBuilderParams {
         userId?: string,
         projectId?: string,
         productsId?: string[]
     }
 
-    function buildRequestDto ({
-      userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-      projectId = '5f8e31d2-4a17-11ec-81d3-0242ac130003',
-      productsId = ['B08QW794WD']
-    }: requestDtoBuilderParams): ProductsAttachingInBulkRequestDto {
-        return new ProductsAttachingInBulkRequestDto(
-        userId,
-        projectId,
-        productsId 
-      )
-    }
+  function buildRequestDto ({
+    userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
+    projectId = '5f8e31d2-4a17-11ec-81d3-0242ac130003',
+    productsId = ['B08QW794WD']
+  }: requestDtoBuilderParams): ProductsAttachingInBulkRequestDto {
+    return new ProductsAttachingInBulkRequestDto(
+      userId,
+      projectId,
+      productsId
+    )
+  }
 })
 
 interface ValidationErrorTestCase {

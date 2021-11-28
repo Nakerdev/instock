@@ -7,12 +7,11 @@ import { useEffect } from 'react'
 import useSession from '../hooks/useSession'
 
 const Home: NextPage = () => {
-
   const { isLogged } = useSession()
 
   useEffect(() => {
-    if(isLogged){
-        Router.push('/dashboard');
+    if (isLogged) {
+      Router.push('/dashboard')
     }
   }, [isLogged])
 

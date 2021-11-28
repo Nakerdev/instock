@@ -12,15 +12,15 @@ export interface ApiResponseBuilder {
 }
 
 export class ErrorResponse {
-  validationErrors: FormValidationError<ValidationError>[];
-  commandError: string | null;
+  validationErrors: FormValidationError<ValidationError>[]
+  commandError: string | null
 
-  constructor(
+  constructor (
     validationErrors: FormValidationError<ValidationError>[],
     commandError: string | null
-  ){
-    this.validationErrors = validationErrors;
-    this.commandError = commandError;
+  ) {
+    this.validationErrors = validationErrors
+    this.commandError = commandError
   }
 }
 

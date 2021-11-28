@@ -16,24 +16,24 @@ class Product {
   readonly state: ProductPersistenceState
 
   static createFromState (state: ProductPersistenceState): Product {
-      return new Product(
-        ProductId.createFromState(state.id),
-        ProjectId.createFromState(state.projectId),
-        UserId.createFromState(state.userId),
-        state.created_at
-      )
+    return new Product(
+      ProductId.createFromState(state.id),
+      ProjectId.createFromState(state.projectId),
+      UserId.createFromState(state.userId),
+      state.created_at
+    )
   }
 
-    constructor (
-        id: ProductId,
-        projectId: ProjectId,
-        userId: UserId,
-        created_at: Date
+  constructor (
+    id: ProductId,
+    projectId: ProjectId,
+    userId: UserId,
+    created_at: Date
   ) {
     this.id = id
     this.projectId = projectId
     this.userId = userId
-    this.created_at = created_at 
+    this.created_at = created_at
     this.state = new ProductPersistenceState(
       this.id.state,
       this.projectId.state,
@@ -58,6 +58,6 @@ class ProductPersistenceState {
     this.id = id
     this.projectId = projectId
     this.userId = userId
-    this.created_at = created_at 
+    this.created_at = created_at
   }
 }

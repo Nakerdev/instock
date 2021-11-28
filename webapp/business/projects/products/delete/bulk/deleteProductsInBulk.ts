@@ -6,7 +6,7 @@ export class DeleteProductsInBulk {
   readonly productsRepository: ProductRepository
 
   constructor (
-    productsRepository: ProductRepository,
+    productsRepository: ProductRepository
   ) {
     this.productsRepository = productsRepository
   }

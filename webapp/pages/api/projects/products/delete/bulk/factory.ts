@@ -7,7 +7,7 @@ import ProductPrismaRepository from '../../../../../../infraestructure/projects/
 import { DeleteProductsInBulk } from '../../../../../../business/projects/products/delete/bulk/deleteProductsInBulk'
 
 export function buildDeleteProductsInBulkController (
-  res: NextApiResponse, 
+  res: NextApiResponse,
   req: NextApiRequest
 ): DeleteProductsInBulkController {
   return new DeleteProductsInBulkController(

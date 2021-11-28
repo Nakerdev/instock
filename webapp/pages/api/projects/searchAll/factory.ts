@@ -5,7 +5,7 @@ import { SearchAllProjectsController, ProjectPrismaRepository } from './controll
 import ServiceFactory from '../../factory/serviceFactory'
 
 export function buildSearchAllProjectsController (
-  res: NextApiResponse, 
+  res: NextApiResponse,
   req: NextApiRequest
 ): SearchAllProjectsController {
   return new SearchAllProjectsController(

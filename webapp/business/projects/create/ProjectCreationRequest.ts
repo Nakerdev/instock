@@ -12,7 +12,7 @@ export {
 }
 
 class ProjectCreationRequest {
-  readonly userId: UserId 
+  readonly userId: UserId
   readonly name: Name
 
   static create (requestDto: ProjectCreationRequestDto): Either<
@@ -40,7 +40,7 @@ class ProjectCreationRequest {
     userId: UserId,
     name: Name
   ) {
-    this.userId = userId 
+    this.userId = userId
     this.name = name
   }
 }

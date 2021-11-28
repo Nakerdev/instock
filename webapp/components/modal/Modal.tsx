@@ -1,5 +1,4 @@
 import { PropsWithChildren, MouseEvent } from 'react'
-import ReactDOM from 'react-dom'
 
 import { colors, fonts } from '../../styles/theme'
 
@@ -9,19 +8,18 @@ interface ModalComponentProps {
     onClose: () => void
 }
 
-export default function Modal(props: PropsWithChildren<ModalComponentProps>) {
+export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
+  function handleCloseClick (e: MouseEvent<HTMLElement>): void {
+    e.preventDefault()
+    props.onClose()
+  };
 
-    function handleCloseClick(e: MouseEvent<HTMLElement>): void {
-        e.preventDefault();
-        props.onClose();
-    };
-
-    return (
+  return (
         <>
         {
-            !props.isShown && typeof(document) !== undefined
-                ? ''
-                : (
+            !props.isShown && typeof (document) !== undefined
+              ? ''
+              : (
                     <div className='overlay'>
                         <div className='modal-container'>
                             <div className='modal-header'>
@@ -29,7 +27,7 @@ export default function Modal(props: PropsWithChildren<ModalComponentProps>) {
                             </div>
                             {props.title && <p className='modal-title'>{props.title}</p>}
                             {props.children}
-                        </div> 
+                        </div>
                     </div>
                 )
         }

@@ -24,13 +24,13 @@ describe('Products Bulk Deletion Request', () => {
           const expectedProductsId = requestDto.productsId
             .map(x => ProductId.create(x))
             .map(x => {
-              if(isLeft(x)) throw new Error('invalid object state') 
+              if (isLeft(x)) throw new Error('invalid object state')
               return x.right
             })
           expect(request).toEqual({
             userId: isRight(expectedUserId) ? expectedUserId.right : null,
             projectId: isRight(expectedProjectId) ? expectedProjectId.right : null,
-            productsId: expectedProductsId,
+            productsId: expectedProductsId
           })
         }
       )
@@ -87,7 +87,7 @@ describe('Products Bulk Deletion Request', () => {
       userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
       projectId = '4b149208-44bf-11ec-81d3-0242ac130003',
       productsId = ['B08QW794WD']
-    }: requestDtoBuilderParams): ProductsBulkDeletionRequestDto{
+    }: requestDtoBuilderParams): ProductsBulkDeletionRequestDto {
       return new ProductsBulkDeletionRequestDto(
         userId,
         projectId,

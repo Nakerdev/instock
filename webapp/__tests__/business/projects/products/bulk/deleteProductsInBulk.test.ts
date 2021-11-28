@@ -6,7 +6,6 @@ import { DeleteProductsInBulk } from '../../../../../business/projects/products/
 import ProductRepository from '../../../../../business/projects/products/productRepository'
 import { ProductsBulkDeletionRequest, ProductsBulkDeletionRequestDto } from '../../../../../business/projects/products/delete/bulk/ProductsBulkDeletionRequest'
 
-
 describe('Delete Products In Bulk', () => {
   let productRepository: MockProxy<ProductRepository>
   let command: DeleteProductsInBulk
@@ -30,18 +29,18 @@ describe('Delete Products In Bulk', () => {
     )
   })
 
-    function buildRequest (): ProductsBulkDeletionRequest | null {
-      const requestDto = new ProductsBulkDeletionRequestDto(
-        'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-        '4b149208-44bf-11ec-81d3-0242ac130003',
-        ['B08QW794WD']
+  function buildRequest (): ProductsBulkDeletionRequest | null {
+    const requestDto = new ProductsBulkDeletionRequestDto(
+      'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
+      '4b149208-44bf-11ec-81d3-0242ac130003',
+      ['B08QW794WD']
+    )
+    return pipe(
+      ProductsBulkDeletionRequest.create(requestDto),
+      match(
+        _ => null,
+        request => request
       )
-      return pipe(
-        ProductsBulkDeletionRequest.create(requestDto),
-        match(
-          _ => null,
-          request => request
-        )
-      )
-    }
+    )
+  }
 })

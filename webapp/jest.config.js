@@ -17,6 +17,6 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/',
-    '^.+\\.module\\.(css|sass|scss)$',
+    '^.+\\.module\\.(css|sass|scss)$'
   ]
 }

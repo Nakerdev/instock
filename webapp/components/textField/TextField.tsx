@@ -9,22 +9,21 @@ interface TextFieldComponentProps {
     errorMessage?: string;
 }
 
-export default function TextField(props: TextFieldComponentProps) {
-
-    return (
+export default function TextField (props: TextFieldComponentProps) {
+  return (
         <>
         <fieldset>
             <label>{props.title} {props.isRequired ? <span>- required</span> : '' }</label>
-            <input 
-                type="text" 
-                onChange={e => props.onChangeHandler(e.target.value)} 
-                value={props.value} 
+            <input
+                type="text"
+                onChange={e => props.onChangeHandler(e.target.value)}
+                value={props.value}
                 className={`field ${props.errorMessage ? 'field-error' : ''}`}>
             </input>
             {
                 props.errorMessage
-                    ? <ErrorMessage message={props.errorMessage}/>
-                    : ''
+                  ? <ErrorMessage message={props.errorMessage}/>
+                  : ''
             }
         </fieldset>
         <style jsx>{`
@@ -63,5 +62,5 @@ export default function TextField(props: TextFieldComponentProps) {
             }
         `}</style>
         </>
-    )
+  )
 }

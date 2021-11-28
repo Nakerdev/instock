@@ -8,13 +8,13 @@ interface ClientSideLinkComponentProps {
     linkText: string;
 }
 
-export default function ClientSideLink(props: ClientSideLinkComponentProps) {
-    return (
+export default function ClientSideLink (props: ClientSideLinkComponentProps) {
+  return (
         <>
         {
             props.text
-                ? <p className='linkText'>{props.text}<Link href={props.href}><a className='link'> {props.linkText}</a></Link></p>
-                : <Link href={props.href}><a className='link'> {props.linkText}</a></Link>
+              ? <p className='linkText'>{props.text}<Link href={props.href}><a className='link'> {props.linkText}</a></Link></p>
+              : <Link href={props.href}><a className='link'> {props.linkText}</a></Link>
         }
         <style jsx>{`
             .link {
@@ -31,5 +31,5 @@ export default function ClientSideLink(props: ClientSideLinkComponentProps) {
             }
         `}</style>
         </>
-    )
+  )
 }

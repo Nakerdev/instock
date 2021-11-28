@@ -31,8 +31,8 @@ class ProductId {
     this.state = new ProductIdPersistenceState(value)
   }
 
-  equals(anotherId: ProductId): boolean {
-    return anotherId.value === this.value;
+  equals (anotherId: ProductId): boolean {
+    return anotherId.value === this.value
   }
 }
 

@@ -8,17 +8,16 @@ import { Product, ProductPersistenceState } from '../../../business/projects/pro
 import { ProductId, ProductIdPersistenceState } from '../../../business/valueObjects/productId'
 
 export default class ProductPrismaRepository implements ProductRepository {
-
   readonly prisma: PrismaClient
 
   constructor () {
     this.prisma = new PrismaClient()
   }
 
-  async searchAll(userId: UserId, projectId: ProjectId): Promise<Product[]> {
+  async searchAll (userId: UserId, projectId: ProjectId): Promise<Product[]> {
     try {
       await this.prisma.$connect()
-      const dbModels: DbProductModel[]  = await this.prisma.products.findMany({
+      const dbModels: DbProductModel[] = await this.prisma.products.findMany({
         where: {
           userId: userId.state.value,
           projectId: projectId.state.value
@@ -31,7 +30,7 @@ export default class ProductPrismaRepository implements ProductRepository {
     }
   }
 
-  async saveAll(products: Product[]): Promise<void> {
+  async saveAll (products: Product[]): Promise<void> {
     try {
       await this.prisma.$connect()
       const dbEntities = products.map(p => this.buildDbEntity(p))
@@ -44,7 +43,7 @@ export default class ProductPrismaRepository implements ProductRepository {
     }
   }
 
-  async deleteAll(userId: UserId, projectId: ProjectId, productsId: ProductId[]): Promise<void> {
+  async deleteAll (userId: UserId, projectId: ProjectId, productsId: ProductId[]): Promise<void> {
     try {
       await this.prisma.$connect()
       await this.prisma.products.deleteMany({
@@ -76,7 +75,7 @@ export default class ProductPrismaRepository implements ProductRepository {
       userId: state.userId.value,
       projectId: state.projectId.value,
       created_at: state.created_at
-    } 
-    return dbEntity 
+    }
+    return dbEntity
   }
- }
+}

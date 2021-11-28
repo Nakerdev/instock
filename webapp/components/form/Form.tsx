@@ -1,11 +1,11 @@
-import { PropsWithChildren, Children } from 'react'
+import { PropsWithChildren } from 'react'
 
 import { colors } from '../../styles/theme'
 
 interface FormComponentProps {}
 
-export default function Form(props: PropsWithChildren<FormComponentProps>) {
-    return (
+export default function Form (props: PropsWithChildren<FormComponentProps>) {
+  return (
         <>
         <form>
             {props.children}
@@ -31,5 +31,5 @@ export default function Form(props: PropsWithChildren<FormComponentProps>) {
             }
         `}</style>
         </>
-    )
+  )
 }

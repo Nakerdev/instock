@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 import { colors, fonts } from '../../styles/theme'
 
-export default function Header() {
-    return (
+export default function Header () {
+  return (
         <>
         <header>
             <Link href='/'><a>Sotckout</a></Link>
@@ -22,5 +22,5 @@ export default function Header() {
             }
         `}</style>
         </>
-    )
+  )
 }

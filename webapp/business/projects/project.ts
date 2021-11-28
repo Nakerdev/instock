@@ -30,10 +30,10 @@ class Project {
     name: Name,
     created_at: Date
   ) {
-    this.id = projectId 
+    this.id = projectId
     this.userId = userId
     this.name = name
-    this.created_at = created_at 
+    this.created_at = created_at
     this.state = new ProjectPersistenceState(
       this.id.state,
       this.userId.state,
@@ -58,6 +58,6 @@ class ProjectPersistenceState {
     this.id = id
     this.userId = userId
     this.name = name
-    this.created_at = created_at 
+    this.created_at = created_at
   }
 }

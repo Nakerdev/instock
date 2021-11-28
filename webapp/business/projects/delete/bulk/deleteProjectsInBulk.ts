@@ -6,7 +6,7 @@ export class DeleteProjectsInBulk {
   readonly projectRepository: ProjectRepository
 
   constructor (
-    projectRepository: ProjectRepository,
+    projectRepository: ProjectRepository
   ) {
     this.projectRepository = projectRepository
   }

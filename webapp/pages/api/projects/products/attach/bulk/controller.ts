@@ -30,7 +30,7 @@ class AttachProductsInBulkController {
   attach (request: AttachProductsInBulkControllerRequest): void {
     pipe(
       this.sessionService.currentUser(),
-      matchOption (
+      matchOption(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.buildCommandRequest(request, currentUser)
       )
@@ -41,7 +41,7 @@ class AttachProductsInBulkController {
     const commandRequestDto = new ProductsAttachingInBulkRequestDto(
       currentUser.userId,
       controllerRequest.projectId,
-      controllerRequest.productsId,
+      controllerRequest.productsId
     )
     pipe(
       ProductsAttachingInBulkRequest.create(commandRequestDto),
@@ -72,6 +72,6 @@ class AttachProductsInBulkControllerRequest {
     productsId: string[]
   ) {
     this.projectId = projectId
-    this.productsId = productsId 
+    this.productsId = productsId
   }
 }

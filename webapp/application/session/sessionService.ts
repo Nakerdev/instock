@@ -19,14 +19,14 @@ export class JwtSessionService implements SessionService {
   }
 
   create (user: User): string {
-    const tokenPayload: SessionToken  = { userId: user.id.state.value }
+    const tokenPayload: SessionToken = { userId: user.id.state.value }
     const tokenConfig = { expiresIn: '30d' }
     return jwt.sign(tokenPayload, this.jwtSecretKey, tokenConfig)
   }
 
-  currentUser(): Option<UserSession> {
+  currentUser (): Option<UserSession> {
     const sessionToken = this.req.headers['x-stockout-token']
-    try{
+    try {
       const decodedToken = <SessionToken>jwt.verify(sessionToken, this.jwtSecretKey)
       const userSession = new UserSession(decodedToken.userId)
       return some(userSession)
@@ -37,9 +37,9 @@ export class JwtSessionService implements SessionService {
 }
 
 export class UserSession {
-  userId: string;
+  userId: string
 
-  constructor(userId: string){
+  constructor (userId: string) {
     this.userId = userId
   }
 }

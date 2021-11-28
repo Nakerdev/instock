@@ -3,7 +3,7 @@ interface RocketIconComponentProps {
     width: number
 }
 
-function RocketIcon(props: RocketIconComponentProps) {
+function RocketIcon (props: RocketIconComponentProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

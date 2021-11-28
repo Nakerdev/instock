@@ -4,8 +4,8 @@ import { colors } from '../../styles/theme'
 
 interface SuccessMessageComponentProps {}
 
-export default function SuccessMessage(props: PropsWithChildren<SuccessMessageComponentProps>) {
-    return (
+export default function SuccessMessage (props: PropsWithChildren<SuccessMessageComponentProps>) {
+  return (
         <>
         <p className='success-message'>
             {props.children}
@@ -20,5 +20,5 @@ export default function SuccessMessage(props: PropsWithChildren<SuccessMessageCo
             }
         `}</style>
         </>
-    )
+  )
 }

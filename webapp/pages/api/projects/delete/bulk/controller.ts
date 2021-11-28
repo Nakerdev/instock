@@ -30,7 +30,7 @@ class DeleteProjectsInBulkController {
   delete (request: DeleteProjectsInBulkControllerRequest): void {
     pipe(
       this.sessionService.currentUser(),
-      matchOption (
+      matchOption(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.buildCommandRequest(request, currentUser)
       )
@@ -53,7 +53,7 @@ class DeleteProjectsInBulkController {
 
   private async executeCommand (request: ProjectBulkDeletionRequest): Promise<void> {
     await this.command.delete(request)
-    this.apiResponseBuilder.sendSuccessResponse({})
+    return this.apiResponseBuilder.sendSuccessResponse({})
   }
 }
 

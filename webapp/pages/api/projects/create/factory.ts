@@ -18,7 +18,7 @@ export function buildCreateProjectController (res: NextApiResponse, req: NextApi
   function buildCommand (): CreateProject {
     return new CreateProject(
       new ProjectPrismaRepository(),
-      new UserPrismaRepository,
+      new UserPrismaRepository(),
       new SystemUuidService(),
       new SystemTimeService())
   }

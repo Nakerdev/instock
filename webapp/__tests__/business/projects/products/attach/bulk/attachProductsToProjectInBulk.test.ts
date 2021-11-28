@@ -70,7 +70,7 @@ describe('Attach products to project in bluk', () => {
       .mockResolvedValue(some(buildProject({})))
     productRepository.searchAll
       .calledWith(request.userId, request.projectId)
-      .mockResolvedValue([buildProduct({id: request.productsId[0].state.value})])
+      .mockResolvedValue([buildProduct({ id: request.productsId[0].state.value })])
 
     const result = await command.attach(request)
 
@@ -88,7 +88,7 @@ describe('Attach products to project in bluk', () => {
   })
 
   it('does not duplicate products if user set the same id twice', async () => {
-    const request = <ProductsAttachingInBulkRequest>buildRequest({productsId: ['B08QW794WD', 'B08QW794WD']})
+    const request = <ProductsAttachingInBulkRequest>buildRequest({ productsId: ['B08QW794WD', 'B08QW794WD'] })
     projectRepository.searchBy
       .calledWith(request.userId, request.projectId)
       .mockResolvedValue(some(buildProject({})))
@@ -130,7 +130,7 @@ describe('Attach products to project in bluk', () => {
     )
     expect(productRepository.saveAll).not.toHaveBeenCalled()
   })
-    
+
   interface RequestBuilderParams {
     productsId?: string[];
   }

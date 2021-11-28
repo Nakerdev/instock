@@ -11,18 +11,18 @@ interface ButtonComponentProps {
     bgColor?: string;
 }
 
-export default function Button(props: ButtonComponentProps) {
-    return (
+export default function Button (props: ButtonComponentProps) {
+  return (
         <>
         <button className="cta" onClick={e => props.onClickHandler(e)} disabled={props.isDisabled}>
             {
                 props.isDisabled
-                    ? <img src='/gifs/eclipse-white.gif'></img>
-                    : props.buttonInnerImgSrc 
-                        ? props.text
-                            ? <span><img src={props.buttonInnerImgSrc}></img>{props.text}</span>
-                            : <img src={props.buttonInnerImgSrc}></img>
-                        : <span>{props.text}</span>
+                  ? <img src='/gifs/eclipse-white.gif'></img>
+                  : props.buttonInnerImgSrc
+                    ? props.text
+                      ? <span><img src={props.buttonInnerImgSrc}></img>{props.text}</span>
+                      : <img src={props.buttonInnerImgSrc}></img>
+                    : <span>{props.text}</span>
             }
         </button>
         <style jsx>{`
@@ -36,7 +36,7 @@ export default function Button(props: ButtonComponentProps) {
                 cursor: pointer;
                 margin-bottom: 5px;
                 ${
-                    props.text === '' 
+                    props.text === ''
                         ? `
                             width: 35px;
                             height: 35px;
@@ -65,7 +65,7 @@ export default function Button(props: ButtonComponentProps) {
                 filter: invert(1);
                 position: absolute;
                 ${
-                    props.text !== '' 
+                    props.text !== ''
                         ? `
                             margin-left: -30px;
                             margin-top: -3px;
@@ -75,5 +75,5 @@ export default function Button(props: ButtonComponentProps) {
             }
         `}</style>
         </>
-    )
+  )
 }

@@ -6,51 +6,50 @@ import useSession from '../../hooks/useSession'
 import ErrorMessage from '../errorMessage/ErrorMessage'
 
 export {
-    ProjectList,
-    Project 
+  ProjectList,
+  Project
 }
 
 class Project {
-    readonly id: string
-    readonly name: string
+  readonly id: string
+  readonly name: string
 
-    constructor(id: string, name: string){
-        this.id = id
-        this.name = name
-    }
+  constructor (id: string, name: string) {
+    this.id = id
+    this.name = name
+  }
 }
 
-function ProjectList() {
-
+function ProjectList () {
   const { getSession } = useSession()
 
-  const [ projects, setProjects ] = useState<Project[]>([])
-  const [ serverErrorMessage, setServerErrorMessage ] = useState('')
+  const [projects, setProjects] = useState<Project[]>([])
+  const [serverErrorMessage, setServerErrorMessage] = useState('')
 
   useEffect(() => {
-    (async function searchProjects() {
+    (async function searchProjects () {
       setServerErrorMessage('')
       const session: string | null = getSession()
       const response = await fetch(
-        '/api/projects/searchAll', 
+        '/api/projects/searchAll',
         {
-          method: 'GET', 
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'x-stockout-token': session === null ? '' : session
           }
         }
       )
-      if(response.status === 200 || response.status === 304){
+      if (response.status === 200 || response.status === 304) {
         const userProjects: Project[] = await response.json()
-        setProjects(userProjects);
+        setProjects(userProjects)
       } else {
         setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
     })()
   }, [])
 
-    return (
+  return (
         <>
         <section>
           {
@@ -59,18 +58,18 @@ function ProjectList() {
                 <article className='project-container' key={project.id}>
                   <p>{project.name}</p>
                   <div>
-                    <Button 
-                      text='' 
-                      onClickHandler={() => {}} 
-                      bgColor={colors.grey} 
-                      isDisabled={false} 
+                    <Button
+                      text=''
+                      onClickHandler={() => {}}
+                      bgColor={colors.grey}
+                      isDisabled={false}
                       buttonInnerImgSrc='/icons/pencil.svg'
                     />
-                    <Button 
-                      text='' 
-                      onClickHandler={() => {}} 
-                      bgColor={colors.grey} 
-                      isDisabled={false} 
+                    <Button
+                      text=''
+                      onClickHandler={() => {}}
+                      bgColor={colors.grey}
+                      isDisabled={false}
                       buttonInnerImgSrc='/icons/trash.svg'
                     />
                   </div>
@@ -112,5 +111,5 @@ function ProjectList() {
           }
         `}</style>
         </>
-    )
+  )
 }

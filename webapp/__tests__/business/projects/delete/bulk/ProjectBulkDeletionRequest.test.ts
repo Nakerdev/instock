@@ -22,12 +22,12 @@ describe('Project Bulk Deletion Request', () => {
           const expectedProjectsId = requestDto.projectsId
             .map(x => ProjectId.create(x))
             .map(x => {
-              if(isLeft(x)) throw new Error('invalid object state') 
+              if (isLeft(x)) throw new Error('invalid object state')
               return x.right
             })
           expect(request).toEqual({
             userId: isRight(expectedUserId) ? expectedUserId.right : null,
-            projectsId: expectedProjectsId,
+            projectsId: expectedProjectsId
           })
         }
       )
@@ -86,7 +86,7 @@ describe('Project Bulk Deletion Request', () => {
     }: requestDtoBuilderParams): ProjectBulkDeletionRequestDto {
       return new ProjectBulkDeletionRequestDto(
         userId,
-        projectsId 
+        projectsId
       )
     }
 })

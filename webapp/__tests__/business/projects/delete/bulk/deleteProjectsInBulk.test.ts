@@ -7,7 +7,6 @@ import ProjectRepository from '../../../../../business/projects/projectRepositor
 import { DeleteProjectsInBulk } from '../../../../../business/projects/delete/bulk/deleteProjectsInBulk'
 import { ProjectBulkDeletionRequest, ProjectBulkDeletionRequestDto } from '../../../../../business/projects/delete/bulk/ProjectBulkDeletionRequest'
 
-
 describe('Crete Project', () => {
   let projectRepository: MockProxy<ProjectRepository>
   let command: DeleteProjectsInBulk
@@ -30,17 +29,17 @@ describe('Crete Project', () => {
     )
   })
 
-    function buildRequest (): ProjectBulkDeletionRequest | null {
-      const requestDto = new ProjectBulkDeletionRequestDto(
-        'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-        ['4b149208-44bf-11ec-81d3-0242ac130003'],
+  function buildRequest (): ProjectBulkDeletionRequest | null {
+    const requestDto = new ProjectBulkDeletionRequestDto(
+      'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
+      ['4b149208-44bf-11ec-81d3-0242ac130003']
+    )
+    return pipe(
+      ProjectBulkDeletionRequest.create(requestDto),
+      match(
+        _ => null,
+        request => request
       )
-      return pipe(
-        ProjectBulkDeletionRequest.create(requestDto),
-        match(
-          _ => null,
-          request => request
-        )
-      )
-    }
+    )
+  }
 })

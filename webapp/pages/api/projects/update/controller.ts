@@ -30,7 +30,7 @@ class UpdateProjectController {
   update (request: ProjectUpdatingControllerRequest): void {
     pipe(
       this.sessionService.currentUser(),
-      matchOption (
+      matchOption(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.buildCommandRequest(request, currentUser)
       )

@@ -13,8 +13,8 @@ export {
 }
 
 class ProductsAttachingInBulkRequest {
-  readonly userId: UserId 
-  readonly projectId: ProjectId 
+  readonly userId: UserId
+  readonly projectId: ProjectId
   readonly productsId: ProductId[]
 
   static create (requestDto: ProductsAttachingInBulkRequestDto): Either<
@@ -26,17 +26,17 @@ class ProductsAttachingInBulkRequest {
     const productsIdValidationResult = requestDto.productsId.map(id => ProductId.create(id))
 
     if (
-      isLeft(userIdValidationResult) 
-      || isLeft(projectIdValidationResult)
-      || productsIdValidationResult.some(x => isLeft(x))
-      || requestDto.productsId.length === 0
+      isLeft(userIdValidationResult) ||
+      isLeft(projectIdValidationResult) ||
+      productsIdValidationResult.some(x => isLeft(x)) ||
+      requestDto.productsId.length === 0
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
       pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), _ => 0))
       productsIdValidationResult
         .forEach((result, index) => {
-          if(!isLeft(result)) return
+          if (!isLeft(result)) return
           pipe(result, match(error => formValidations.push(new FormValidationError(`productsId[${index}]`, error)), _ => 0))
         })
       if (requestDto.productsId.length === 0) {
@@ -47,7 +47,7 @@ class ProductsAttachingInBulkRequest {
 
     const productsId = productsIdValidationResult
       .map(result => {
-        if(isLeft(result)) throw new Error('invalid object state')
+        if (isLeft(result)) throw new Error('invalid object state')
         return result.right
       })
     const request = new ProductsAttachingInBulkRequest(
@@ -62,9 +62,9 @@ class ProductsAttachingInBulkRequest {
     projectId: ProjectId,
     productsId: ProductId[]
   ) {
-    this.userId = userId 
+    this.userId = userId
     this.projectId = projectId
-    this.productsId = productsId 
+    this.productsId = productsId
   }
 }
 

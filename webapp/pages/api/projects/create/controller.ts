@@ -31,7 +31,7 @@ class CreateProjectController {
   create (request: ProjectCreationControllerRequest): void {
     pipe(
       this.sessionService.currentUser(),
-      matchOption (
+      matchOption(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         currentUser => this.buildCommandRequest(request, currentUser)
       )
@@ -75,6 +75,6 @@ class ResponseDto {
   readonly projectId: string
 
   constructor (projectId: string) {
-    this.projectId = name
+    this.projectId = projectId
   }
 }

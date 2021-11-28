@@ -12,7 +12,7 @@ export {
 }
 
 class ProjectBulkDeletionRequest {
-  readonly userId: UserId 
+  readonly userId: UserId
   readonly projectsId: ProjectId[]
 
   static create (requestDto: ProjectBulkDeletionRequestDto): Either<
@@ -23,15 +23,15 @@ class ProjectBulkDeletionRequest {
     const projectsIdValidationResult = requestDto.projectsId.map(id => ProjectId.create(id))
 
     if (
-      isLeft(userIdValidationResult) 
-      || projectsIdValidationResult.some(x => isLeft(x))
-      || requestDto.projectsId.length === 0
+      isLeft(userIdValidationResult) ||
+      projectsIdValidationResult.some(x => isLeft(x)) ||
+      requestDto.projectsId.length === 0
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
       projectsIdValidationResult
         .forEach((result, index) => {
-          if(!isLeft(result)) return
+          if (!isLeft(result)) return
           pipe(result, match(error => formValidations.push(new FormValidationError(`projectsId[${index}]`, error)), _ => 0))
         })
       if (requestDto.projectsId.length === 0) {
@@ -42,22 +42,22 @@ class ProjectBulkDeletionRequest {
 
     const projectsId = projectsIdValidationResult
       .map(result => {
-        if(isLeft(result)) throw new Error('invalid object state')
+        if (isLeft(result)) throw new Error('invalid object state')
         return result.right
       })
     const request = new ProjectBulkDeletionRequest(
       userIdValidationResult.right,
-      projectsId 
+      projectsId
     )
     return right(request)
   }
 
   private constructor (
     userId: UserId,
-    projectsId: ProjectId[],
+    projectsId: ProjectId[]
   ) {
-    this.userId = userId 
-    this.projectsId = projectsId 
+    this.userId = userId
+    this.projectsId = projectsId
   }
 }
 

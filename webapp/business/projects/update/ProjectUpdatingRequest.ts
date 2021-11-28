@@ -13,8 +13,8 @@ export {
 }
 
 class ProjectUpdatingRequest {
-  readonly projectId: ProjectId 
-  readonly userId: UserId 
+  readonly projectId: ProjectId
+  readonly userId: UserId
   readonly name: Name
 
   static create (requestDto: ProjectUpdatingRequestDto): Either<
@@ -26,9 +26,9 @@ class ProjectUpdatingRequest {
     const nameValidationResult = Name.create(requestDto.name)
 
     if (
-      isLeft(projectIdValidationResult) 
-      || isLeft(userIdValidationResult) 
-      || isLeft(nameValidationResult)
+      isLeft(projectIdValidationResult) ||
+      isLeft(userIdValidationResult) ||
+      isLeft(nameValidationResult)
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
       pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), _ => 0))
@@ -50,7 +50,7 @@ class ProjectUpdatingRequest {
     name: Name
   ) {
     this.projectId = projectId
-    this.userId = userId 
+    this.userId = userId
     this.name = name
   }
 }

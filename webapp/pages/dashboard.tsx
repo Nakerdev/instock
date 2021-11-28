@@ -74,7 +74,7 @@ const Dashboard: NextPage = () => {
 
             } else {
                 if(errorResponse.commandError == 'ProjectWithTheSameNameAlreadyExist') {
-                    //TODO: controlar este error
+                    setProjectCreationServerError('Another project with the same name already exists.')
                 }else {
                     setProjectCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
                 }

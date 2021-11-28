@@ -35,10 +35,13 @@ describe('Create Project', () => {
   })
 
   it('creates project', async () => {
-    const request = <ProjectCreationRequest>buildRequest({createEvenIfAnotherProjectAlreadyExistsWithTheSameName: 'true'})
+    const request = <ProjectCreationRequest>buildRequest()
     userRepository.searchById
       .calledWith(request.userId)
       .mockResolvedValue(some(buildUser({})))
+    projectRepository.exist
+      .calledWith(request.userId, request.name)
+      .mockResolvedValue(false)
     const uuid = 'deb74e35-ea5f-535f-890f-5779b5d8e27f'
     uuidService.create
       .mockReturnValue(uuid)
@@ -65,11 +68,10 @@ describe('Create Project', () => {
         created_at: utcNow
       })
     )
-    expect(projectRepository.exist).not.toHaveBeenCalled()
   })
 
   it('does not create project when project with the same name already exist', async () => {
-    const request = <ProjectCreationRequest>buildRequest({createEvenIfAnotherProjectAlreadyExistsWithTheSameName: 'false'})
+    const request = <ProjectCreationRequest>buildRequest()
     userRepository.searchById
       .calledWith(request.userId)
       .mockResolvedValue(some(buildUser({})))
@@ -91,7 +93,7 @@ describe('Create Project', () => {
   })
 
   it('does not create project when user not found', async () => {
-    const request = <ProjectCreationRequest>buildRequest({})
+    const request = <ProjectCreationRequest>buildRequest()
     userRepository.searchById
       .calledWith(request.userId)
       .mockResolvedValue(none)
@@ -109,17 +111,10 @@ describe('Create Project', () => {
     expect(projectRepository.save).not.toHaveBeenCalled()
   })
 
-    interface RequestBuilderParams {
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName?: string;
-    }
-
-    function buildRequest ({
-      createEvenIfAnotherProjectAlreadyExistsWithTheSameName = 'false'
-    }: RequestBuilderParams): ProjectCreationRequest | null {
+    function buildRequest (): ProjectCreationRequest | null {
       const requestDto = new ProjectCreationRequestDto(
         'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-        'Xataka.com',
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName
+        'Xataka.com'
       )
       return pipe(
         ProjectCreationRequest.create(requestDto),

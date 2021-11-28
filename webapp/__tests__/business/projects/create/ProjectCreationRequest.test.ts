@@ -22,8 +22,7 @@ describe('Project Creation Request', () => {
           const expectedName = Name.create(requestDto.name)
           expect(request).toEqual({
             userId: isRight(expectedUserId) ? expectedUserId.right : null,
-            name: isRight(expectedName) ? expectedName.right : null,
-            createEvenIfAnotherProjectAlreadyExistsWithTheSameName: (/true/i).test(requestDto.createEvenIfAnotherProjectAlreadyExistsWithTheSameName)
+            name: isRight(expectedName) ? expectedName.right : null
           })
         }
       )
@@ -40,12 +39,6 @@ describe('Project Creation Request', () => {
       name: 'does not create request when name has validaiton errors',
       requestDto: buildRequestDto({ name: '' }),
       expectedFieldId: 'name'
-    },
-    {
-      name: 'does not create request when creation rule is empty',
-      requestDto: buildRequestDto({ createEvenIfAnotherProjectAlreadyExistsWithTheSameName: '' }),
-      expectedFieldId: 'createEvenIfAnotherProjectAlreadyExistsWithTheSameName',
-      expectedError: ValidationError.Required
     }
   ]
 
@@ -72,19 +65,16 @@ describe('Project Creation Request', () => {
 
     interface requestDtoBuilderParams {
         userId?: string,
-        name?: string,
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName?: string
+        name?: string
     }
 
     function buildRequestDto ({
       userId = 'a0b1dd5a-2e63-11ec-8d3d-0242ac130003',
-      name = 'Xataka.com',
-      createEvenIfAnotherProjectAlreadyExistsWithTheSameName = 'true'
+      name = 'Xataka.com'
     }: requestDtoBuilderParams): ProjectCreationRequestDto {
       return new ProjectCreationRequestDto(
         userId,
-        name,
-        createEvenIfAnotherProjectAlreadyExistsWithTheSameName 
+        name
       )
     }
 })

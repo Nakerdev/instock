@@ -53,7 +53,7 @@ class DeleteProductsInBulkController {
   }
 
   private async executeCommand (request: ProductsBulkDeletionRequest): Promise<void> {
-    await this.command.delete(request),
+    await this.command.delete(request)
     this.apiResponseBuilder.sendSuccessResponse({})
   }
 }

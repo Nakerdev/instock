@@ -53,7 +53,7 @@ class DeleteProjectsInBulkController {
 
   private async executeCommand (request: ProjectBulkDeletionRequest): Promise<void> {
     await this.command.delete(request)
-    return this.apiResponseBuilder.sendSuccessResponse({})
+    this.apiResponseBuilder.sendSuccessResponse({})
   }
 }
 

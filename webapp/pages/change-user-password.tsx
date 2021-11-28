@@ -15,9 +15,7 @@ import Layout from '../components/layout/Layout'
 import useSession from '../hooks/useSession'
 
 interface Context {
-	query: {
-		t: string
-  },
+  query: { t: string },
   res: NextApiResponse
 }
 

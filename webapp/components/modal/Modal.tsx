@@ -17,7 +17,7 @@ export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
   return (
         <>
         {
-            !props.isShown && typeof (document) !== undefined
+            !props.isShown && typeof (document) !== 'undefined'
               ? ''
               : (
                     <div className='overlay'>

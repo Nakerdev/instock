@@ -22,9 +22,6 @@ const Dashboard: NextPage = () => {
   const [projectCreationServerError, setProjectCreationServerError ] = useState('')
   const [ isCreateProjectButtonDisabled, setIsCreateProjectButtonDisabled ] = useState(false)
 
-  //Projects
-  const [ projects, setProjects ] = useState<Project[]>([new Project('', 'MejoresPaelleras.com'), new Project('', 'Xataka.com')])
-
   const { removeSession, getSession, isLogged } = useSession()
 
   useEffect(() => {
@@ -52,8 +49,8 @@ const Dashboard: NextPage = () => {
         setIsCreateProjectButtonDisabled(false)
         if(response.status === 200){
             const successResponse: ResponseDto = await response.json()
-            projects.push(new Project(successResponse.projectId, newProjectName))
-            setProjects(projects);
+            //projects.push(new Project(successResponse.projectId, newProjectName))
+            //setProjects(projects);
             setIsNewProjectModalShown(false)
             setNewProjectName('')
         } else if (response.status === 401){
@@ -95,7 +92,7 @@ const Dashboard: NextPage = () => {
 
       <aside>
         <h1>Stockout</h1>
-        <ProjectList projects={projects}/>        
+        <ProjectList />        
         <div className='actionButtonsContainer'>
           <Button 
             text='New Project' 

@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react'
+
 import { colors, fonts } from '../../styles/theme'
 import Button from '../button/Button'
+import useSession from '../../hooks/useSession'
+import ErrorMessage from '../errorMessage/ErrorMessage'
 
 export {
     ProjectList,
     Project 
-}
-
-interface ProjectListComponentProps {
-    projects: Project[];
 }
 
 class Project {
@@ -20,14 +20,43 @@ class Project {
     }
 }
 
-function ProjectList(props: ProjectListComponentProps) {
+function ProjectList() {
+
+  const { getSession } = useSession()
+
+  const [ projects, setProjects ] = useState<Project[]>([])
+  const [ serverErrorMessage, setServerErrorMessage ] = useState('')
+
+  useEffect(() => {
+    (async function searchProjects() {
+      setServerErrorMessage('')
+      const session: string | null = getSession()
+      const response = await fetch(
+        '/api/projects/searchAll', 
+        {
+          method: 'GET', 
+          headers: {
+            'Content-Type': 'application/json',
+            'x-stockout-token': session === null ? '' : session
+          }
+        }
+      )
+      if(response.status === 200 || response.status === 304){
+        const userProjects: Project[] = await response.json()
+        setProjects(userProjects);
+      } else {
+        setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
+    })()
+  }, [])
+
     return (
         <>
         <section>
           {
-            props.projects.map(project => {
+            projects.map(project => {
               return (
-                <article className='project-container'>
+                <article className='project-container' key={project.id}>
                   <p>{project.name}</p>
                   <div>
                     <Button 
@@ -45,11 +74,11 @@ function ProjectList(props: ProjectListComponentProps) {
                       buttonInnerImgSrc='/icons/trash.svg'
                     />
                   </div>
-                  
                 </article>
               )
             })
           }
+          <ErrorMessage message={serverErrorMessage}/>
         </section>
         <style jsx>{`
           section {

@@ -37,7 +37,7 @@ const Dashboard: NextPage = () => {
     e.preventDefault();
     setIsCreateProjectButtonDisabled(true)
     try{
-        const request = new ProjectCreationControllerRequest(newProjectName, JSON.stringify(false))
+        const request = new ProjectCreationControllerRequest(newProjectName)
         const session: string | null = getSession()
         const response = await fetch(
             '/api/projects/create', 

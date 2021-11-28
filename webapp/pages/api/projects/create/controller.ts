@@ -9,7 +9,8 @@ import { ProjectCreationRequestDto, ProjectCreationRequest } from '../../../../b
 
 export {
   CreateProjectController,
-  ProjectCreationControllerRequest
+  ProjectCreationControllerRequest,
+  ResponseDto
 }
 
 class CreateProjectController {
@@ -40,8 +41,7 @@ class CreateProjectController {
   private buildCommandRequest (controllerRequest: ProjectCreationControllerRequest, currentUser: UserSession) {
     const commandRequestDto = new ProjectCreationRequestDto(
       currentUser.userId,
-      controllerRequest.name,
-      controllerRequest.createEvenIfAnotherProjectAlreadyExistsWithTheSameName
+      controllerRequest.name
     )
     pipe(
       ProjectCreationRequest.create(commandRequestDto),
@@ -57,7 +57,7 @@ class CreateProjectController {
       await this.command.create(request),
       match(
         error => this.apiResponseBuilder.sendCommandErrorResponse(error.toString()),
-        _ => this.apiResponseBuilder.sendSuccessResponse({})
+        project => this.apiResponseBuilder.sendSuccessResponse(new ResponseDto(project.id.state.value))
       )
     )
   }
@@ -65,13 +65,16 @@ class CreateProjectController {
 
 class ProjectCreationControllerRequest {
   readonly name: string
-  readonly createEvenIfAnotherProjectAlreadyExistsWithTheSameName: string
 
-  constructor (
-    name: string,
-    createEvenIfAnotherProjectAlreadyExistsWithTheSameName: string
-  ) {
+  constructor (name: string) {
     this.name = name
-    this.createEvenIfAnotherProjectAlreadyExistsWithTheSameName = createEvenIfAnotherProjectAlreadyExistsWithTheSameName 
+  }
+}
+
+class ResponseDto {
+  readonly projectId: string
+
+  constructor (projectId: string) {
+    this.projectId = name
   }
 }

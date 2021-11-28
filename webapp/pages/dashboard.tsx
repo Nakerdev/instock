@@ -8,7 +8,7 @@ import Button from '../components/button/Button';
 import RocketIcon from '../components/icons/Rocket';
 import Modal from '../components/modal/Modal';
 import TextField from '../components/textField/TextField';
-import { ProjectCreationControllerRequest } from './api/projects/create/controller';
+import { ProjectCreationControllerRequest, ResponseDto } from './api/projects/create/controller';
 import ErrorMessage from '../components/errorMessage/ErrorMessage';
 import { ErrorResponse } from './api/utils/apiUtils';
 import { ProjectList, Project } from '../components/projectList/ProjectList';
@@ -51,7 +51,8 @@ const Dashboard: NextPage = () => {
         )
         setIsCreateProjectButtonDisabled(false)
         if(response.status === 200){
-            projects.push(new Project('', newProjectName))
+            const successResponse: ResponseDto = await response.json()
+            projects.push(new Project(successResponse.projectId, newProjectName))
             setProjects(projects);
             setIsNewProjectModalShown(false)
             setNewProjectName('')

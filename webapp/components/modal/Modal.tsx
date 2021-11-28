@@ -12,7 +12,7 @@ export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
   function handleCloseClick (e: MouseEvent<HTMLElement>): void {
     e.preventDefault()
     props.onClose()
-  };
+  }
 
   return (
         <>
@@ -69,4 +69,4 @@ export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
             }
         `}</style>
         </>)
-};
+}

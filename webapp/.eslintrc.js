@@ -7,6 +7,7 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
     'standard'
   ],
   settings: {

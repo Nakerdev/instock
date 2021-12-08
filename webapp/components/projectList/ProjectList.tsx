@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { colors, fonts } from '../../styles/theme'
-import Button from '../button/Button'
 import useSession from '../../hooks/useSession'
 import ErrorMessage from '../errorMessage/ErrorMessage'
+import Button from '../button/Button'
 
 export {
   ProjectList,
@@ -24,11 +24,14 @@ function ProjectList () {
   const { getSession } = useSession()
 
   const [projects, setProjects] = useState<Project[]>([])
+  const [isProjectSearchingInProgress, setIsProjectSearchingInProgress] = useState(true)
   const [serverErrorMessage, setServerErrorMessage] = useState('')
 
   useEffect(() => {
     (async function searchProjects () {
+      setProjects([])
       setServerErrorMessage('')
+      setIsProjectSearchingInProgress(true)
       const session: string | null = getSession()
       const response = await fetch(
         '/api/projects/searchAll',
@@ -41,9 +44,11 @@ function ProjectList () {
         }
       )
       if (response.status === 200 || response.status === 304) {
+        setIsProjectSearchingInProgress(false)
         const userProjects: Project[] = await response.json()
         setProjects(userProjects)
       } else {
+        setIsProjectSearchingInProgress(false)
         setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
     })()
@@ -53,27 +58,24 @@ function ProjectList () {
         <>
         <section>
           {
+            isProjectSearchingInProgress && (
+              <div className='spinner-container'>
+                <img src='/gifs/eclipse-blue.gif'></img>
+                <p>Searching projects...</p>
+              </div>
+            )
+          }
+          {
             projects.map(project => {
               return (
-                <article className='project-container' key={project.id}>
-                  <p>{project.name}</p>
-                  <div>
-                    <Button
-                      text=''
-                      onClickHandler={() => {}}
-                      bgColor={colors.grey}
-                      isDisabled={false}
-                      buttonInnerImgSrc='/icons/pencil.svg'
-                    />
-                    <Button
-                      text=''
-                      onClickHandler={() => {}}
-                      bgColor={colors.grey}
-                      isDisabled={false}
-                      buttonInnerImgSrc='/icons/trash.svg'
-                    />
-                  </div>
-                </article>
+                <Button
+                  isDisabled={false}
+                  text={project.name}
+                  textColor={colors.black}
+                  bgColor={colors.blue}
+                  onClickHandler={() => {}}
+                  key={project.id} 
+                />
               )
             })
           }
@@ -84,30 +86,19 @@ function ProjectList () {
             width: 100%
           }
 
-          article {
-            width: 100%;
-            background-color: ${colors.blue};
+          .spinner-container {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
-            padding: 10px 0px;
-            border-radius: 5px;
           }
 
-          article > p {
-            margin-left: 5px;
-            display: block;
-            font-family: ${fonts.base};
+          .spinner-container > img {
+            width: 150px;
           }
 
-          article > div {
-            width: 100px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
+          .spinner-container > p {
             margin-top: 10px;
+            font-family: ${fonts.base};
           }
         `}</style>
         </>

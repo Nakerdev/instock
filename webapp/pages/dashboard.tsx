@@ -91,6 +91,7 @@ const Dashboard: NextPage = () => {
             text='New Project'
             onClickHandler={() => setIsNewProjectModalShown(true)}
             isDisabled={false}
+            buttonInnerImgSrc={'/icons/plus.svg'}
           />
           <Button
             text='Settings'

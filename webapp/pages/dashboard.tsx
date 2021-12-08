@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useEffect, useState, MouseEvent } from 'react'
+import { Option, none, some, match } from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function'
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme'
@@ -11,7 +13,7 @@ import TextField from '../components/textField/TextField'
 import { ProjectCreationControllerRequest } from './api/projects/create/controller'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import { ErrorResponse } from './api/utils/apiUtils'
-import { ProjectList } from '../components/projectList/ProjectList'
+import { ProjectList, Project } from '../components/projectList/ProjectList'
 
 const Dashboard: NextPage = () => {
   const [isNewProjectModalShown, setIsNewProjectModalShown] = useState(false)
@@ -19,6 +21,7 @@ const Dashboard: NextPage = () => {
   const [projectNameError, setProjectNameError] = useState('')
   const [projectCreationServerError, setProjectCreationServerError] = useState('')
   const [isCreateProjectButtonDisabled, setIsCreateProjectButtonDisabled] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<Option<Project>>(none)
 
   const { removeSession, getSession, isLogged } = useSession()
 
@@ -85,7 +88,9 @@ const Dashboard: NextPage = () => {
 
       <aside>
         <h1>Stockout</h1>
-        <ProjectList />
+        <ProjectList 
+          onProjectSelectedHandler={(project: Project) => setSelectedProject(some(project))}
+        />
         <div className='actionButtonsContainer'>
           <Button
             text='New Project'
@@ -111,8 +116,28 @@ const Dashboard: NextPage = () => {
       </aside>
 
       <section>
-        <RocketIcon color={colors.black} width={100}/>
-        <h2>Create new project and start tracking your products!</h2>
+        {
+          pipe(
+            selectedProject,
+            match(
+              () => {
+                return (
+                  <>
+                    <RocketIcon color={colors.black} width={100}/>
+                    <h2>Create new project and start tracking your products!</h2>
+                  </>
+                )
+              },
+              (project: Project) => {
+                return (
+                  <>
+                    <h2>{project.name}</h2>
+                  </>
+                )
+              }
+            )
+          )
+        }
       </section>
 
       <Modal

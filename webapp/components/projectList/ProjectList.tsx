@@ -4,6 +4,7 @@ import { colors, fonts } from '../../styles/theme'
 import useSession from '../../hooks/useSession'
 import ErrorMessage from '../errorMessage/ErrorMessage'
 import Button from '../button/Button'
+import { ProjectCreationControllerRequest } from '../../pages/api/projects/create/controller'
 
 export {
   ProjectList,
@@ -20,7 +21,11 @@ class Project {
   }
 }
 
-function ProjectList () {
+interface ProjectListComponentProps {
+  onProjectSelectedHandler: (project: Project) => void
+}
+
+function ProjectList (props: ProjectListComponentProps) {
   const { getSession } = useSession()
 
   const [projects, setProjects] = useState<Project[]>([])
@@ -47,12 +52,25 @@ function ProjectList () {
         setIsProjectSearchingInProgress(false)
         const userProjects: Project[] = await response.json()
         setProjects(userProjects)
+        if(userProjects.length > 0){
+          props.onProjectSelectedHandler(userProjects[0])
+        }
       } else {
         setIsProjectSearchingInProgress(false)
         setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
     })()
   }, [])
+
+  function onProjectSelectedHandler(projectId: string): void {
+    const project = projects.find(p => p.id === projectId);
+    if(project) {
+      props.onProjectSelectedHandler(project)
+    } else {
+      setProjects([])
+      setServerErrorMessage('Oops! Something went wrong with your projects, our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+    }
+  }
 
   return (
         <>
@@ -66,6 +84,9 @@ function ProjectList () {
             )
           }
           {
+            console.log(projects)
+          }
+          {
             projects.map(project => {
               return (
                 <Button
@@ -73,7 +94,7 @@ function ProjectList () {
                   text={project.name}
                   textColor={colors.black}
                   bgColor={colors.blue}
-                  onClickHandler={() => {}}
+                  onClickHandler={() => onProjectSelectedHandler(project.id)}
                   key={project.id} 
                 />
               )

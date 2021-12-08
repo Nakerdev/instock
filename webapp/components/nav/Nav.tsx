@@ -1,0 +1,61 @@
+import { colors, fonts } from '../../styles/theme'
+import Button from '../button/Button'
+import useSession from '../../hooks/useSession'
+
+export default function Nav () {
+
+  const { removeSession } = useSession()
+
+  return (
+        <>
+        <nav>
+            <p>Sotckout</p>
+            <div>
+                <Button
+                    text='Settings'
+                    onClickHandler={() => {}}
+                    bgColor={colors.grey}
+                    isDisabled={false}
+                    buttonInnerImgSrc='/icons/cogs.svg'
+                    maxWidth='200px'
+                />
+                <Button
+                    text='Logout'
+                    onClickHandler={() => removeSession()}
+                    bgColor={colors.grey}
+                    isDisabled={false}
+                    buttonInnerImgSrc='/icons/log-out.svg'
+                    maxWidth='200px'
+                />
+            </div>
+        </nav>
+        <style jsx>{`
+            nav {
+                background-color: ${colors.white};
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid rgba(100, 100, 111, 0.2);
+            }
+
+            p {
+                display: block;
+                font-size: 36px;
+                padding-left: 20px;
+                color: ${colors.black};
+                text-shadow: 2px 3px 3px rgba(0,0,0,0.3);
+                font-family: ${fonts.base};
+            }
+
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 410px;
+                margin-right: 20px;
+            }
+        `}</style>
+        </>
+  )
+}

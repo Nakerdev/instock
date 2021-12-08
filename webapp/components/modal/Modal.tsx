@@ -37,6 +37,7 @@ export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
                 width: 100%;
                 height: 100%;
                 bottom: 0;
+                left: 0;
                 background-color: rgba(0, 0, 0, 0.8);
                 display: flex;
                 align-items: center;

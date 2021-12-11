@@ -2,16 +2,13 @@ import { NextPage } from 'next'
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
 import { Option, none, some, match } from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/function'
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme'
-import RocketIcon from '../components/icons/Rocket'
 import { ProjectList, Project } from '../components/projectList/ProjectList'
 import Nav from '../components/nav/Nav'
 
 const Dashboard: NextPage = () => {
-  const [selectedProject, setSelectedProject] = useState<Option<Project>>(none)
 
   const { isLogged } = useSession()
 
@@ -25,9 +22,7 @@ const Dashboard: NextPage = () => {
     <>
     <Nav/>
     <main>
-      <ProjectList 
-        onProjectSelectedHandler={(project: Project) => setSelectedProject(some(project))}
-      />
+      <ProjectList />
     </main>
     <style jsx>{`
         main {

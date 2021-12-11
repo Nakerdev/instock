@@ -17,7 +17,7 @@ export default function Nav () {
                     bgColor={colors.grey}
                     isDisabled={false}
                     buttonInnerImgSrc='/icons/cogs.svg'
-                    maxWidth='200px'
+                    width='180px'
                 />
                 <Button
                     text='Logout'
@@ -25,7 +25,7 @@ export default function Nav () {
                     bgColor={colors.grey}
                     isDisabled={false}
                     buttonInnerImgSrc='/icons/log-out.svg'
-                    maxWidth='200px'
+                    width='180px'
                 />
             </div>
         </nav>
@@ -52,7 +52,7 @@ export default function Nav () {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                width: 410px;
+                width: 370px;
                 margin-right: 20px;
             }
         `}</style>

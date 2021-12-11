@@ -10,6 +10,7 @@ import TextField from '../textField/TextField'
 import Modal from '../modal/Modal'
 import { ErrorResponse } from '../../pages/api/utils/apiUtils'
 import RocketIcon from '../icons/Rocket'
+import ClientSideLink from '../clientSideLink/ClientSideLink'
 
 export {
   ProjectList,
@@ -26,11 +27,7 @@ class Project {
   }
 }
 
-interface ProjectListComponentProps {
-  onProjectSelectedHandler: (project: Project) => void
-}
-
-function ProjectList (props: ProjectListComponentProps) {
+function ProjectList () {
 
   const { getSession } = useSession()
 
@@ -67,26 +64,12 @@ function ProjectList (props: ProjectListComponentProps) {
         const userProjects: Project[] = await response.json()
         setProjects(userProjects)
         setShowedProjects(userProjects)
-        if(userProjects.length > 0){
-          props.onProjectSelectedHandler(userProjects[0])
-        }
       } else {
         setIsProjectSearchingInProgress(false)
         setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
     })()
   }, [])
-
-  function onProjectSelectedHandler(projectId: string): void {
-    const project = projects.find(p => p.id === projectId);
-    if(project) {
-      props.onProjectSelectedHandler(project)
-    } else {
-      setProjects([])
-      setShowedProjects([])
-      setServerErrorMessage('Oops! Something went wrong with your projects, our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
-    }
-  }
 
   function filterProjects(name: string){
     setFilterText(name)
@@ -205,25 +188,30 @@ function ProjectList (props: ProjectListComponentProps) {
                         showedProjects.map(project => {
                           return (
                             <tr key={project.id}>
-                              <td>{project.name}</td>
+                              <td>
+                                <ClientSideLink 
+                                  linkText={project.name} 
+                                  href=''
+                                />
+                              </td>
                               <td>1000</td>
                               <td>10/10/2020</td>
                               <td className='action-button'>
                                 <Button
-                                  text='Edit'
+                                  text=''
                                   isDisabled={false}
                                   onClickHandler={() => {}}
                                   buttonInnerImgSrc={'/icons/pencil.svg'}
                                   bgColor={colors.grey}
-                                  width='200px'
+                                  width='150px'
                                 />
                                 <Button
-                                  text='Delete'
+                                  text=''
                                   isDisabled={false}
                                   onClickHandler={() => {}}
                                   buttonInnerImgSrc={'/icons/trash.svg'}
                                   bgColor={colors.grey}
-                                  width='200px'
+                                  width='150px'
                                 />                   
                               </td>
                             </tr>     
@@ -266,6 +254,12 @@ function ProjectList (props: ProjectListComponentProps) {
               margin: 0 20px;
             }
 
+            .action-button {
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+            }
+
             .create-project-btn-container {
               display: flex;
               justify-content: end;
@@ -275,8 +269,6 @@ function ProjectList (props: ProjectListComponentProps) {
 
             .project-list-container {
               display: flex;
-              align-items: center;
-              justify-content: center;
               width: 100%;
               height: 80%;
             }
@@ -290,10 +282,12 @@ function ProjectList (props: ProjectListComponentProps) {
             }
 
             .spinner-container {
+              width: 100%;
               background-color: ${colors.background};
               display: flex;
               flex-direction: column;
               align-items: center;
+              justify-content:center;
             }
 
             .spinner-container > img {
@@ -307,6 +301,7 @@ function ProjectList (props: ProjectListComponentProps) {
 
             .filter-project-container {
               text-align: end;
+              margin-top: 20px;
             }
 
             .field { 
@@ -336,22 +331,29 @@ function ProjectList (props: ProjectListComponentProps) {
 
             table {
               width: 100%;
-              text-align: center;
+              text-align: left;
               font-size: 18px;
               line-height: 1.5rem;
               font-family: ${fonts.base};
               background-color: ${colors.white};
             }
 
+            thead {
+              background-color: ${colors.black};
+            }
+
             th {
-              font-weight: bold;
               padding: 10px;
-              border: 1px solid ${colors.grey};
+              height: 20px;
+              color: ${colors.white};
             }
 
             td {
               padding: 10px;
-              border: 1px solid ${colors.grey};
+            }
+
+            tbody > tr {
+              border-bottom: solid 1px ${colors.black}
             }
 
             .create-project-modal__paragraph {

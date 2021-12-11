@@ -6,15 +6,19 @@ import ProjectRepository from '../../../../../business/projects/projectRepositor
 
 import { DeleteProjectsInBulk } from '../../../../../business/projects/delete/bulk/deleteProjectsInBulk'
 import { ProjectBulkDeletionRequest, ProjectBulkDeletionRequestDto } from '../../../../../business/projects/delete/bulk/ProjectBulkDeletionRequest'
+import ProductRepository from '../../../../../business/projects/products/productRepository'
 
 describe('Crete Project', () => {
   let projectRepository: MockProxy<ProjectRepository>
+  let productRepository: MockProxy<ProductRepository>
   let command: DeleteProjectsInBulk
 
   beforeEach(() => {
     projectRepository = mock<ProjectRepository>()
+    productRepository = mock<ProductRepository>()
     command = new DeleteProjectsInBulk(
-      projectRepository
+      projectRepository,
+      productRepository
     )
   })
 
@@ -23,9 +27,13 @@ describe('Crete Project', () => {
 
     await command.delete(request)
 
+    expect(productRepository.deleteAllProjectsProducts).toHaveBeenCalledWith(
+      request.userId,
+      request.projectsId
+    )
     expect(projectRepository.deleteAll).toHaveBeenCalledWith(
-      request.projectsId,
-      request.userId
+      request.userId,
+      request.projectsId
     )
   })
 

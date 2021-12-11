@@ -8,6 +8,7 @@ import { Product, ProductPersistenceState } from '../../../business/projects/pro
 import { ProductId, ProductIdPersistenceState } from '../../../business/valueObjects/productId'
 
 export default class ProductPrismaRepository implements ProductRepository {
+  
   readonly prisma: PrismaClient
 
   constructor () {
@@ -51,6 +52,20 @@ export default class ProductPrismaRepository implements ProductRepository {
           id: { in: productsId.map(x => x.state.value) },
           userId: userId.state.value,
           projectId: projectId.state.value
+        }
+      })
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  async deleteAllProjectsProducts(userId: UserId, projectsId: ProjectId[]): Promise<void> {
+    try {
+      await this.prisma.$connect()
+      await this.prisma.products.deleteMany({
+        where: {
+          userId: userId.state.value,
+          projectId: { in: projectsId.map(x => x.state.value) }
         }
       })
     } finally {

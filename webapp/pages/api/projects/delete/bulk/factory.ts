@@ -5,6 +5,7 @@ import { DeleteProjectsInBulkController } from './controller'
 import ProjectPrismaRepository from '../../../../../infraestructure/projects/projectRepository'
 import { DeleteProjectsInBulk } from '../../../../../business/projects/delete/bulk/deleteProjectsInBulk'
 import ServiceFactory from '../../../factory/serviceFactory'
+import ProductPrismaRepository from '../../../../../infraestructure/projects/products/productRepository'
 
 export function buildDeleteProjectsInBulkController (
   res: NextApiResponse,
@@ -16,6 +17,9 @@ export function buildDeleteProjectsInBulkController (
     ServiceFactory.buildSessionService(req))
 
   function buildCommand (): DeleteProjectsInBulk {
-    return new DeleteProjectsInBulk(new ProjectPrismaRepository())
+    return new DeleteProjectsInBulk(
+      new ProjectPrismaRepository(),
+      new ProductPrismaRepository()
+    )
   }
 }

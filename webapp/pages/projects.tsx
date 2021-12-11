@@ -346,7 +346,7 @@ const Dashboard: NextPage = () => {
 
         th {
           padding: 10px;
-          height: 20px;
+          height: 40px;
           color: ${colors.white};
         }
 

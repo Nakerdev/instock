@@ -54,7 +54,7 @@ describe('Create Project', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         createdProject => expect(createdProject.id.state.value).toBe(uuid)
       )
     )
@@ -85,7 +85,7 @@ describe('Create Project', () => {
       result,
       match(
         error => expect(error).toBe(ProjectCreationError.ProjectWithTheSameNameAlreadyExist),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
     expect(projectRepository.save).not.toHaveBeenCalled()
@@ -104,7 +104,7 @@ describe('Create Project', () => {
       result,
       match(
         error => expect(error).toBe(ProjectCreationError.UserNotExist),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
     expect(projectRepository.save).not.toHaveBeenCalled()
@@ -118,7 +118,7 @@ describe('Create Project', () => {
     return pipe(
       ProjectCreationRequest.create(requestDto),
       match(
-        _ => null,
+        () => null,
         request => request
       )
     )

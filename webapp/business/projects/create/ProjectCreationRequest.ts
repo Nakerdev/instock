@@ -25,8 +25,8 @@ class ProjectCreationRequest {
     if (isLeft(userIdValidationResult) || isLeft(nameValidationResult)
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
-      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), _ => 0))
+      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), () => 0))
+      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), () => 0))
       return left(formValidations)
     }
 

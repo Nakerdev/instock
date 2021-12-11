@@ -21,7 +21,7 @@ class UserPasswordRecoveryRequest {
 
     if (isLeft(emailValidationResult)) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), _ => 0))
+      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), () => 0))
       return left(formValidations)
     }
 

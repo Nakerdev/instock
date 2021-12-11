@@ -77,7 +77,7 @@ describe('User Password Recovery', () => {
     return pipe(
       UserPasswordRecoveryRequest.create(requestDto),
       eitherMatch(
-        _ => null,
+        () => null,
         request => request
       )
     )

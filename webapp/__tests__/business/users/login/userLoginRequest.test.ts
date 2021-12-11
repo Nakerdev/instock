@@ -15,7 +15,7 @@ describe('User Login Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedEmail = Email.create(requestDto.email)
           const expectedPassword = Password.create(requestDto.password)
@@ -53,7 +53,7 @@ describe('User Login Request', () => {
             expect(errors.length).toBe(1)
             expect(errors[0].fieldId).toBe(testCase.expectedFieldId)
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

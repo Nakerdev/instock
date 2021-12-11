@@ -6,9 +6,9 @@ module.exports = {
     'jest/globals': true
   },
   extends: [
-    'plugin:react/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'standard'
   ],
   settings: {
     react: {
@@ -31,6 +31,7 @@ module.exports = {
   rules: {
     'no-use-before-define': 'off',
     'react/react-in-jsx-scope': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
     camelcase: 'off'
   }
 }

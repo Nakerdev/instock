@@ -41,7 +41,7 @@ describe('User Login', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         loggedUser => expect(loggedUser).toBe(user)
       )
     )
@@ -61,7 +61,7 @@ describe('User Login', () => {
       result,
       match(
         error => expect(error).toBe(UserLoginError.InvalidCredentials),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
   })
@@ -78,7 +78,7 @@ describe('User Login', () => {
       result,
       match(
         error => expect(error).toBe(UserLoginError.UserNotFound),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
   })
@@ -97,7 +97,7 @@ describe('User Login', () => {
       return pipe(
         UserLoginRequest.create(requestDto),
         match(
-          _ => null,
+          () => null,
           request => request
         )
       )

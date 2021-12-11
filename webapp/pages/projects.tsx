@@ -1,7 +1,6 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useEffect, useState, MouseEvent } from 'react'
-import { Option, none, some, match } from 'fp-ts/lib/Option'
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme'
@@ -204,7 +203,7 @@ const Dashboard: NextPage = () => {
                                 <Button
                                   text=''
                                   isDisabled={false}
-                                  onClickHandler={() => {}}
+                                  onClickHandler={() => new Error('not implemented')}
                                   buttonInnerImgSrc={'/icons/pencil.svg'}
                                   bgColor={colors.grey}
                                   width='150px'
@@ -212,7 +211,7 @@ const Dashboard: NextPage = () => {
                                 <Button
                                   text=''
                                   isDisabled={false}
-                                  onClickHandler={() => {}}
+                                  onClickHandler={() => new Error('not implemented')}
                                   buttonInnerImgSrc={'/icons/trash.svg'}
                                   bgColor={colors.grey}
                                   width='150px'
@@ -230,7 +229,7 @@ const Dashboard: NextPage = () => {
             <ErrorMessage message={serverErrorMessage}/>
           </div>
       </section>
-      
+
           <Modal
             isShown={isNewProjectModalShown}
             title='New Project'

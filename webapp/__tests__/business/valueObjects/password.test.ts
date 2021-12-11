@@ -53,7 +53,7 @@ describe('Password', () => {
         result,
         match(
           error => expect(error).toBe(testCase.expectedError),
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

@@ -12,7 +12,7 @@ export default function Nav () {
             <div>
                 <Button
                     text='Settings'
-                    onClickHandler={() => {}}
+                    onClickHandler={() => new Error('not implemented')}
                     bgColor={colors.grey}
                     isDisabled={false}
                     buttonInnerImgSrc='/icons/cogs.svg'

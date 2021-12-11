@@ -16,7 +16,7 @@ describe('Project Bulk Deletion Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedUserId = UserId.create(requestDto.userId)
           const expectedProjectsId = requestDto.projectsId
@@ -69,7 +69,7 @@ describe('Project Bulk Deletion Request', () => {
               expect(errors[0].error).toBe(testCase.expectedError)
             }
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

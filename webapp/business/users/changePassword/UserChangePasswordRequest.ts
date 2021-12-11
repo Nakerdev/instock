@@ -29,9 +29,9 @@ class UserChangePasswordRequest {
       isLeft(passwordValidationResult) ||
       isLeft(expirationDateValidationResult)) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
-      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), _ => 0))
-      pipe(expirationDateValidationResult, match(error => formValidations.push(new FormValidationError('passwordChangePetitionExpirationDate', error)), _ => 0))
+      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), () => 0))
+      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), () => 0))
+      pipe(expirationDateValidationResult, match(error => formValidations.push(new FormValidationError('passwordChangePetitionExpirationDate', error)), () => 0))
       return left(formValidations)
     }
 

@@ -18,7 +18,7 @@ describe('User SignUp Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedEmail = Email.create(requestDto.email)
           const expectedName = Name.create(requestDto.name)
@@ -85,7 +85,7 @@ describe('User SignUp Request', () => {
               expect(errors[0].error).toBe(testCase.expectedError)
             }
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

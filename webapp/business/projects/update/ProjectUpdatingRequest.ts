@@ -31,9 +31,9 @@ class ProjectUpdatingRequest {
       isLeft(nameValidationResult)
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), _ => 0))
-      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
-      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), _ => 0))
+      pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), () => 0))
+      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), () => 0))
+      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), () => 0))
       return left(formValidations)
     }
 

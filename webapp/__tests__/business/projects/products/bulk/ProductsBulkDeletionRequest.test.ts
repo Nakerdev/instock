@@ -17,7 +17,7 @@ describe('Products Bulk Deletion Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedUserId = UserId.create(requestDto.userId)
           const expectedProjectId = ProjectId.create(requestDto.projectId)
@@ -71,7 +71,7 @@ describe('Products Bulk Deletion Request', () => {
               expect(errors[0].error).toBe(testCase.expectedError)
             }
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

@@ -57,7 +57,7 @@ class AttachProductsInBulkController {
       await this.command.attach(request),
       match(
         error => this.apiResponseBuilder.sendCommandErrorResponse(error.toString()),
-        _ => this.apiResponseBuilder.sendSuccessResponse({})
+        () => this.apiResponseBuilder.sendSuccessResponse({})
       )
     )
   }

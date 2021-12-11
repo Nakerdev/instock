@@ -119,7 +119,7 @@ describe('Change User Password', () => {
     return pipe(
       UserChangePasswordRequest.create(requestDto),
       eitherMatch(
-        _ => null,
+        () => null,
         request => request
       )
     )

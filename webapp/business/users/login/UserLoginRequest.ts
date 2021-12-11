@@ -24,8 +24,8 @@ class UserLoginRequest {
 
     if (isLeft(emailValidationResult) || isLeft(passwordValidationResult)) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), _ => 0))
-      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), _ => 0))
+      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), () => 0))
+      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), () => 0))
       return left(formValidations)
     }
 

@@ -37,10 +37,10 @@ class UserSignUpRequest {
       !requestDto.areLegalTermsAndConditionsAccepted || !termsAndConditionsBoolValue
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), _ => 0))
-      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), _ => 0))
-      pipe(surnameValidationResult, match(error => formValidations.push(new FormValidationError('surname', error)), _ => 0))
-      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), _ => 0))
+      pipe(emailValidationResult, match(error => formValidations.push(new FormValidationError('email', error)), () => 0))
+      pipe(nameValidationResult, match(error => formValidations.push(new FormValidationError('name', error)), () => 0))
+      pipe(surnameValidationResult, match(error => formValidations.push(new FormValidationError('surname', error)), () => 0))
+      pipe(passwordValidationResult, match(error => formValidations.push(new FormValidationError('password', error)), () => 0))
       if (!requestDto.areLegalTermsAndConditionsAccepted || !termsAndConditionsBoolValue) {
         formValidations.push(new FormValidationError('legalTermsAndConditions', ValidationError.Required))
       }

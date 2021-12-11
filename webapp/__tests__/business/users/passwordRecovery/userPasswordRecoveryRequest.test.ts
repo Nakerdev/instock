@@ -14,7 +14,7 @@ describe('User Password Recovery Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedEmail = Email.create(requestDto.email)
           expect(request).toEqual({
@@ -45,7 +45,7 @@ describe('User Password Recovery Request', () => {
             expect(errors.length).toBe(1)
             expect(errors[0].fieldId).toBe(testCase.expectedFieldId)
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

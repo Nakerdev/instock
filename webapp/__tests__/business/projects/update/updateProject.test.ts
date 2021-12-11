@@ -63,7 +63,7 @@ describe('Update Project', () => {
       return pipe(
         ProjectUpdatingRequest.create(requestDto),
         match(
-          _ => null,
+          () => null,
           request => request
         )
       )

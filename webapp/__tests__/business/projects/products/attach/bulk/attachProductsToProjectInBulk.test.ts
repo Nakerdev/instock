@@ -46,7 +46,7 @@ describe('Attach products to project in bluk', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         createdProducts => {
           expect(createdProducts.length).toBe(1)
           expect(createdProducts[0].id).toBe(request.productsId[0])
@@ -78,7 +78,7 @@ describe('Attach products to project in bluk', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         createdProducts => {
           expect(createdProducts.length).toBe(0)
         }
@@ -102,7 +102,7 @@ describe('Attach products to project in bluk', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         createdProducts => {
           expect(createdProducts.length).toBe(1)
           expect(createdProducts[0].id).toBe(request.productsId[0])
@@ -125,7 +125,7 @@ describe('Attach products to project in bluk', () => {
       result,
       match(
         error => expect(error).toBe(ProductsAttachingToProjectError.ProjectNotExist),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
     expect(productRepository.saveAll).not.toHaveBeenCalled()
@@ -146,7 +146,7 @@ describe('Attach products to project in bluk', () => {
     return pipe(
       ProductsAttachingInBulkRequest.create(requestDto),
       match(
-        _ => null,
+        () => null,
         request => request
       )
     )

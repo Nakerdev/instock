@@ -32,12 +32,12 @@ class ProductsAttachingInBulkRequest {
       requestDto.productsId.length === 0
     ) {
       const formValidations: FormValidationError<ValidationError>[] = []
-      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), _ => 0))
-      pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), _ => 0))
+      pipe(userIdValidationResult, match(error => formValidations.push(new FormValidationError('userId', error)), () => 0))
+      pipe(projectIdValidationResult, match(error => formValidations.push(new FormValidationError('projectId', error)), () => 0))
       productsIdValidationResult
         .forEach((result, index) => {
           if (!isLeft(result)) return
-          pipe(result, match(error => formValidations.push(new FormValidationError(`productsId[${index}]`, error)), _ => 0))
+          pipe(result, match(error => formValidations.push(new FormValidationError(`productsId[${index}]`, error)), () => 0))
         })
       if (requestDto.productsId.length === 0) {
         formValidations.push(new FormValidationError('productsId', ValidationError.Required))

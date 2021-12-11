@@ -2,9 +2,9 @@ import { PropsWithChildren } from 'react'
 
 import { colors } from '../../styles/theme'
 
-interface SuccessMessageComponentProps {}
+interface SuccessMessageProps {}
 
-export default function SuccessMessage (props: PropsWithChildren<SuccessMessageComponentProps>) {
+export default function SuccessMessage (props: PropsWithChildren<SuccessMessageProps>) {
   return (
         <>
         <p className='success-message'>

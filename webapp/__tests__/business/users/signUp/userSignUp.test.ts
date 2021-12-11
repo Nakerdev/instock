@@ -50,7 +50,7 @@ describe('User SignUp', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         createdUser => expect(createdUser.id.state.value).toBe(uuid)
       )
     )
@@ -81,7 +81,7 @@ describe('User SignUp', () => {
       result,
       match(
         error => expect(error).toBe(UserSignUpError.UserAlreadyExist),
-        _ => expect(true).toBeFalsy()
+        () => expect(true).toBeFalsy()
       )
     )
     expect(userRepository.save).not.toHaveBeenCalled()
@@ -104,7 +104,7 @@ describe('User SignUp', () => {
       return pipe(
         UserSignUpRequest.create(requestDto),
         match(
-          _ => null,
+          () => null,
           request => request
         )
       )

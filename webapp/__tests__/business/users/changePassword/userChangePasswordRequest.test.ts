@@ -16,7 +16,7 @@ describe('User Change Password Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedUserId = UserId.create(requestDto.userId)
           const expectedPassword = Password.create(requestDto.password)
@@ -61,7 +61,7 @@ describe('User Change Password Request', () => {
             expect(errors.length).toBe(1)
             expect(errors[0].fieldId).toBe(testCase.expectedFieldId)
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

@@ -32,7 +32,7 @@ class UserLoginController {
     pipe(
       this.buildCommandRequest(request),
       match(
-        _ => this.apiResponseBuilder.sendUnauthorizedResponse(),
+        () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         request => this.executeCommand(request)
       )
     )
@@ -42,7 +42,7 @@ class UserLoginController {
     pipe(
       await this.command.login(request),
       match(
-        _ => this.apiResponseBuilder.sendUnauthorizedResponse(),
+        () => this.apiResponseBuilder.sendUnauthorizedResponse(),
         createdUser => this.createSessionTokenAndBuildSuccessResponse(createdUser)
       )
     )

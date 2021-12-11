@@ -38,7 +38,7 @@ describe('Delete Products In Bulk', () => {
     return pipe(
       ProductsBulkDeletionRequest.create(requestDto),
       match(
-        _ => null,
+        () => null,
         request => request
       )
     )

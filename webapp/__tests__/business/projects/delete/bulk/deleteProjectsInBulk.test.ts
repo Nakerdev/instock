@@ -37,7 +37,7 @@ describe('Crete Project', () => {
     return pipe(
       ProjectBulkDeletionRequest.create(requestDto),
       match(
-        _ => null,
+        () => null,
         request => request
       )
     )

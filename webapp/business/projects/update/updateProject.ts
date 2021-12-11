@@ -17,9 +17,9 @@ export class UpdateProject {
 
   async update (request: ProjectUpdatingRequest): Promise<void> {
     pipe(
-      await this.projectRepository.searchBy(request.projectId, request.userId),
+      await this.projectRepository.searchBy(request.userId, request.projectId),
       match(
-        () => {},
+        () => { /*Do nothing*/ },
         (project: Project) => this.updateProject(project, request)
       )
     )

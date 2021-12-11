@@ -4,9 +4,9 @@ import Head from 'next/head'
 import { fonts } from '../../styles/theme'
 import Header from '../header/Header'
 
-interface LayoutComponentProps {}
+interface LayoutProps {}
 
-export default function Layout (props: PropsWithChildren<LayoutComponentProps>) {
+export default function Layout (props: PropsWithChildren<LayoutProps>) {
   return (
         <>
         <Head>

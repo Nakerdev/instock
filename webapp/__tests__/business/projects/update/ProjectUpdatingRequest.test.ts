@@ -17,7 +17,7 @@ describe('Project Updating Request', () => {
     pipe(
       result,
       match(
-        _ => expect(true).toBeFalsy(),
+        () => expect(true).toBeFalsy(),
         request => {
           const expectedProjectId = ProjectId.create(requestDto.projectId)
           const expectedUserId = UserId.create(requestDto.userId)
@@ -65,7 +65,7 @@ describe('Project Updating Request', () => {
               expect(errors[0].error).toBe(testCase.expectedError)
             }
           },
-          _ => expect(true).toBeFalsy()
+          () => expect(true).toBeFalsy()
         )
       )
     })

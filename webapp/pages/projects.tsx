@@ -216,7 +216,7 @@ const Dashboard: NextPage = () => {
               )
             }
             {
-              showedProjects.length === 0 && !isProjectSearchingInProgress && (
+              projects.length === 0 && !isProjectSearchingInProgress && (
                 <div className='empty-list-container'>
                   <RocketIcon color={colors.black} width={100}/>
                   <h2>Create new project and start tracking your products!</h2>
@@ -224,7 +224,7 @@ const Dashboard: NextPage = () => {
               )
             }
             {
-              showedProjects.length > 0 && !isProjectSearchingInProgress && (
+              projects.length > 0 && !isProjectSearchingInProgress && (
                 <div className='table-container'>
                   <div className='filter-project-container'>
                     <input
@@ -245,6 +245,9 @@ const Dashboard: NextPage = () => {
                       </tr>
                     </thead>
                     <tbody>
+                      {
+                        showedProjects.length === 0 && <p>No projects found</p>
+                      }
                       {
                         showedProjects.map(project => {
                           return (

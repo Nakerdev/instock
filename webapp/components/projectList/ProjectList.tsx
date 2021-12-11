@@ -168,13 +168,13 @@ function ProjectList () {
                   <div className='filter-project-container'>
                     <input
                       type="text"
-                      onChange={e => {filterProjects(e.target.value)}}
+                      onChange={e => filterProjects(e.target.value)}
                       value={filterText}
                       className='field'>
                     </input>
                     <img className='magnifying-glass' src='/icons/search.svg'></img>
                   </div>
-                  <table className="table table-bordered table-hover">
+                  <table>
                     <thead>
                       <tr>
                         <th>Project name</th>

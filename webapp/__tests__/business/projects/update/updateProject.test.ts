@@ -22,7 +22,7 @@ describe('Update Project', () => {
     const request = <ProjectUpdatingRequest>buildRequest({ name: 'MundoManitas.com' })
     const project = buildProject({ name: 'Xataka.com' })
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(some(project))
 
     await command.update(request)
@@ -40,7 +40,7 @@ describe('Update Project', () => {
   it('does not update project when it not found', async () => {
     const request = <ProjectUpdatingRequest>buildRequest({})
     projectRepository.searchBy
-      .calledWith(request.projectId, request.userId)
+      .calledWith(request.userId, request.projectId)
       .mockResolvedValue(none)
 
     await command.update(request)

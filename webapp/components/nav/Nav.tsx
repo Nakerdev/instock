@@ -3,7 +3,6 @@ import Button from '../button/Button'
 import useSession from '../../hooks/useSession'
 
 export default function Nav () {
-
   const { removeSession } = useSession()
 
   return (

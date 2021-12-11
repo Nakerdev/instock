@@ -31,7 +31,7 @@ export default function Button (props: ButtonComponentProps) {
                 color: ${props.textColor ? props.textColor : colors.white};
                 background-color: ${props.bgColor ? props.bgColor : colors.CTA};
                 width: 100%;
-                ${props.width && `width: ${props.width };`}
+                ${props.width && `width: ${props.width};`}
                 border: 0;
                 border-radius: 5px;
                 font-size: 18px;

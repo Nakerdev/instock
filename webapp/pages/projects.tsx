@@ -26,7 +26,6 @@ class Project {
 }
 
 const Dashboard: NextPage = () => {
-
   const { isLogged, getSession } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
   const [showedProjects, setShowedProjects] = useState<Project[]>([])
@@ -74,12 +73,12 @@ const Dashboard: NextPage = () => {
     })()
   }, [])
 
-  function filterProjects(name: string){
+  function filterProjects (name: string) {
     setFilterText(name)
-    if(name.length >= 3){
+    if (name.length >= 3) {
       const filteredProjects = projects.filter(p => p.name.includes(name))
       setShowedProjects(filteredProjects)
-    }else{
+    } else {
       setShowedProjects(projects)
     }
   }
@@ -139,7 +138,8 @@ const Dashboard: NextPage = () => {
     <>
     <Nav/>
     <main>
-      <div className='create-project-btn-container'>
+      <section>
+        <div className='create-project-btn-container'>
             <Button
               text='New Project'
               onClickHandler={() => setIsNewProjectModalShown(true)}
@@ -148,7 +148,7 @@ const Dashboard: NextPage = () => {
               width='200px'
             />
           </div>
-          
+
           <div className='project-list-container'>
             {
               isProjectSearchingInProgress && (
@@ -182,9 +182,9 @@ const Dashboard: NextPage = () => {
                     <thead>
                       <tr>
                         <th>Project name</th>
-                        <th style={{width: '220px'}}>Products</th>
-                        <th style={{width: '220px'}}>Creation date</th>
-                        <th style={{width: '220px'}}></th>
+                        <th style={{ width: '220px' }}>Products</th>
+                        <th style={{ width: '220px' }}>Creation date</th>
+                        <th style={{ width: '220px' }}></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -193,8 +193,8 @@ const Dashboard: NextPage = () => {
                           return (
                             <tr key={project.id}>
                               <td>
-                                <ClientSideLink 
-                                  linkText={project.name} 
+                                <ClientSideLink
+                                  linkText={project.name}
                                   href=''
                                 />
                               </td>
@@ -216,9 +216,9 @@ const Dashboard: NextPage = () => {
                                   buttonInnerImgSrc={'/icons/trash.svg'}
                                   bgColor={colors.grey}
                                   width='150px'
-                                />                   
+                                />
                               </td>
-                            </tr>     
+                            </tr>
                           )
                         })
                       }
@@ -229,6 +229,8 @@ const Dashboard: NextPage = () => {
             }
             <ErrorMessage message={serverErrorMessage}/>
           </div>
+      </section>
+      
           <Modal
             isShown={isNewProjectModalShown}
             title='New Project'
@@ -262,127 +264,119 @@ const Dashboard: NextPage = () => {
         }
 
         main > section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
           width: 100%;
-        }
-
-        main > section > h2 {
-          font-size: 24px;
-          font-family: ${fonts.base};
+          margin: 0 20px;
         }
 
         .action-button {
-              display: flex;
-              justify-content: space-around;
-              align-items: center;
-            }
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+          }
 
-            .create-project-btn-container {
-              display: flex;
-              justify-content: end;
-              margin-top: 20px;
-              width: 100%;
-            }
+          .create-project-btn-container {
+            display: flex;
+            justify-content: end;
+            margin-top: 20px;
+            width: 100%;
+          }
 
-            .project-list-container {
-              display: flex;
-              width: 100%;
-              height: 80%;
-            }
+          .project-list-container {
+            display: flex;
+            width: 100%;
+            height: 80%;
+          }
 
-            .empty-list-container {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              font-size: 24px;
+          .empty-list-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 24px;
+            font-family: ${fonts.base};
+          }
+
+          .spinner-container {
+            width: 100%;
+            background-color: ${colors.background};
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content:center;
+          }
+
+          .spinner-container > img {
+            width: 150px;
+          }
+
+          .spinner-container > p {
+            margin-top: 10px;
+            font-family: ${fonts.base};
+          }
+
+          .filter-project-container {
+            text-align: end;
+            margin-top: 20px;
+          }
+
+          .field { 
               font-family: ${fonts.base};
-            }
-
-            .spinner-container {
-              width: 100%;
-              background-color: ${colors.background};
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content:center;
-            }
-
-            .spinner-container > img {
-              width: 150px;
-            }
-
-            .spinner-container > p {
-              margin-top: 10px;
-              font-family: ${fonts.base};
-            }
-
-            .filter-project-container {
-              text-align: end;
-              margin-top: 20px;
-            }
-
-            .field { 
-                font-family: ${fonts.base};
-                color: ${colors.black};
-                border: 1px solid #C4C2C2;
-                font-size: 16px;
-                padding: 0.25em 0.5em;
-                border-radius: 5px;
-                line-height: 1.5rem;
-                margin-bottom: 10px;
-            }
-
-            .magnifying-glass {
-                display: inline;
-                margin-left: -37px;
-                padding-top: 4px;
-                background-color: ${colors.white};
-                border: none;
-                position: absolute;
-                margin-top: 1px;
-            }
-
-            .table-container {
-              width: 100%;
-            }
-
-            table {
-              width: 100%;
-              text-align: left;
-              font-size: 18px;
+              color: ${colors.black};
+              border: 1px solid #C4C2C2;
+              font-size: 16px;
+              padding: 0.25em 0.5em;
+              border-radius: 5px;
               line-height: 1.5rem;
-              font-family: ${fonts.base};
+              margin-bottom: 10px;
+          }
+
+          .magnifying-glass {
+              display: inline;
+              margin-left: -37px;
+              padding-top: 4px;
               background-color: ${colors.white};
-            }
+              border: none;
+              position: absolute;
+              margin-top: 1px;
+          }
 
-            thead {
-              background-color: ${colors.black};
-            }
+          .table-container {
+            width: 100%;
+          }
 
-            th {
-              padding: 10px;
-              height: 20px;
-              color: ${colors.white};
-            }
+          table {
+            width: 100%;
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.5rem;
+            font-family: ${fonts.base};
+            background-color: ${colors.white};
+          }
 
-            td {
-              padding: 10px;
-            }
+          thead {
+            background-color: ${colors.black};
+          }
 
-            tbody > tr {
-              border-bottom: solid 1px ${colors.black}
-            }
+          th {
+            padding: 10px;
+            height: 20px;
+            color: ${colors.white};
+          }
 
-            .create-project-modal__paragraph {
-              font-size: 18px;
-              line-height: 1.5rem;
-              font-family: ${fonts.base};
-              max-width: 500px;
-              margin-bottom: 20px;
-            }
+          td {
+            padding: 10px;
+          }
+
+          tbody > tr {
+            border-bottom: solid 1px ${colors.black}
+          }
+
+          .create-project-modal__paragraph {
+            font-size: 18px;
+            line-height: 1.5rem;
+            font-family: ${fonts.base};
+            max-width: 500px;
+            margin-bottom: 20px;
+          }
     `}</style>
     </>
   )

@@ -10,15 +10,20 @@ interface ButtonComponentProps {
     textColor?: string;
     bgColor?: string;
     width?: string;
+    avoidSpinnerOnDisabledMode?: boolean
 }
 
 export default function Button (props: ButtonComponentProps) {
   return (
         <>
-        <button className="cta" onClick={e => props.onClickHandler(e)} disabled={props.isDisabled}>
+        <button 
+            className="cta" 
+            onClick={e => props.onClickHandler(e)} 
+            disabled={props.isDisabled}
+        >
             {
                 props.isDisabled
-                  ? <img src='/gifs/eclipse-white.gif'></img>
+                  ? !props.avoidSpinnerOnDisabledMode && <img src='/gifs/eclipse-white.gif'></img>
                   : props.buttonInnerImgSrc
                     ? props.text
                       ? <span><img src={props.buttonInnerImgSrc}></img>{props.text}</span>

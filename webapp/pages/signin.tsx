@@ -61,7 +61,7 @@ const Signin: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout pageTitle='SignIn'>
         <section>
             <Form>
                 <TextField

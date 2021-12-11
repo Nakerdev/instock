@@ -135,7 +135,7 @@ const Dashboard: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout pageTitle='Projects'>
       <section>
         <div className='create-project-btn-container'>
             <Button

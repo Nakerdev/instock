@@ -112,7 +112,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
   return (
     <>
-      <Layout>
+      <Layout pageTitle='Reset your password'>
         <section>
             <Form>
                 <h2>Reset your password</h2>

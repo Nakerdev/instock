@@ -119,7 +119,7 @@ const SignUp: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout pageTitle='SignUp'>
         <section>
             <Form>
                 <TextField

@@ -4,10 +4,9 @@ import { useEffect, useState, MouseEvent } from 'react'
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme'
-import Nav from '../components/nav/Nav'
 import ErrorMessage from '../components/errorMessage/ErrorMessage'
 import Button from '../components/button/Button'
-import { ProjectCreationControllerRequest } from './api/projects/create/controller'
+import { ProjectCreationControllerRequest, ResponseDto } from './api/projects/create/controller'
 import TextField from '../components/textField/TextField'
 import Modal from '../components/modal/Modal'
 import { ErrorResponse } from './api/utils/apiUtils'
@@ -102,9 +101,10 @@ const Dashboard: NextPage = () => {
       )
       setIsCreateProjectButtonDisabled(false)
       if (response.status === 200) {
-        // const successResponse: ResponseDto = await response.json()
-        // projects.push(new Project(successResponse.projectId, newProjectName))
-        // setProjects(projects);
+        const successResponse: ResponseDto = await response.json()
+        projects.push(new Project(successResponse.projectId, newProjectName))
+        setProjects(projects);
+        setShowedProjects(projects);
         setIsNewProjectModalShown(false)
         setNewProjectName('')
       } else if (response.status === 401) {

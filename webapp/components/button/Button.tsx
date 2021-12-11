@@ -61,6 +61,8 @@ export default function Button (props: ButtonComponentProps) {
             }
 
             .cta:disabled > img {
+                filter: invert(0);
+                margin-top: -13px;
                 width: 30px;
             }
 

@@ -47,7 +47,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
 
   useEffect(() => {
     if (isLogged) {
-      Router.push('/dashboard')
+      Router.push('/projects')
     }
   }, [isLogged])
 
@@ -158,7 +158,6 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
       </Layout>
     <style jsx>{`
         section {
-            background-color: ${colors.background};
             height: 100vh;
             display: flex;
             flex-direction: column;

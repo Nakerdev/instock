@@ -1,9 +1,16 @@
+import Router from 'next/router'
+
 import { colors, fonts } from '../../styles/theme'
 import Button from '../button/Button'
 import useSession from '../../hooks/useSession'
 
 export default function Nav () {
   const { removeSession } = useSession()
+
+  function logout(){
+    removeSession()
+    Router.push('/')
+  }
 
   return (
         <>
@@ -20,7 +27,7 @@ export default function Nav () {
                 />
                 <Button
                     text='Logout'
-                    onClickHandler={() => removeSession()}
+                    onClickHandler={() => logout()}
                     bgColor={colors.grey}
                     isDisabled={false}
                     buttonInnerImgSrc='/icons/log-out.svg'

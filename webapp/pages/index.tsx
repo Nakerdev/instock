@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (isLogged) {
-      Router.push('/dashboard')
+      Router.push('/projects')
     }
   }, [isLogged])
 

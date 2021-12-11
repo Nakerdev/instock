@@ -32,7 +32,7 @@ const SignUp: NextPage = () => {
 
   useEffect(() => {
     if (isLogged) {
-      Router.push('/dashboard')
+      Router.push('/projects')
     }
   }, [isLogged])
 
@@ -172,7 +172,7 @@ const SignUp: NextPage = () => {
                 <ErrorMessage message={serverError}/>
                 <ClientSideLink
                     text='Already have an account?'
-                    href='/login'
+                    href='/signin'
                     linkText='Login'
                 />
             </Form>
@@ -180,7 +180,6 @@ const SignUp: NextPage = () => {
       </Layout>
     <style jsx>{`
         section {
-            background-color: ${colors.background};
             height: 100vh;
             display: flex;
             flex-direction: column;

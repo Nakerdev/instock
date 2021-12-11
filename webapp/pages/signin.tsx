@@ -23,7 +23,7 @@ const Signin: NextPage = () => {
 
   useEffect(() => {
     if (isLogged) {
-      Router.push('/dashboard')
+      Router.push('/projects')
     }
   }, [isLogged])
 
@@ -95,7 +95,6 @@ const Signin: NextPage = () => {
       </Layout>
       <style jsx>{`
         section {
-            background-color: ${colors.background};
             height: 100vh;
             display: flex;
             flex-direction: column;

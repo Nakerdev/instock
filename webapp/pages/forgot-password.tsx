@@ -25,7 +25,7 @@ const ForgotPassword: NextPage = () => {
 
   useEffect(() => {
     if (isLogged) {
-      Router.push('/dashboard')
+      Router.push('/projects')
     }
   }, [isLogged])
 
@@ -82,6 +82,11 @@ const ForgotPassword: NextPage = () => {
                     isDisabled={isRecoveryBtnDisabled}
                 />
                 <ErrorMessage message={serverError}/>
+                <ClientSideLink
+                    text='Back to'
+                    href='/signin'
+                    linkText='Login'
+                />
               </div>
               <div style={hasEmailToResetPasswordBeenSent ? { display: 'block' } : { display: 'none' }}>
                 <SuccessMessage>
@@ -99,7 +104,6 @@ const ForgotPassword: NextPage = () => {
       </Layout>
     <style jsx>{`
         section {
-            background-color: ${colors.background};
             height: 100vh;
             display: flex;
             flex-direction: column;

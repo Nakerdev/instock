@@ -30,8 +30,11 @@ export default function Button (props: ButtonComponentProps) {
             .cta {
                 color: ${props.textColor ? props.textColor : colors.white};
                 background-color: ${props.bgColor ? props.bgColor : colors.CTA};
-                width: 100%;
-                ${props.width && `width: ${props.width};`}
+                ${
+                    props.width
+                        ? `width: ${props.width};`
+                        : 'width: 100%;'
+                }
                 border: 0;
                 border-radius: 5px;
                 font-size: 18px;

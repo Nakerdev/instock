@@ -246,7 +246,7 @@ const Dashboard: NextPage = () => {
                     </thead>
                     <tbody>
                       {
-                        showedProjects.length === 0 && <p>No projects found</p>
+                        showedProjects.length === 0 && <p className='not-projects-found'>No projects found</p>
                       }
                       {
                         showedProjects.map(project => {
@@ -464,6 +464,11 @@ const Dashboard: NextPage = () => {
         .delete-project-modal-button {
           display: flex;
           justify-content:space-between;
+        }
+
+        .not-projects-found {
+          padding: 20px 0px;
+          text-align: center;
         }
     `}</style>
     </Layout>

@@ -1,15 +1,15 @@
 import { NextApiResponse, NextApiRequest } from 'next'
 
-import { nextApiResponseBuilder } from '../../utils/apiUtils'
-import { SearchAllProjectsController, ProjectPrismaRepository } from './controller'
-import ServiceFactory from '../../factory/serviceFactory'
+import { nextApiResponseBuilder } from '../../../utils/apiUtils'
+import { SearchProductsController, ProductPrismaRepository } from './controller'
+import ServiceFactory from '../../../factory/serviceFactory'
 
-export function buildSearchAllProjectsController (
+export function buildSearchProductsController (
   res: NextApiResponse,
   req: NextApiRequest
-): SearchAllProjectsController {
-  return new SearchAllProjectsController(
-    new ProjectPrismaRepository(),
+): SearchProductsController {
+  return new SearchProductsController(
+    new ProductPrismaRepository(),
     nextApiResponseBuilder(res),
     ServiceFactory.buildSessionService(req))
 }

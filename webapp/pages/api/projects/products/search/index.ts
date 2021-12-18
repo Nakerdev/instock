@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { buildSearchAllProjectsController } from './factory'
+import { buildSearchProductsController } from './factory'
 
 export default function handler (req: NextApiRequest, res: NextApiResponse) {
   const { method } = req
   switch (method) {
     case 'GET': {
-      const controller = buildSearchAllProjectsController(res, req)
+      const controller = buildSearchProductsController(res, req)
       controller.search()
       break
     }

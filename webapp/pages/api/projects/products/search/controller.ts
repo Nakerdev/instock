@@ -1,4 +1,4 @@
-import { match } from 'fp-ts/Option'
+import { Option, match, some, none } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/pipeable'
 
 import DbProjectModel from '../../../../../prisma/models/projects/project'
@@ -6,25 +6,24 @@ import DbProductModel from '../../../../../prisma/models/projects/products/produ
 import { ApiResponseBuilder } from './../../../utils/apiUtils'
 import SessionService, { UserSession } from '../../../../../application/session/sessionService'
 import { PrismaClient } from '@prisma/client'
-import { Product } from '../../../../../business/projects/products/product'
 
 export {
   SearchProductsController,
   ProjectDto,
-  ProjectPrismaRepository
+  ProductPrismaRepository
 }
 
 class SearchProductsController {
-  readonly projectRepository: ProjectRepository
+  readonly productRepository: ProductRepository
   readonly apiResponseBuilder: ApiResponseBuilder
   readonly sessionService: SessionService
 
   constructor (
-    projectRepository: ProjectRepository,
+    productRepository: ProductRepository,
     apiResponseBuilder: ApiResponseBuilder,
     sessionService: SessionService
   ) {
-    this.projectRepository = projectRepository
+    this.productRepository = productRepository
     this.apiResponseBuilder = apiResponseBuilder
     this.sessionService = sessionService
   }
@@ -34,19 +33,19 @@ class SearchProductsController {
       this.sessionService.currentUser(),
       match(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
-        currentUser => this.searchProjects(currentUser)
+        currentUser => this.searchProject(currentUser)
       )
     )
   }
 
-  private async searchProjects (currentUser: UserSession) {
-    const projects = await this.projectRepository.searchAll(currentUser.userId)
-    this.apiResponseBuilder.sendSuccessResponse(projects)
+  private async searchProject (currentUser: UserSession) {
+    const project = await this.productRepository.search(currentUser.userId)
+    this.apiResponseBuilder.sendSuccessResponse(project)
   }
 }
 
 interface ProductRepository {
-  search(projectId: string): Promise<ProjectDto[]>
+  search (projectId: string): Promise<Option<ProjectDto>>
 }
 
 class ProductPrismaRepository implements ProductRepository {
@@ -56,29 +55,28 @@ class ProductPrismaRepository implements ProductRepository {
     this.prisma = new PrismaClient()
   }
 
-  async search (projectId: string): Promise<ProjectDto> {
+  async search (projectId: string): Promise<Option<ProjectDto>> {
     try {
       await this.prisma.$connect()
-      const dbModels: DbProjectModel | null = await this.prisma.projects.findFirst({
+      const dbModel: DbProjectModel | null = await this.prisma.projects.findFirst({
         where: {
           id: projectId
         }
       })
-      const projectsId = dbModels.map(model => model.id)
-      const projectsProducts = await this.searchProjectsProducts(projectsId)
-      const projects = dbModels.map(model => this.buildProject(model, projectsProducts))
-      return projects
+      if(dbModel === null) return none
+      const products = await this.searchProducts(projectId)
+      return some(this.buildProject(dbModel, products))
     } finally {
       this.prisma.$disconnect()
     }
   }
 
-  async searchProjectsProducts (projectsId: string[]): Promise<ProductDto[]> {
+  async searchProducts (projectId: string): Promise<ProductDto[]> {
     try {
       await this.prisma.$connect()
       const dbModels: DbProductModel[] = await this.prisma.products.findMany({
         where: {
-          projectId: { in: projectsId } 
+          projectId: projectId
         }
       })
       const products = dbModels.map(model => this.buildProduct(model))
@@ -90,16 +88,13 @@ class ProductPrismaRepository implements ProductRepository {
 
   private buildProject (dbEntity: DbProjectModel, products: ProductDto[]): ProjectDto {
     return new ProjectDto(
-      dbEntity.id, 
       dbEntity.name,
-      products.filter(product => product.projectId === dbEntity.id).length,
-      dbEntity.created_at)
+      products
+    )
   }
 
   private buildProduct (dbEntity: DbProductModel): ProductDto {
-    return new ProductDto(
-      dbEntity.id, 
-      dbEntity.projectId)
+    return new ProductDto(dbEntity.id)
   }
 }
 
@@ -108,7 +103,7 @@ class ProjectDto {
   readonly products: ProductDto[]
 
   constructor (
-    id: string, 
+    name: string, 
     products: ProductDto[]) {
     this.name = name
     this.products = products
@@ -117,12 +112,8 @@ class ProjectDto {
 
 class ProductDto {
   readonly id: string
-  readonly name: string
 
-  constructor (
-    id: string, 
-    name: string) {
+  constructor (id: string) {
     this.id = id
-    this.name = name 
   }
 }

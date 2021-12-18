@@ -2,7 +2,6 @@ import { NextPage } from 'next'
 import { useState, MouseEvent, useEffect } from 'react'
 import Router from 'next/router'
 
-import { colors } from '../styles/theme'
 import { UserLoginControllerRequest, ResponseDto } from './api/users/login/controller'
 import Button from '../components/button/Button'
 import PasswordField from '../components/paswordField/PasswordField'

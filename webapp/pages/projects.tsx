@@ -15,6 +15,7 @@ import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import Layout from '../components/layout/Layout'
 import { DeleteProjectsInBulkControllerRequest } from './api/projects/delete/bulk/controller'
 import { ProjectUpdatingControllerRequest } from './api/projects/update/controller'
+import ServerSideLink from '../components/serverSideLink/ServerSideLink'
 
 class Project {
   readonly id: string
@@ -34,7 +35,7 @@ class Project {
   }
 }
 
-const Dashboard: NextPage = () => {
+const ProjectsPage: NextPage = () => {
 
   const { isLogged, getSession } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
@@ -317,10 +318,10 @@ const Dashboard: NextPage = () => {
                           return (
                             <tr key={project.id}>
                               <td>
-                                <ClientSideLink
+                                <ServerSideLink 
                                   linkText={project.name}
-                                  href=''
-                                />
+                                  href={`/project?id=${project.id}`}
+                                /> 
                               </td>
                               <td>{project.totalNumberOfProducts}</td>
                               <td>{project.created_at}</td>
@@ -558,9 +559,15 @@ const Dashboard: NextPage = () => {
           padding: 20px 0px;
           text-align: center;
         }
+
+        .link {
+            color: ${colors.link};
+            font-weight: bold;
+            cursor: pointer;
+        }
     `}</style>
     </Layout>
   )
 }
 
-export default Dashboard
+export default ProjectsPage

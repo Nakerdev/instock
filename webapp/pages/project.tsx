@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import useSession from '../hooks/useSession'
 import Layout from '../components/layout/Layout'
+import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 
 interface Context {
   query: { id: string },
@@ -39,7 +40,11 @@ const ProjectPage: NextPage = (props: ServerSideProps) => {
   return (
     <Layout pageTitle='Project name'>
       <section>
-        
+        <ClientSideLink
+          linkText='Back to projects list'
+          href='/projects'
+          imgSrc='/icons/plus.svg'
+        /> 
       </section>
       <style jsx>{`
           section {

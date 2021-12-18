@@ -320,7 +320,7 @@ const ProjectsPage: NextPage = () => {
                               <td>
                                 <ServerSideLink 
                                   linkText={project.name}
-                                  href={`/project?id=${project.id}`}
+                                  href={`/project/${project.id}`}
                                 /> 
                               </td>
                               <td>{project.totalNumberOfProducts}</td>

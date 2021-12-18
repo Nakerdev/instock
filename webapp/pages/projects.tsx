@@ -13,8 +13,8 @@ import { ErrorResponse } from './api/utils/apiUtils'
 import RocketIcon from '../components/icons/Rocket'
 import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import Layout from '../components/layout/Layout'
-import { ProjectBulkDeletionRequestDto } from '../business/projects/delete/bulk/ProjectBulkDeletionRequest'
 import { DeleteProjectsInBulkControllerRequest } from './api/projects/delete/bulk/controller'
+import { ProjectUpdatingControllerRequest } from './api/projects/update/controller'
 
 class Project {
   readonly id: string
@@ -40,11 +40,13 @@ const Dashboard: NextPage = () => {
   const [projects, setProjects] = useState<Project[]>([])
   const [showedProjects, setShowedProjects] = useState<Project[]>([])
   const [selectedProjectToDelete, setSelectedProjectToDelete] = useState<Project | null>(null)
+  const [selectedProjectToUpdate, setSelectedProjectToUpdate] = useState<Project | null>(null)
   const [isProjectSearchingInProgress, setIsProjectSearchingInProgress] = useState(true)
   const [serverErrorMessage, setServerErrorMessage] = useState('')
   const [filterText, setFilterText] = useState('')
   const [isNewProjectModalShown, setIsNewProjectModalShown] = useState(false)
   const [isDeleteProjectModalShown, setIsDeleteProjectModalShown] = useState(false)
+  const [isUpdateProjectModalShown, setIsUpdateProjectModalShown] = useState(false)
   const [projectNameError, setProjectNameError] = useState('')
   const [projectCreationServerError, setProjectCreationServerError] = useState('')
   const [projectDeletionServerError, setProjectDeletionServerError] = useState('')
@@ -52,6 +54,9 @@ const Dashboard: NextPage = () => {
   const [isDeleteProjectConfirmationButtonDisabled, setIsDeleteProjectConfirmationButtonDisabled] = useState(false)
   const [isDeleteProjectCancellationButtonDisabled, setIsDeleteProjectCancellationButtonDisabled] = useState(false)
   const [newProjectName, setNewProjectName] = useState('')
+  const [isUpdateProjectButtonDisabled, setIsUpdateProjectButtonDisabled] = useState(false)
+  const [newProjectNameToUpdate, setNewProjectNameToUpdate] = useState('')
+  const [projectUpdatingServerError, setProjectUpdatingServerError] = useState('')
 
   useEffect(() => {
     if (!isLogged) {
@@ -159,6 +164,15 @@ const Dashboard: NextPage = () => {
     }
   }
 
+  function updateProject(project: Project): Function {
+    setSelectedProjectToUpdate(project)
+    setIsUpdateProjectModalShown(true)
+
+    return async function updateProjectAux(event: MouseEvent<HTMLElement>): Promise<void> {
+      event.preventDefault()
+    }
+  }
+
   async function confirmProjectDeletion(event: MouseEvent<HTMLElement>): Promise<void> {
       event.preventDefault()
       setIsDeleteProjectConfirmationButtonDisabled(true)
@@ -189,16 +203,58 @@ const Dashboard: NextPage = () => {
         } else if (response.status === 401) {
           Router.push('/signin')
         } else {
-          setProjectCreationServerError('Oops! Something went wrong deleting a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+          setProjectDeletionServerError('Oops! Something went wrong deleting a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
         }
       } catch {
-        setProjectCreationServerError('Oops! Something went wrong deleting a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+        setProjectDeletionServerError('Oops! Something went wrong deleting a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
   }
 
   async function cancelProjectDeletion(): Promise<void> {
     setSelectedProjectToDelete(null)
     setIsDeleteProjectModalShown(false)
+  }
+
+  async function confirmProjectUpdating(event: MouseEvent<HTMLElement>): Promise<void> {
+      event.preventDefault()
+      setIsUpdateProjectButtonDisabled(true)
+      try {
+        const projectIdToUpdate = selectedProjectToUpdate ? selectedProjectToUpdate.id : ''
+        const request = new ProjectUpdatingControllerRequest(projectIdToUpdate, newProjectNameToUpdate)
+        const session: string | null = getSession()
+        const response = await fetch(
+          '/api/projects/update',
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-stockout-token': session === null ? '' : session
+            },
+            body: JSON.stringify(request)
+          }
+        )
+        setIsUpdateProjectButtonDisabled(false)
+        if (response.status === 200) {
+          const updatedProjects = projects.map(project => {
+            if(project.id === projectIdToUpdate){
+              return new Project(project.id, newProjectNameToUpdate, project.totalNumberOfProducts, project.created_at)
+            }
+            return project
+          })
+
+          setProjects(updatedProjects);
+          setShowedProjects(updatedProjects);
+
+          setSelectedProjectToUpdate(null)
+          setIsUpdateProjectModalShown(false)
+        } else if (response.status === 401) {
+          Router.push('/signin')
+        } else {
+          setProjectUpdatingServerError('Oops! Something went wrong updating a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+        }
+      } catch {
+        setProjectUpdatingServerError('Oops! Something went wrong updating a project! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
   }
 
   return (
@@ -272,7 +328,7 @@ const Dashboard: NextPage = () => {
                                 <Button
                                   text=''
                                   isDisabled={false}
-                                  onClickHandler={() => new Error('not implemented')}
+                                  onClickHandler={() => updateProject(project)}
                                   buttonInnerImgSrc={'/icons/pencil.svg'}
                                   bgColor={colors.grey}
                                 />
@@ -350,6 +406,30 @@ const Dashboard: NextPage = () => {
         />
       </div>
       <ErrorMessage message={projectDeletionServerError}/>
+    </Modal>
+    <Modal
+      isShown={isUpdateProjectModalShown}
+      title='Change Project Name'
+      onClose={() => setIsUpdateProjectModalShown(false)}
+    >
+      <p className='modal-paragraph'>
+        We recommend you use the domain name of your website,
+        a project is used to group and organise your products.
+      </p>
+      <TextField
+        title='Project name'
+        isRequired={true}
+        value={newProjectNameToUpdate}
+        onChangeHandler={value => setNewProjectNameToUpdate(value)}
+        errorMessage={projectNameError}
+        placeholder={selectedProjectToUpdate ? selectedProjectToUpdate.name : ''}
+      />
+      <Button
+        text='Update'
+        onClickHandler={confirmProjectUpdating}
+        isDisabled={isUpdateProjectButtonDisabled}
+      />
+      <ErrorMessage message={projectUpdatingServerError}/>
     </Modal>
     <style jsx>{`
         section {

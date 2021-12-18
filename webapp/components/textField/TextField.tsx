@@ -7,6 +7,7 @@ interface TextFieldComponentProps {
     value: string;
     onChangeHandler: (value: string) => void;
     errorMessage?: string;
+    placeholder?: string;
 }
 
 export default function TextField (props: TextFieldComponentProps) {
@@ -18,7 +19,8 @@ export default function TextField (props: TextFieldComponentProps) {
                 type="text"
                 onChange={e => props.onChangeHandler(e.target.value)}
                 value={props.value}
-                className={`field ${props.errorMessage ? 'field-error' : ''}`}>
+                className={`field ${props.errorMessage ? 'field-error' : ''}`}
+                placeholder={props.placeholder ? props.placeholder : ''}>
             </input>
             {
                 props.errorMessage

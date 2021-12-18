@@ -11,17 +11,31 @@ interface ClientSideLinkComponentProps {
 
 export default function ClientSideLink (props: ClientSideLinkComponentProps) {
   return (
-        <div>
-            {
-                props.imgSrc && <img src={props.imgSrc}></img>
-            }
+        <>
             {
                 props.text
-                ? <p className='linkText'>{props.text}<Link href={props.href}><a className='link'> {props.linkText}</a></Link></p>
-                : <Link href={props.href}><a className='link'> {props.linkText}</a></Link>
+                ? (
+                    <p className='linkText'>
+                        {props.text}
+                        <Link href={props.href}>
+                            <a className='link'>
+                                {props.imgSrc && <img src={props.imgSrc}></img>}
+                                {props.linkText}
+                            </a>
+                        </Link>
+                    </p>
+                )
+                : (
+                    <Link href={props.href}>
+                        <a className='link'>
+                            {props.imgSrc && <img src={props.imgSrc}></img>}
+                            {props.linkText}
+                        </a>
+                    </Link>
+                )
             }
             <style jsx>{`
-                div {
+                a {
                     display: flex;
                     align-items: center;
                     padding: 20px 0;
@@ -44,6 +58,6 @@ export default function ClientSideLink (props: ClientSideLinkComponentProps) {
                     line-height: 1.3rem;
                 }
             `}</style>
-        </div>
+        </>
   )
 }

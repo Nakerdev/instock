@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import Router from 'next/router'
 import { useEffect, useState, MouseEvent } from 'react'
+import moment from 'moment'
 
 import useSession from '../hooks/useSession'
 import { colors, fonts } from '../styles/theme'
@@ -11,7 +12,6 @@ import TextField from '../components/textField/TextField'
 import Modal from '../components/modal/Modal'
 import { ErrorResponse } from './api/utils/apiUtils'
 import RocketIcon from '../components/icons/Rocket'
-import ClientSideLink from '../components/clientSideLink/ClientSideLink'
 import Layout from '../components/layout/Layout'
 import { DeleteProjectsInBulkControllerRequest } from './api/projects/delete/bulk/controller'
 import { ProjectUpdatingControllerRequest } from './api/projects/update/controller'
@@ -21,13 +21,13 @@ class Project {
   readonly id: string
   readonly name: string
   readonly totalNumberOfProducts: string
-  readonly created_at: string
+  readonly created_at: Date
 
   constructor (
     id: string, 
     name: string,
     totalNumberOfProducts: string,
-    created_at: string) {
+    created_at: Date) {
     this.id = id
     this.name = name
     this.totalNumberOfProducts = totalNumberOfProducts 
@@ -124,7 +124,7 @@ const ProjectsPage: NextPage = () => {
       setIsCreateProjectButtonDisabled(false)
       if (response.status === 200) {
         const successResponse: ResponseDto = await response.json()
-        projects.push(new Project(successResponse.projectId, newProjectName, '0', new Date().toDateString()))
+        projects.push(new Project(successResponse.projectId, newProjectName, '0', new Date()))
         setProjects(projects);
         setShowedProjects(projects);
         setIsNewProjectModalShown(false)
@@ -324,7 +324,7 @@ const ProjectsPage: NextPage = () => {
                                 /> 
                               </td>
                               <td>{project.totalNumberOfProducts}</td>
-                              <td>{project.created_at}</td>
+                              <td>{moment(project.created_at).format("DD/MMM/YYYY")}</td>
                               <td className='action-button'>
                                 <Button
                                   text=''

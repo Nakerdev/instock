@@ -25,6 +25,7 @@
     "fp-ts": "^2.11.4",
     "jest-mock-extended": "^2.0.4",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "next": "11.1.2",
     "prisma": "3.2.1",
     "react": "17.0.2",

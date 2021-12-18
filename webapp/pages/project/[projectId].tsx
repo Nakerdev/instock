@@ -25,7 +25,7 @@ const ProjectPage: NextPage = () => {
         <ClientSideLink
           linkText='Back to projects list'
           href='/projects'
-          imgSrc='/icons/plus.svg'
+          imgSrc='/icons/arrow-circle-left.f.svg'
         /> 
         {projectId}
       </section>

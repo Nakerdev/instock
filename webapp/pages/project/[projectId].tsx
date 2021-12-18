@@ -1,4 +1,4 @@
-import { NextPage, NextApiResponse } from 'next'
+import { NextPage } from 'next'
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 

@@ -2,9 +2,11 @@ import { match } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/pipeable'
 
 import DbProjectModel from '../../../../prisma/models/projects/project'
+import DbProductModel from '../../../../prisma/models/projects/products/product'
 import { ApiResponseBuilder } from './../../utils/apiUtils'
 import SessionService, { UserSession } from '../../../../application/session/sessionService'
 import { PrismaClient } from '@prisma/client'
+import { Product } from '../../../../business/projects/products/product'
 
 export {
   SearchAllProjectsController,
@@ -62,24 +64,71 @@ class ProjectPrismaRepository implements ProjectRepository {
           userId: userId
         }
       })
-      const projects = dbModels.map(model => this.buildProject(model))
+      const projectsId = dbModels.map(model => model.id)
+      const projectsProducts = await this.searchProjectsProducts(projectsId)
+      const projects = dbModels.map(model => this.buildProject(model, projectsProducts))
       return projects
     } finally {
       this.prisma.$disconnect()
     }
   }
 
-  private buildProject (dbEntity: DbProjectModel): ProjectDto {
-    return new ProjectDto(dbEntity.id, dbEntity.name)
+  async searchProjectsProducts (projectsId: string[]): Promise<ProductDto[]> {
+    try {
+      await this.prisma.$connect()
+      const dbModels: DbProductModel[] = await this.prisma.products.findMany({
+        where: {
+          projectId: { in: projectsId } 
+        }
+      })
+      const products = dbModels.map(model => this.buildProduct(model))
+      return products
+    } finally {
+      this.prisma.$disconnect()
+    }
+  }
+
+  private buildProject (dbEntity: DbProjectModel, products: ProductDto[]): ProjectDto {
+    return new ProjectDto(
+      dbEntity.id, 
+      dbEntity.name,
+      products.filter(product => product.projectId === dbEntity.id).length,
+      dbEntity.created_at)
+  }
+
+  private buildProduct (dbEntity: DbProductModel): ProductDto {
+    return new ProductDto(
+      dbEntity.id, 
+      dbEntity.projectId)
   }
 }
 
 class ProjectDto {
   readonly id: string
   readonly name: string
+  readonly totalNumberOfProducts: number
+  readonly created_at: Date
 
-  constructor (id: string, name: string) {
+  constructor (
+    id: string, 
+    name: string,
+    totalNumberOfProducts: number,
+    created_at: Date) {
     this.id = id
     this.name = name
+    this.totalNumberOfProducts = totalNumberOfProducts
+    this.created_at = created_at
+  }
+}
+
+class ProductDto {
+  readonly id: string
+  readonly projectId: string
+
+  constructor (
+    id: string, 
+    projectId: string) {
+    this.id = id
+    this.projectId = projectId 
   }
 }

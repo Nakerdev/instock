@@ -19,10 +19,18 @@ import { DeleteProjectsInBulkControllerRequest } from './api/projects/delete/bul
 class Project {
   readonly id: string
   readonly name: string
+  readonly totalNumberOfProducts: string
+  readonly created_at: string
 
-  constructor (id: string, name: string) {
+  constructor (
+    id: string, 
+    name: string,
+    totalNumberOfProducts: string,
+    created_at: string) {
     this.id = id
     this.name = name
+    this.totalNumberOfProducts = totalNumberOfProducts 
+    this.created_at = created_at
   }
 }
 
@@ -110,7 +118,7 @@ const Dashboard: NextPage = () => {
       setIsCreateProjectButtonDisabled(false)
       if (response.status === 200) {
         const successResponse: ResponseDto = await response.json()
-        projects.push(new Project(successResponse.projectId, newProjectName))
+        projects.push(new Project(successResponse.projectId, newProjectName, '0', new Date().toDateString()))
         setProjects(projects);
         setShowedProjects(projects);
         setIsNewProjectModalShown(false)
@@ -258,8 +266,8 @@ const Dashboard: NextPage = () => {
                                   href=''
                                 />
                               </td>
-                              <td>1000</td>
-                              <td>10/10/2020</td>
+                              <td>{project.totalNumberOfProducts}</td>
+                              <td>{project.created_at}</td>
                               <td className='action-button'>
                                 <Button
                                   text=''

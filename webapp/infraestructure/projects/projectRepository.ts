@@ -82,8 +82,7 @@ export default class ProjectPrismaRepository implements ProjectRepository {
       await this.prisma.$connect()
       await this.prisma.projects.update({
         where: {
-          id: project.id.state.value,
-          userId: project.userId.state.value
+          id: project.id.state.value
         },
         data: {
           name: project.name.state.value

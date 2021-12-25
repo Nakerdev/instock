@@ -72,7 +72,7 @@ const ChangePassword: NextPage = (props: ServerSideProps) => {
       )
       if (response.status === 200) {
         setHasPasswordBeenChanged(true)
-      } else if (response.status === 404) {
+      } else if (response.status === 400) {
         const errorResponse: ErrorResponse = await response.json()
         if (errorResponse.validationErrors.length > 0) {
           errorResponse.validationErrors.forEach(error => {

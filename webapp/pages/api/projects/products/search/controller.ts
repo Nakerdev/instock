@@ -3,14 +3,23 @@ import { pipe } from 'fp-ts/pipeable'
 
 import DbProjectModel from '../../../../../prisma/models/projects/project'
 import DbProductModel from '../../../../../prisma/models/projects/products/product'
-import { ApiResponseBuilder } from './../../../utils/apiUtils'
+import { ApiResponseBuilder } from '../../../utils/apiUtils'
 import SessionService, { UserSession } from '../../../../../application/session/sessionService'
 import { PrismaClient } from '@prisma/client'
 
 export {
   SearchProductsController,
   ProjectDto,
-  ProductPrismaRepository
+  ProductPrismaRepository,
+  RequestDto
+}
+
+class RequestDto {
+  readonly projectId: string
+
+  constructor(projectId: string) {
+    this.projectId = projectId
+  }
 }
 
 class SearchProductsController {
@@ -28,24 +37,29 @@ class SearchProductsController {
     this.sessionService = sessionService
   }
 
-  search (): void {
+  search (request: RequestDto): void {
     pipe(
       this.sessionService.currentUser(),
       match(
         () => this.apiResponseBuilder.sendUnauthorizedResponse(),
-        currentUser => this.searchProject(currentUser)
+        currentUser => this.searchProject(currentUser, request.projectId)
       )
     )
   }
 
-  private async searchProject (currentUser: UserSession) {
-    const project = await this.productRepository.search(currentUser.userId)
-    this.apiResponseBuilder.sendSuccessResponse(project)
+  private async searchProject (currentUser: UserSession, projectId: string) {
+    pipe(
+      await this.productRepository.search(currentUser.userId, projectId),
+      match(
+        () => this.apiResponseBuilder.sendNotFoundResponse(),
+        project => this.apiResponseBuilder.sendSuccessResponse(project),
+      )
+    )
   }
 }
 
 interface ProductRepository {
-  search (projectId: string): Promise<Option<ProjectDto>>
+  search (userId: string, projectId: string): Promise<Option<ProjectDto>>
 }
 
 class ProductPrismaRepository implements ProductRepository {
@@ -55,12 +69,13 @@ class ProductPrismaRepository implements ProductRepository {
     this.prisma = new PrismaClient()
   }
 
-  async search (projectId: string): Promise<Option<ProjectDto>> {
+  async search (userId: string, projectId: string): Promise<Option<ProjectDto>> {
     try {
       await this.prisma.$connect()
       const dbModel: DbProjectModel | null = await this.prisma.projects.findFirst({
         where: {
-          id: projectId
+          id: projectId,
+          userId: userId
         }
       })
       if(dbModel === null) return none

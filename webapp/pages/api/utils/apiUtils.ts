@@ -9,6 +9,7 @@ export interface ApiResponseBuilder {
   sendValidationErrorResponse(formValidationErrors: FormValidationError<ValidationError>[]): void;
   sendCommandErrorResponse(commandError: string): void;
   sendUnauthorizedResponse(): void;
+  sendNotFoundResponse(): void;
 }
 
 export class ErrorResponse {
@@ -31,7 +32,8 @@ export function nextApiResponseBuilder (
     sendSuccessResponse,
     sendValidationErrorResponse: sendValidtionErrorResponse,
     sendCommandErrorResponse,
-    sendUnauthorizedResponse
+    sendUnauthorizedResponse,
+    sendNotFoundResponse,
   }
 
   function sendSuccessResponse (responseBody: ResponseBody): void {
@@ -40,15 +42,19 @@ export function nextApiResponseBuilder (
 
   function sendValidtionErrorResponse (formValidationErrors: FormValidationError<ValidationError>[]): void {
     const error = new ErrorResponse(formValidationErrors, null)
-    res.status(404).json(error)
+    res.status(400).json(error)
   }
 
   function sendCommandErrorResponse (commandError: string): void {
     const error = new ErrorResponse([], commandError)
-    res.status(404).json(error)
+    res.status(400).json(error)
   }
 
   function sendUnauthorizedResponse (): void {
     res.status(401).send()
+  }
+
+  function sendNotFoundResponse (): void {
+    res.status(404).send()
   }
 }

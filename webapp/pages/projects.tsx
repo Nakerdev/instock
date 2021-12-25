@@ -131,7 +131,7 @@ const ProjectsPage: NextPage = () => {
         setNewProjectName('')
       } else if (response.status === 401) {
         Router.push('/signin')
-      } else if (response.status === 404) {
+      } else if (response.status === 400) {
         const errorResponse: ErrorResponse = await response.json()
         if (errorResponse.validationErrors.length > 0) {
           errorResponse.validationErrors.forEach(error => {

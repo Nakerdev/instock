@@ -261,7 +261,7 @@ const ProjectsPage: NextPage = () => {
   return (
     <Layout pageTitle='Projects'>
       <section>
-        <div className='create-project-btn-container'>
+          <div className='create-project-btn-container'>
             <Button
               text='New Project'
               onClickHandler={() => setIsNewProjectModalShown(true)}

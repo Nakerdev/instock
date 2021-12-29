@@ -7,8 +7,11 @@ import Layout from '../../components/layout/Layout'
 import ClientSideLink from '../../components/clientSideLink/ClientSideLink'
 import { colors, fonts } from '../../styles/theme'
 import { ProjectDto } from '../api/projects/products/search/controller'
-import RocketIcon from '../../components/icons/Rocket'
 import Button from '../../components/button/Button'
+import Modal from '../../components/modal/Modal'
+import TextField from '../../components/textField/TextField'
+import ErrorMessage from '../../components/errorMessage/ErrorMessage'
+import TextArea from '../../components/textArea/TextArea'
 
 const ProjectPage: NextPage = () => {
 
@@ -18,6 +21,7 @@ const ProjectPage: NextPage = () => {
   const [ serverErrorMessage, setServerErrorMessage ] = useState('')
   const [ isProductsSearchingInProgress, setIsProductsSearchingInProgress ] = useState(false)
   const [ filterText, setFilterText ] = useState('')
+  const [ isAttachProductsToProjectModalShown, setIsAttachProductsToProjectModalShown ] = useState(false)
 
   const { projectId } = router.query;
   
@@ -74,18 +78,19 @@ const ProjectPage: NextPage = () => {
         />
         <div className='products-list-container'>
           {
-            isProductsSearchingInProgress && (
-              <div className='spinner-container'>
-                <img src='/gifs/eclipse-blue.gif'></img>
-                <p>Searching products...</p>
-              </div>
-            )
-          }
-          {
             project && (
               <h2>{project.name}</h2>
             )
           }
+          <div className='create-product-btn-container'>
+            <Button
+              text='New Product'
+              onClickHandler={() => setIsAttachProductsToProjectModalShown(true)}
+              isDisabled={false}
+              buttonInnerImgSrc={'/icons/plus.svg'}
+              width='200px'
+            />
+          </div>
           {
               !isProductsSearchingInProgress && (
                 <div className='table-container'>
@@ -118,13 +123,6 @@ const ProjectPage: NextPage = () => {
                                   text=''
                                   isDisabled={false}
                                   onClickHandler={() => {}}
-                                  buttonInnerImgSrc={'/icons/pencil.svg'}
-                                  bgColor={colors.grey}
-                                />
-                                <Button
-                                  text=''
-                                  isDisabled={false}
-                                  onClickHandler={() => {}}
                                   buttonInnerImgSrc={'/icons/trash.svg'}
                                   bgColor={colors.grey}
                                 />
@@ -138,8 +136,43 @@ const ProjectPage: NextPage = () => {
                 </div>
               )
             }
+          {
+            isProductsSearchingInProgress && (
+              <div className='spinner-container'>
+                <img src='/gifs/eclipse-blue.gif'></img>
+                <p>Searching products...</p>
+              </div>
+            )
+          }
         </div>
       </section>
+      <Modal
+        isShown={isAttachProductsToProjectModalShown}
+        title='Create Products'
+        onClose={() => setIsAttachProductsToProjectModalShown(false)}
+      >
+        <p className='modal-paragraph'>
+          Use Amazon Standard Identification Number (ASIN) to create the product.
+        </p>
+        <p className='modal-paragraph'>
+          If you would like to create more than one product at the same time use 
+          comma to split multiple ASIN.
+        </p>
+        <TextArea
+          title='ASIN'
+          isRequired={true}
+          value=''
+          onChangeHandler={() => {}}
+          errorMessage=''
+          placeholder='B0837F9CZW,B07FWTKXJM,...'
+        />
+        <Button
+          text='Create'
+          onClickHandler={() => {}}
+          isDisabled={false}
+        />
+        <ErrorMessage message=''/>
+      </Modal>
       <style jsx>{`
           section {
             height: 100%;
@@ -151,6 +184,21 @@ const ProjectPage: NextPage = () => {
             font-family: ${fonts.base};
             font-size: 24px;
             margin-right: 20px;
+          }
+
+          .modal-paragraph {
+            font-size: 18px;
+            line-height: 1.5rem;
+            font-family: ${fonts.base};
+            max-width: 500px;
+            margin-bottom: 20px;
+          }
+
+          .create-product-btn-container {
+            display: flex;
+            justify-content: end;
+            margin-top: 20px;
+            width: 100%;
           }
 
           .products-list-container {

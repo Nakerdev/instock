@@ -38,7 +38,6 @@ class AttachProductsInBulkController {
   }
 
   private buildCommandRequest (controllerRequest: AttachProductsInBulkControllerRequest, currentUser: UserSession) {
-    throw new Error("mi culo");
     const commandRequestDto = new ProductsAttachingInBulkRequestDto(
       currentUser.userId,
       controllerRequest.projectId,

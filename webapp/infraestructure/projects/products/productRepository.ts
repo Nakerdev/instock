@@ -36,8 +36,8 @@ export default class ProductPrismaRepository implements ProductRepository {
       await this.prisma.$connect()
       const dbEntities = products.map(p => this.buildDbEntity(p))
       await this.prisma.products.createMany({
-        data: [dbEntities],
-        skipDuplicated: true
+        data: dbEntities,
+        skipDuplicates: true
       })
     } finally {
       this.prisma.$disconnect()

@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import Router, { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, MouseEvent } from 'react'
 
 import useSession from '../../hooks/useSession'
 import Layout from '../../components/layout/Layout'
@@ -9,9 +9,11 @@ import { colors, fonts } from '../../styles/theme'
 import { ProjectDto } from '../api/projects/products/search/controller'
 import Button from '../../components/button/Button'
 import Modal from '../../components/modal/Modal'
-import TextField from '../../components/textField/TextField'
 import ErrorMessage from '../../components/errorMessage/ErrorMessage'
 import TextArea from '../../components/textArea/TextArea'
+import { AttachProductsInBulkControllerRequest } from '../api/projects/products/attach/bulk/controller'
+import { ProductId } from '../../business/valueObjects/productId'
+import { ErrorResponse } from '../api/utils/apiUtils'
 
 const ProjectPage: NextPage = () => {
 
@@ -22,6 +24,11 @@ const ProjectPage: NextPage = () => {
   const [ isProductsSearchingInProgress, setIsProductsSearchingInProgress ] = useState(false)
   const [ filterText, setFilterText ] = useState('')
   const [ isAttachProductsToProjectModalShown, setIsAttachProductsToProjectModalShown ] = useState(false)
+  const [ isCreateProductButtonDisabled, setIsCreateProductButtonDisabled ] = useState(false)
+  const [ productsSplittedByComma, setProductsSplittedByComma ] = useState('')
+  const [ productsToCreateError, setProductsToCreateError ] = useState('')
+  const [ productsCreationServerError, setProductsCreationServerError ] = useState('')
+
 
   const { projectId } = router.query;
   
@@ -32,31 +39,88 @@ const ProjectPage: NextPage = () => {
   }, [isLogged])
 
   useEffect(() => {
-    (async function searchProjects () {
-      setProject(null)
-      setServerErrorMessage('')
-      setIsProductsSearchingInProgress(true)
+    searchProjects()
+  }, [projectId])
+
+  async function searchProjects () {
+    setProject(null)
+    setServerErrorMessage('')
+    setIsProductsSearchingInProgress(true)
+    const session: string | null = getSession()
+    const response = await fetch(
+      `/api/projects/products/search?projectId=${projectId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-stockout-token': session === null ? '' : session
+        }
+      }
+    )
+    if (response.status === 200 || response.status === 304) {
+      setIsProductsSearchingInProgress(false)
+      setProductsSplittedByComma('')
+      const project: ProjectDto = await response.json()
+      setProject(project)
+    } else {
+      setIsProductsSearchingInProgress(false)
+      setServerErrorMessage('Oops! Something went wrong! We can\'t search your products but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+    }
+  }
+
+  async function attachProductsToProject (e: MouseEvent<HTMLElement>): Promise<void> {
+    e.preventDefault()
+    setIsCreateProductButtonDisabled(true)
+    setProductsCreationServerError('')
+    setProductsToCreateError('')
+    try {
+      let productsId: string[] = [];
+      if(productsSplittedByComma.length === 10){
+        productsId.push(productsSplittedByComma)
+      } else if (productsSplittedByComma.length > 10 && productsSplittedByComma.includes(',')) {
+        productsId = (productsSplittedByComma.trim().split(',').filter(x => x !== ''))
+      } else {
+        setProductsToCreateError('Please, be sure all ASIN are valid and all of then are separated by comma.')
+        setIsCreateProductButtonDisabled(false)
+      }
+      if(productsId.length === 0) return;
+      const request = new AttachProductsInBulkControllerRequest(projectId, productsId)
       const session: string | null = getSession()
       const response = await fetch(
-         `/api/projects/products/search?projectId=${projectId}`,
+        '/api/projects/products/attach/bulk',
         {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'x-stockout-token': session === null ? '' : session
-          }
+          },
+          body: JSON.stringify(request)
         }
       )
-      if (response.status === 200 || response.status === 304) {
-        setIsProductsSearchingInProgress(false)
-        const project: ProjectDto = await response.json()
-        setProject(project)
+      setIsCreateProductButtonDisabled(false)
+      if (response.status === 200) {
+        searchProjects();
+        setIsAttachProductsToProjectModalShown(false)
+      } else if (response.status === 401) {
+        Router.push('/signin')
+      } else if (response.status === 400) {
+        const errorResponse: ErrorResponse = await response.json()
+        if (errorResponse.validationErrors.length > 0) {
+          errorResponse.validationErrors.forEach(error => {
+            if (error.fieldId === 'productsId') {
+              setProductsToCreateError('At least one ASIN is required.')
+            }
+          })
+        } else {
+            setProductsCreationServerError('Another project with the same name already exists.')
+        }
       } else {
-        setIsProductsSearchingInProgress(false)
-        setServerErrorMessage('Oops! Something went wrong! We can\'t search your products but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+        setProductsCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
       }
-    })()
-  }, [projectId])
+    } catch {
+      setProductsCreationServerError('Oops! Something went wrong! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+    }
+  }
 
   function filterProducts (name: string) {
     setFilterText(name)
@@ -106,7 +170,8 @@ const ProjectPage: NextPage = () => {
                   <table>
                     <thead>
                       <tr>
-                        <th>Product id</th>
+                        <th>ASIN</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -161,17 +226,17 @@ const ProjectPage: NextPage = () => {
         <TextArea
           title='ASIN'
           isRequired={true}
-          value=''
-          onChangeHandler={() => {}}
-          errorMessage=''
+          value={productsSplittedByComma}
+          onChangeHandler={value => setProductsSplittedByComma(value)}
+          errorMessage={productsToCreateError}
           placeholder='B0837F9CZW,B07FWTKXJM,...'
         />
         <Button
           text='Create'
-          onClickHandler={() => {}}
-          isDisabled={false}
+          onClickHandler={attachProductsToProject}
+          isDisabled={isCreateProductButtonDisabled}
         />
-        <ErrorMessage message=''/>
+        <ErrorMessage message={productsCreationServerError}/>
       </Modal>
       <style jsx>{`
           section {

@@ -20,7 +20,7 @@ const ProjectPage: NextPage = () => {
   const router = useRouter()
   const { isLogged, getSession } = useSession()
   const [ project, setProject ] = useState<ProjectDto | null> (null)
-  const [ serverErrorMessage, setServerErrorMessage ] = useState('')
+  const [ serverErrorMessage, setServerErrorMessage ] = useState('') //TODO usar esto.
   const [ isProductsSearchingInProgress, setIsProductsSearchingInProgress ] = useState(false)
   const [ filterText, setFilterText ] = useState('')
   const [ isAttachProductsToProjectModalShown, setIsAttachProductsToProjectModalShown ] = useState(false)

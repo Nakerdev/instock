@@ -6,14 +6,14 @@ import useSession from '../../hooks/useSession'
 import Layout from '../../components/layout/Layout'
 import ClientSideLink from '../../components/clientSideLink/ClientSideLink'
 import { colors, fonts } from '../../styles/theme'
-import { ProjectDto } from '../api/projects/products/search/controller'
+import { ProjectDto, ProductDto } from '../api/projects/products/search/controller'
 import Button from '../../components/button/Button'
 import Modal from '../../components/modal/Modal'
 import ErrorMessage from '../../components/errorMessage/ErrorMessage'
 import TextArea from '../../components/textArea/TextArea'
 import { AttachProductsInBulkControllerRequest } from '../api/projects/products/attach/bulk/controller'
-import { ProductId } from '../../business/valueObjects/productId'
 import { ErrorResponse } from '../api/utils/apiUtils'
+import { DeleteProductsInBulkControllerRequest } from '../api/projects/products/delete/bulk/controller'
 
 const ProjectPage: NextPage = () => {
 
@@ -28,7 +28,11 @@ const ProjectPage: NextPage = () => {
   const [ productsSplittedByComma, setProductsSplittedByComma ] = useState('')
   const [ productsToCreateError, setProductsToCreateError ] = useState('')
   const [ productsCreationServerError, setProductsCreationServerError ] = useState('')
-
+  const [ isDeleteProjectModalShown, setIsDeleteProjectModalShown  ] = useState(false)
+  const [ selectedProductToDelete, setSelectedProductToDelete ] = useState<ProductDto | null>(null)
+  const [ isDeleteProductConfirmationButtonDisabled, setIsDeleteProductConfirmationButtonDisabled ] = useState(false)
+  const [ isDeleteProductCancellationButtonDisabled, setIsDeleteProductCancellationButtonDisabled ] = useState(false)
+  const [ productDeletionServerError, setProductDeletionServerError ] = useState('')
 
   const { projectId } = router.query;
   
@@ -122,6 +126,56 @@ const ProjectPage: NextPage = () => {
     }
   }
 
+  function deleteProject(product: ProductDto): Function {
+    setSelectedProductToDelete(product)
+    setIsDeleteProjectModalShown(true)
+
+    return async function deleteProjectAux(event: MouseEvent<HTMLElement>): Promise<void> {
+      event.preventDefault()
+    }
+  }
+  async function cancelProjectDeletion(): Promise<void> {
+    setSelectedProductToDelete(null)
+    setIsDeleteProjectModalShown(false)
+  }
+
+  async function confirmProductDeletion(event: MouseEvent<HTMLElement>): Promise<void> {
+      event.preventDefault()
+      setIsDeleteProductConfirmationButtonDisabled(true)
+      setIsDeleteProductCancellationButtonDisabled(true)
+      try {
+        const productIdToDelete = selectedProductToDelete ? selectedProductToDelete.id : ''
+        const request = new DeleteProductsInBulkControllerRequest(projectId, [productIdToDelete])
+        const session: string | null = getSession()
+        const response = await fetch(
+          '/api/projects/products/delete/bulk',
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-stockout-token': session === null ? '' : session
+            },
+            body: JSON.stringify(request)
+          }
+        )
+        setIsDeleteProductConfirmationButtonDisabled(false)
+        setIsDeleteProductCancellationButtonDisabled(false)
+        if (response.status === 200) {
+          if(!project) return;
+          const productsWithoutDeletedOne = project?.products.filter(p => p.id !== productIdToDelete)
+          setProject(new ProjectDto(project.name, productsWithoutDeletedOne));
+          setSelectedProductToDelete(null)
+          setIsDeleteProjectModalShown(false)
+        } else if (response.status === 401) {
+          Router.push('/signin')
+        } else {
+          setProductDeletionServerError('Oops! Something went wrong deleting a product! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+        }
+      } catch {
+        setProductDeletionServerError('Oops! Something went wrong deleting a product! It doesn\'t appear to have affected your data, but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')
+      }
+  }
+
   function filterProducts (name: string) {
     setFilterText(name)
     if (name.length >= 3) {
@@ -187,7 +241,7 @@ const ProjectPage: NextPage = () => {
                                 <Button
                                   text=''
                                   isDisabled={false}
-                                  onClickHandler={() => {}}
+                                  onClickHandler={() => deleteProject(product)}
                                   buttonInnerImgSrc={'/icons/trash.svg'}
                                   bgColor={colors.grey}
                                 />
@@ -239,6 +293,35 @@ const ProjectPage: NextPage = () => {
           isDisabled={isCreateProductButtonDisabled}
         />
         <ErrorMessage message={productsCreationServerError}/>
+      </Modal>
+      <Modal
+        isShown={isDeleteProjectModalShown}
+        title='Delete Product'
+        onClose={() => cancelProjectDeletion()}
+      >
+        <p className='modal-paragraph'>
+          Are you sure you want to the product?
+        </p>
+        <div className='delete-product-modal-button'>
+          <Button
+            text='Yes'
+            onClickHandler={confirmProductDeletion}
+            isDisabled={isDeleteProductConfirmationButtonDisabled}
+            bgColor={colors.green}
+            textColor={colors.white}
+            width='170px'
+          />
+          <Button
+            text='No'
+            onClickHandler={cancelProjectDeletion}
+            isDisabled={isDeleteProductCancellationButtonDisabled}
+            bgColor={colors.error}
+            textColor={colors.white}
+            width='170px'
+            avoidSpinnerOnDisabledMode={true}
+          />
+        </div>
+        <ErrorMessage message={productDeletionServerError}/>
       </Modal>
       <style jsx>{`
           section {
@@ -338,6 +421,11 @@ const ProjectPage: NextPage = () => {
 
           tbody > tr {
             border-bottom: solid 1px ${colors.black}
+          }
+
+          .delete-product-modal-button {
+            display: flex;
+            justify-content:space-between;
           }
       `}</style>
     </Layout>

@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client'
 export {
   SearchProductsController,
   ProjectDto,
+  ProductDto,
   ProductPrismaRepository,
   RequestDto
 }

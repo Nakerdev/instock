@@ -5,7 +5,8 @@ import { colors, fonts } from '../../styles/theme'
 interface ModalComponentProps {
     isShown: boolean
     title: string
-    onClose: () => void
+    onClose: () => void,
+    maxWidth?: string
 }
 
 export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
@@ -45,12 +46,13 @@ export default function Modal (props: PropsWithChildren<ModalComponentProps>) {
             }
 
             .modal-container {
-                max-width: 1000px;
+                max-width: ${props.maxWidth ? props.maxWidth : '1000px'};
                 border-radius: 5px;
                 background-color: white;
                 padding: 20px;
                 background-color: ${colors.white};
                 box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+                margin: 0 20px;
             }
 
             .modal-close-button {

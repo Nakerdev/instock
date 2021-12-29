@@ -8,6 +8,7 @@ interface TextAreaComponentProps {
     onChangeHandler: (value: string) => void;
     errorMessage?: string;
     placeholder?: string;
+    resize?: string;
 }
 
 export default function TextArea (props: TextAreaComponentProps) {
@@ -52,6 +53,7 @@ export default function TextArea (props: TextAreaComponentProps) {
                 padding: 0.25em 0.5em;
                 border-radius: 5px;
                 line-height: 1.5rem;
+                ${ props.resize && `resize: ${props.resize};`}
             }
 
             .field:focus {

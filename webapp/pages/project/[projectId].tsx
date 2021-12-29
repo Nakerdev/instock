@@ -215,6 +215,7 @@ const ProjectPage: NextPage = () => {
         isShown={isAttachProductsToProjectModalShown}
         title='Create Products'
         onClose={() => setIsAttachProductsToProjectModalShown(false)}
+        maxWidth='500px'
       >
         <p className='modal-paragraph'>
           Use Amazon Standard Identification Number (ASIN) to create the product.
@@ -230,6 +231,7 @@ const ProjectPage: NextPage = () => {
           onChangeHandler={value => setProductsSplittedByComma(value)}
           errorMessage={productsToCreateError}
           placeholder='B0837F9CZW,B07FWTKXJM,...'
+          resize='vertical'
         />
         <Button
           text='Create'

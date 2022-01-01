@@ -1,6 +1,6 @@
 import { Option, match, some, none } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/pipeable'
-import fetch from "node-fetch";
+import axios from 'axios';
 import cheerio from 'cheerio';
 import { PrismaClient } from '@prisma/client'
 
@@ -8,7 +8,6 @@ import DbProjectModel from '../../../../../prisma/models/projects/project'
 import DbProductModel from '../../../../../prisma/models/projects/products/product'
 import { ApiResponseBuilder } from '../../../utils/apiUtils'
 import SessionService, { UserSession } from '../../../../../application/session/sessionService'
-import { Product } from '../../../../../business/projects/products/product';
 
 export {
   SearchProductsController,
@@ -68,9 +67,14 @@ interface ProjectRepository {
 
 class ProjectPrismaRepository implements ProjectRepository {
   readonly prisma: PrismaClient
+  readonly productRepository: ProductFacadeRepository;
 
   constructor () {
     this.prisma = new PrismaClient()
+    this.productRepository = new ProductFacadeRepository(
+      new ProductPrismaRepository(),
+      new ProductDetailsWebScrappingRepository()
+    )
   }
 
   async search (userId: string, projectId: string): Promise<Option<ProjectDto>> {
@@ -83,23 +87,8 @@ class ProjectPrismaRepository implements ProjectRepository {
         }
       })
       if(dbModel === null) return none
-      const products = await this.searchProducts(projectId)
+      const products = await this.productRepository.searchProducts(projectId)
       return some(this.buildProject(dbModel, products))
-    } finally {
-      this.prisma.$disconnect()
-    }
-  }
-
-  async searchProducts (projectId: string): Promise<ProductDto[]> {
-    try {
-      await this.prisma.$connect()
-      const dbModels: DbProductModel[] = await this.prisma.products.findMany({
-        where: {
-          projectId: projectId
-        }
-      })
-      const products = dbModels.map(model => this.buildProduct(model))
-      return products
     } finally {
       this.prisma.$disconnect()
     }
@@ -111,9 +100,25 @@ class ProjectPrismaRepository implements ProjectRepository {
       products
     )
   }
+}
 
-  private buildProduct (dbEntity: DbProductModel): ProductDto {
-    return new ProductDto(dbEntity.id, "", "", "", true)
+class ProductFacadeRepository {
+
+  readonly productRepository: ProductPrismaRepository;
+  readonly productDetailsRepository: ProductDetailsWebScrappingRepository;
+
+  constructor(
+    productRepository: ProductPrismaRepository,
+    productDetailsRepository: ProductDetailsWebScrappingRepository
+  ){
+    this.productRepository = productRepository;
+    this.productDetailsRepository = productDetailsRepository;
+  }
+
+  async searchProducts(projectId: string): Promise<ProductDto[]>{
+    const productsId = await this.productRepository.searchProductsId(projectId);
+    const productsDetails = await this.productDetailsRepository.searchProductsDetails(productsId);
+    return productsDetails;
   }
 }
 
@@ -144,20 +149,16 @@ class ProductPrismaRepository {
 class ProductDetailsWebScrappingRepository {
 
   async searchProductsDetails(productsId: string[]): Promise<ProductDto[]> {
-    const products: ProductDto[] = [];
-    productsId.forEach(async asin => {
-      const product = await this.searchProductsDetailsFromAmazonWebPage(asin)
-      products.push(product);
-    });
-    return products;
+    return Promise.all(productsId.map(async asin => {
+      return this.searchProductsDetailsFromAmazonWebPage(asin)
+    }));
   }
 
   private searchProductsDetailsFromAmazonWebPage(asin: string) : Promise<ProductDto> {
     const searchAmazonProductByAsinUrl = `https://www.amazon.es/exec/obidos/ASIN/${asin}`;
-    return fetch(searchAmazonProductByAsinUrl)
-    .then(response =>response.text())
-    .then(html => {
-      const $ = cheerio.load(html);
+    return axios.get(searchAmazonProductByAsinUrl)
+    .then(response => {
+      const $ = cheerio.load(response.data);
       const availabilityDomElement: cheerio.Cheerio = $('#availability > span[class*="a-color-success"]');
       const title: string = $('#productTitle').text();
       const price: string = $('#corePrice_feature_div > div > span').first().text();
@@ -173,8 +174,6 @@ class ProductDetailsWebScrappingRepository {
     .catch(e => new ProductDto(asin, "", "", "", true));
   }
 }
-
-
 
 class ProjectDto {
   readonly name: string

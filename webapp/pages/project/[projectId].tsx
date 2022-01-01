@@ -225,6 +225,10 @@ const ProjectPage: NextPage = () => {
                     <thead>
                       <tr>
                         <th>ASIN</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>InStock</th>
+                        <th>Picture</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -237,6 +241,50 @@ const ProjectPage: NextPage = () => {
                           return (
                             <tr key={product.id}>
                               <td>{product.id}</td>
+                              <td style={{maxWidth: '220px'}}>{product.name}</td>
+                              <td>{product.price}</td>
+                              <td>
+                                {
+                                  product.isInStock 
+                                    ? <svg height="40" width="40"><circle cx="20" cy="20" r="10" stroke="white" stroke-width="3" fill="green" /></svg>  
+                                    : <svg height="40" width="40"><circle cx="20" cy="20" r="10" stroke="white" stroke-width="3" fill="red" /></svg>  
+                                }
+                                </td>
+                              <td>
+                                {
+                                  product.prictureUrl && (
+                                    <div>
+                                      <Button
+                                        text=''
+                                        isDisabled={false}
+                                        onClickHandler={() => navigator.clipboard.writeText(product.prictureUrl ? product.prictureUrl : '')}
+                                        buttonInnerImgSrc={'/icons/clipboard.svg'}
+                                        bgColor={colors.grey}
+                                      />
+                                      <Button
+                                        text=''
+                                        isDisabled={false}
+                                        onClickHandler={async () => {
+                                          const image = await fetch(product.prictureUrl ? product.prictureUrl : '')
+                                          const imageBlog = await image.blob()
+                                          const imageURL = URL.createObjectURL(imageBlog)
+
+                                          const link = document.createElement('a')
+                                          link.href = imageURL;
+                                          link.download = `${product.id}.jpg`;
+                                          link.target = '_blank';
+                                          document.body.appendChild(link);
+                                          link.click();
+                                          document.body.removeChild(link);
+                                        }}
+                                        buttonInnerImgSrc={'/icons/download.svg'}
+                                        bgColor={colors.grey}
+                                      />
+                                    </div>
+                                  )
+                                }
+                                
+                              </td>
                               <td className='action-button'>
                                 <Button
                                   text=''

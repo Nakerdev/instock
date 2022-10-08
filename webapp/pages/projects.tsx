@@ -37,7 +37,7 @@ class Project {
 
 const ProjectsPage: NextPage = () => {
 
-  const { isLogged, getSession } = useSession()
+  const { isLogged, getSession, removeSession } = useSession()
   const [projects, setProjects] = useState<Project[]>([])
   const [showedProjects, setShowedProjects] = useState<Project[]>([])
   const [selectedProjectToDelete, setSelectedProjectToDelete] = useState<Project | null>(null)
@@ -87,6 +87,9 @@ const ProjectsPage: NextPage = () => {
         const userProjects: Project[] = await response.json()
         setProjects(userProjects)
         setShowedProjects(userProjects)
+      } else if (response.status === 401) {
+        removeSession()
+        Router.push('/')
       } else {
         setIsProjectSearchingInProgress(false)
         setServerErrorMessage('Oops! Something went wrong! We can\'t search your projects but our technical staff have been automatically notified and will be looking into this with the utmost urgency.')

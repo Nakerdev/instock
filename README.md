@@ -7,7 +7,10 @@
 
 ## Enviroment Variables
 
-TODO (the .env file is not in the version control system)
+JWT_SECRET_KEY=""
+DATABASE_URL=""
+SENDGRID_API_KEY=_""
+SYMETRIC_ENCRYPTION_KEY=""
 
 ## Database
 

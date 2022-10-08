@@ -30,7 +30,7 @@ export default function PasswordField (props: PasswordFieldComponentProps) {
   return (
         <>
         <fieldset>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' }}>
                 <label>{props.title} {props.isRequired ? <span>- required</span> : '' }</label>
                 {
                     props.helperLink && props.helperText
